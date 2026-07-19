@@ -122,7 +122,7 @@ margin:24px 0;
 <link rel="stylesheet" id="dashicons-css" href="https://beesayatv.com/wp-includes/css/dashicons.min.css?ver=7.0.2" media="all">
 <link rel="stylesheet" id="beesayatv-cards-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/cards.css?ver=1784397693" media="all">
 <link rel="stylesheet" id="chld_thm_cfg_parent-css" href="https://beesayatv.com/wp-content/themes/bloggerly/style.css?ver=7.0.2" media="all">
-<link rel="stylesheet" id="beesayatv-child-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1784444129" media="all">
+<link rel="stylesheet" id="beesayatv-child-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1784446683" media="all">
 <link rel="stylesheet" id="beesayatv-audio-player-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/audio-player.css?ver=1784397693" media="all">
 <link rel="stylesheet" id="bloggerly-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1.0.5.1782171480" media="all">
 <link rel="stylesheet" id="beesayatv-page-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/page.css?ver=1784397693" media="all">
@@ -626,6 +626,7 @@ document.head.appendChild(locateStyle);
 		var routeEndpointMarkers = L.layerGroup().addTo(map);
 		var routeChevronMarkers = L.layerGroup().addTo(map);
 		var activeEndpointTrail = null;
+		var activeFocusedTrail = null;
 		var atlasInspector = document.createElement('aside');
 		atlasInspector.className = 'beesayatv-atlas-inspector';
 		atlasInspector.hidden = true;
@@ -912,6 +913,59 @@ function routePolylineLayers(layer, callback) {
     }
 }
 
+function captureTrailVisualStyles(trail) {
+    trail.visualLayers.forEach(function(visualLayer) {
+        routePolylineLayers(visualLayer, function(lineLayer) {
+            lineLayer._atlasFocusBaseStyle = {
+                color: lineLayer.options.color,
+                weight: lineLayer.options.weight,
+                opacity: lineLayer.options.opacity
+            };
+        });
+    });
+}
+
+function setTrailVisualState(trail, isFocused) {
+    trail.visualLayers.forEach(function(visualLayer) {
+        routePolylineLayers(visualLayer, function(lineLayer) {
+            var baseStyle = lineLayer._atlasFocusBaseStyle;
+            if (!baseStyle) {
+                return;
+            }
+
+            lineLayer.setStyle(isFocused ? baseStyle : {
+                color: '#85857d',
+                weight: Math.min(baseStyle.weight, 4),
+                opacity: 0.22
+            });
+        });
+    });
+}
+
+function setRouteFocus(trail) {
+    activeFocusedTrail = trail;
+    Object.keys(trailLayers).forEach(function(slug) {
+        var currentTrail = trailLayers[slug];
+        setTrailVisualState(currentTrail, currentTrail.slug === trail.slug);
+    });
+}
+
+function clearRouteFocus() {
+    if (!activeFocusedTrail) {
+        return;
+    }
+
+    Object.keys(trailLayers).forEach(function(slug) {
+        setTrailVisualState(trailLayers[slug], true);
+    });
+
+    activeFocusedTrail = null;
+    activeEndpointTrail = null;
+    routeEndpointMarkers.clearLayers();
+    routeChevronMarkers.clearLayers();
+    closeAtlasInspector();
+}
+
 function showRouteChevrons(trail) {
     routeChevronMarkers.clearLayers();
 
@@ -1019,11 +1073,12 @@ var style = {
 style.color = getTrailColor(trail.difficulty);
 var layer;
 var clickLayer;
+var visualLayers;
 
 if (trail.wip === '1') {
 
     // Red casing
-    L.geoJSON(data, {
+    var wipCasingLayer = L.geoJSON(data, {
         style: {
             color: '#ff0000',
             weight: 7,
@@ -1045,9 +1100,12 @@ if (trail.wip === '1') {
         color: '#000',
         weight: 20,
         opacity: 0,
-        interactive: true
+        interactive: true,
+        bubblingMouseEvents: false
     }
 }).addTo(map);
+
+    visualLayers = [wipCasingLayer, layer];
 
 } else {
 
@@ -1060,15 +1118,17 @@ if (segments) {
         var latLngs = segment.coordinates.map(function (point) { return [point[1], point[0]]; });
         var visibleSectionLayer = L.polyline(latLngs, { color: getTrailColor(segment.difficulty), weight: 5, opacity: 0.8 }).addTo(layer);
         // Preserve the existing 25px invisible mobile-friendly interaction layer per section.
-        var clickSectionLayer = L.polyline(latLngs, { color: '#000', weight: 25, opacity: 0, interactive: true }).addTo(clickLayer);
+        var clickSectionLayer = L.polyline(latLngs, { color: '#000', weight: 25, opacity: 0, interactive: true, bubblingMouseEvents: false }).addTo(clickLayer);
         visibleSectionLayer._atlasSectionDifficulty = segment.difficulty;
         clickSectionLayer._atlasSectionDifficulty = segment.difficulty;
     });
 } else {
     var visibleLayer = L.geoJSON(data, { style: style }).addTo(map);
     layer = visibleLayer;
-    clickLayer = L.geoJSON(data, { style: { color: '#000', weight: 25, opacity: 0, interactive: true } }).addTo(map);
+    clickLayer = L.geoJSON(data, { style: { color: '#000', weight: 25, opacity: 0, interactive: true, bubblingMouseEvents: false } }).addTo(map);
 }
+
+    visualLayers = [layer];
 
 }
 
@@ -1084,11 +1144,18 @@ var popupTitle = trail.title.replace(/\s*\|.*$/, '').trim() || trail.title;
 		article: trail.article,
 		youtube: trail.youtube,
 		layer: layer,
-		clickLayer: clickLayer
+		clickLayer: clickLayer,
+		visualLayers: visualLayers
 	};
 
+    captureTrailVisualStyles(trailLayers[trail.slug]);
+
     // Markers appear only for the selected route, keeping the overview map uncluttered.
-    clickLayer.on('click', function() {
+    clickLayer.on('click', function(event) {
+        if (event.originalEvent) {
+            L.DomEvent.stopPropagation(event.originalEvent);
+        }
+        setRouteFocus(trailLayers[trail.slug]);
         showSelectedTrailDetails(trailLayers[trail.slug]);
         showRouteInspector(trailLayers[trail.slug]);
     });
@@ -1140,7 +1207,10 @@ pois.forEach(function(poi) {
     )
     .addTo(map);
 
-    poiMarker.on('click', function() {
+    poiMarker.on('click', function(event) {
+        if (event.originalEvent) {
+            L.DomEvent.stopPropagation(event.originalEvent);
+        }
         showPoiInspector(poi);
     });
 
@@ -1179,6 +1249,7 @@ function closeSearchResults() {
 }
 
 function focusTrail(trail) {
+    setRouteFocus(trail);
     var mobilePadding = window.matchMedia('(max-width: 640px)').matches;
     map.fitBounds(trail.layer.getBounds(), {
         paddingTopLeft: mobilePadding ? [20, 20] : [30, 30],
@@ -1318,6 +1389,7 @@ document.addEventListener('keydown', function(e) {
 });
 
 map.on('click dragstart zoomstart', closeSearchResults);
+map.on('click', clearRouteFocus);
 map.on('dragstart', closeAtlasInspector);
 map.on('zoomend', refreshSelectedTrailDetails);
     });
