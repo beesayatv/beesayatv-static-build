@@ -1,0 +1,119 @@
+/* ==========================================
+   Beesayatv Trails v5
+   ========================================== */
+
+/* Card */
+
+.beesayatv-trails-card{
+    background:#fbf9f2;
+    border:1px solid #e8e2d2;
+    border-radius:10px;
+    padding:14px 16px;
+    box-sizing:border-box;
+    width:min(320px,100%);
+    margin:0 0 22px;
+}
+
+.beesayatv-trails-title{
+    margin:0 0 14px;
+    font-size:1.1rem;
+    font-weight:700;
+}
+
+.beesayatv-trails-title:after{
+    display:none!important;
+    content:none!important;
+}
+
+/* Float */
+
+.beesayatv-float-right{
+    float:right;
+    margin:0 0 22px 20px;
+}
+
+.beesayatv-float-left{
+    float:left;
+    margin:0 20px 22px 0;
+}
+
+.beesayatv-float-none{
+    float:none;
+    width:100%;
+}
+
+/* Base */
+
+.beesayatv-trails{
+    margin:0;
+    font-size:0.95em;
+}
+
+/* Lists */
+
+.beesayatv-trails ul,
+.beesayatv-trails ol{
+    margin:0 0 1.5em 1.5em;
+    padding:0;
+}
+
+.beesayatv-trails li{
+    font:inherit;
+    line-height:inherit;
+    margin-bottom:.35em;
+}
+
+.beesayatv-trails p{
+    margin:0 0 .75em;
+    font:inherit;
+    line-height:inherit;
+}
+
+/* Links */
+
+.beesayatv-trails a{
+    color:inherit;
+    font-size:.95em !important;
+    line-height:inherit;
+    text-decoration:none;
+}
+
+.beesayatv-trails a:hover,
+.beesayatv-trails a:focus{
+    color:inherit;
+    text-decoration:underline;
+}
+
+/* Two-column layout */
+
+.beesayatv-trails.columns-2 ul,
+.beesayatv-trails.columns-2 ol{
+    columns:2;
+    column-gap:2rem;
+}
+
+/* Footer */
+
+.beesayatv-trails-footer{
+    font-size:.9em !important;
+    line-height:inherit;
+    margin-top:-.75em;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .beesayatv-float-right,
+    .beesayatv-float-left,
+    .beesayatv-float-none{
+        float:none;
+        width:100%;
+        margin:24px 0;
+    }
+
+    .beesayatv-trails.columns-2 ul,
+    .beesayatv-trails.columns-2 ol{
+        columns:1;
+    }
+}

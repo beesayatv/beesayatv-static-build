@@ -1,0 +1,16 @@
+/* Normal WordPress Audio block enhancement. */
+.wp-block-audio.btv-audio-player{margin:28px 0;}
+.btv-audio-player__native{display:none;}
+.btv-audio-player__controls{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid #D8D2BD;border-radius:14px;background:#F5F2E8;color:#4D533F;}
+.btv-audio-player__button{display:grid;flex:0 0 38px;width:38px;height:38px;place-items:center;padding:0;border:0;border-radius:50%;background:#6E7359;color:#F5F2E8;cursor:pointer;}
+.btv-audio-player__button:hover{background:#4D533F;}
+.btv-audio-player__button:focus-visible,.btv-audio-player__range:focus-visible{outline:2px solid #697055;outline-offset:3px;}
+.btv-audio-player__button svg{width:16px;height:16px;fill:currentColor;}
+.btv-audio-player__progress{min-width:0;flex:1 1 auto;}
+.btv-audio-player__range{display:block;width:100%;height:14px;margin:0;background:transparent;cursor:pointer;-webkit-appearance:none;appearance:none;}
+.btv-audio-player__range::-webkit-slider-runnable-track{height:4px;border:0;border-radius:999px;background:linear-gradient(to right,#6E7359 0 var(--btv-audio-progress,0%),#D8D2BD var(--btv-audio-progress,0%) 100%);}
+.btv-audio-player__range::-webkit-slider-thumb{width:14px;height:14px;margin-top:-5px;border:2px solid #F5F2E8;border-radius:50%;background:#6E7359;-webkit-appearance:none;appearance:none;}
+.btv-audio-player__range::-moz-range-track{height:4px;border:0;border-radius:999px;background:#D8D2BD;}
+.btv-audio-player__range::-moz-range-progress{height:4px;border-radius:999px;background:#6E7359;}
+.btv-audio-player__range::-moz-range-thumb{width:10px;height:10px;border:2px solid #F5F2E8;border-radius:50%;background:#6E7359;}
+.btv-audio-player__time{flex:0 0 auto;color:#4D533F;font-size:13px;line-height:1;white-space:nowrap;}

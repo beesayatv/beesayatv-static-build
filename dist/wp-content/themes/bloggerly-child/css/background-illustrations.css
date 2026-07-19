@@ -1,0 +1,27 @@
+@media (min-width:1024px){
+
+body{
+    position:relative;
+    background:var(--bg-body);
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+
+    pointer-events:none;
+
+    z-index:0;
+
+    background:
+        url("https://beesayatv.com/wp-content/themes/bloggerly-child/assets/images/site-atmosphere.png")
+        center 180px / 100% auto
+        no-repeat;
+}
+
+#page{
+    position:relative;
+    z-index:1;
+}
+}
