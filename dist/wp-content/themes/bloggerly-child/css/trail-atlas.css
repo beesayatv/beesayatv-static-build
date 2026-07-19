@@ -33,8 +33,8 @@
 .beesayatv-atlas-fullscreen-button svg{width:18px;height:18px;display:block;}
 body.beesayatv-atlas-fullscreen-active{overflow:hidden;}
 .beesayatv-trail-atlas.is-fullscreen{position:fixed;inset:0;z-index:2000;background:#fff;padding:0;}
-.beesayatv-trail-atlas.is-fullscreen .beesayatv-atlas-search{position:absolute;top:12px;left:12px;right:12px;margin:0;z-index:2100;}
-.beesayatv-trail-atlas.is-fullscreen .leaflet-top.leaflet-right{top:78px;}
-.beesayatv-trail-atlas.is-fullscreen #beesayatv-test-map{height:100vh!important;border:0;border-radius:0;}
+.beesayatv-trail-atlas.is-fullscreen .beesayatv-atlas-search{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));left:calc(12px + env(safe-area-inset-left,0px));right:calc(12px + env(safe-area-inset-right,0px));margin:0;z-index:2100;}
+.beesayatv-trail-atlas.is-fullscreen .leaflet-top.leaflet-right{top:calc(78px + env(safe-area-inset-top,0px));}
+.beesayatv-trail-atlas.is-fullscreen #beesayatv-test-map{height:100vh!important;height:100dvh!important;border:0;border-radius:0;}
 body.beesayatv-atlas-fullscreen-active .site-header,body.beesayatv-atlas-fullscreen-active .site-footer{visibility:hidden;}
-@media (max-width:480px){.beesayatv-trail-atlas.is-fullscreen .beesayatv-atlas-search{top:8px;left:8px;right:8px;}.beesayatv-trail-atlas.is-fullscreen .leaflet-top.leaflet-right{top:70px;}}
+@media (max-width:480px){.beesayatv-trail-atlas.is-fullscreen .beesayatv-atlas-search{top:calc(8px + env(safe-area-inset-top,0px));left:calc(8px + env(safe-area-inset-left,0px));right:calc(8px + env(safe-area-inset-right,0px));}.beesayatv-trail-atlas.is-fullscreen .leaflet-top.leaflet-right{top:calc(70px + env(safe-area-inset-top,0px));}}
