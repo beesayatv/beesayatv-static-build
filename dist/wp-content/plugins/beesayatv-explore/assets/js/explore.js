@@ -131,13 +131,31 @@ async function loadTrails() {
 
 function renderTrailCard(trail) {
 
+    const resolveLocalUrl = function (value) {
+
+        try {
+            const url = new URL(value, window.location.origin);
+
+            if (url.hostname === 'beesayatv.test') {
+                return url.pathname + url.search + url.hash;
+            }
+        } catch (error) {
+            // Keep the original value if it is not a valid URL.
+        }
+
+        return value;
+    };
+
+    const trailUrl = resolveLocalUrl(trail.url);
+    const thumbnailUrl = resolveLocalUrl(trail.thumbnail);
+
     return `
         <article class="post-card">
 
-            <a class="post-card-link" href="${trail.url}">
+            <a class="post-card-link" href="${trailUrl}">
 
                 <div class="post-thumbnail">
-                    <img src="${trail.thumbnail}" alt="${trail.title}">
+                    <img src="${thumbnailUrl}" alt="${trail.title}">
                 </div>
 
                 <div class="post-content-wrap">
