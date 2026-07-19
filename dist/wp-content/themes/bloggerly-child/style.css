@@ -950,13 +950,9 @@ gap:20px;
     display:none;
 }
 
-@media (max-width:768px){
-
-    /* Keep the sticky header above the Leaflet control stack on the atlas page */
-    .page-id-96 .site-header{
-        z-index:1101;
-    }
-
+/* Keep the sticky header above the Atlas search and Leaflet control stack. */
+.page-id-96 .site-header{
+    z-index:1101;
 }
 
 /* ===========================================
