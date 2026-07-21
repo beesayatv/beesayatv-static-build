@@ -31,10 +31,21 @@
 .beesayatv-atlas-fullscreen-button:hover,.beesayatv-atlas-fullscreen-button:focus{background:#f4f4f4;}
 .beesayatv-atlas-fullscreen-button:focus-visible{outline:2px solid #697055;outline-offset:-2px;}
 .beesayatv-atlas-fullscreen-button svg{width:18px;height:18px;display:block;}
+.beesayatv-atlas-legend{position:relative;box-sizing:border-box;color:#333;font:600 13px/1 "Nunito Sans",sans-serif;}
+.beesayatv-atlas-legend__toggle{display:flex;align-items:center;justify-content:space-between;gap:7px;height:30px;padding:0 10px;border:0;border-radius:4px;background:#fff;color:inherit;font:inherit;line-height:30px;cursor:pointer;box-shadow:0 1px 5px rgba(0,0,0,.35);}
+.beesayatv-atlas-legend__toggle:hover,.beesayatv-atlas-legend__toggle:focus{background:#f4f4f4;}
+.beesayatv-atlas-legend__toggle:focus-visible{outline:2px solid #697055;outline-offset:2px;}
+.beesayatv-atlas-legend__toggle::after{content:"+";font-size:18px;font-weight:400;line-height:1;}
+.beesayatv-atlas-legend__items{display:none;position:absolute;top:36px;left:0;min-width:144px;padding:10px 12px;gap:7px;background:rgba(245,242,232,.96);border:1px solid rgba(70,70,60,.16);border-radius:8px;box-shadow:0 3px 12px rgba(0,0,0,.16);}
+.beesayatv-atlas-legend.is-open .beesayatv-atlas-legend__items{display:grid;}
+.beesayatv-atlas-legend.is-open .beesayatv-atlas-legend__toggle::after{content:"−";}
+.beesayatv-atlas-legend__item{display:flex;align-items:center;gap:8px;white-space:nowrap;}
+.beesayatv-atlas-legend__swatch{width:16px;height:5px;border-radius:999px;box-shadow:0 0 0 1px rgba(0,0,0,.08);}
 body.beesayatv-atlas-fullscreen-active{overflow:hidden;}
 .beesayatv-trail-atlas.is-fullscreen{position:fixed;inset:0;z-index:2000;background:#fff;padding:0;}
 .beesayatv-trail-atlas.is-fullscreen .beesayatv-atlas-search{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));left:calc(12px + env(safe-area-inset-left,0px));right:calc(12px + env(safe-area-inset-right,0px));margin:0;z-index:2100;}
 .beesayatv-trail-atlas.is-fullscreen .leaflet-top.leaflet-right{top:calc(78px + env(safe-area-inset-top,0px));}
 .beesayatv-trail-atlas.is-fullscreen #beesayatv-test-map{height:100vh!important;height:100dvh!important;border:0;border-radius:0;}
 body.beesayatv-atlas-fullscreen-active .site-header,body.beesayatv-atlas-fullscreen-active .site-footer{visibility:hidden;}
-@media (max-width:480px){.beesayatv-trail-atlas.is-fullscreen .beesayatv-atlas-search{top:calc(8px + env(safe-area-inset-top,0px));left:calc(8px + env(safe-area-inset-left,0px));right:calc(8px + env(safe-area-inset-right,0px));}.beesayatv-trail-atlas.is-fullscreen .leaflet-top.leaflet-right{top:calc(70px + env(safe-area-inset-top,0px));}}
+@media (max-width:640px){.leaflet-top.leaflet-left .beesayatv-atlas-legend{margin-top:70px;}}
+@media (max-width:480px){.beesayatv-trail-atlas.is-fullscreen .beesayatv-atlas-search{top:calc(8px + env(safe-area-inset-top,0px));left:calc(8px + env(safe-area-inset-left,0px));right:calc(8px + env(safe-area-inset-right,0px));}.beesayatv-trail-atlas.is-fullscreen .leaflet-top.leaflet-right{top:calc(70px + env(safe-area-inset-top,0px));}.beesayatv-trail-atlas.is-fullscreen .leaflet-top.leaflet-left .beesayatv-atlas-legend{margin-top:calc(82px + env(safe-area-inset-top,0px));}}
