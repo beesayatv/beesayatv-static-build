@@ -1,5 +1,7 @@
 .btv-site-header__actions{display:flex;align-items:center;gap:10px;}
 .btv-site-header__search,.btv-site-header__atlas{display:none;}
+.btv-site-header__search,.btv-site-header__atlas{outline:none!important;}
+.btv-site-header__search:focus-visible,.btv-site-header__atlas:focus-visible{outline:2px solid var(--hover-color)!important;outline-offset:2px;}
 .btv-site-header__nav li{position:relative;}
 .btv-site-header__nav .sub-menu{display:none;position:absolute;z-index:1000;min-width:180px;}
 .btv-site-header__nav li:hover>.sub-menu{display:block;}
