@@ -122,7 +122,7 @@ margin:24px 0;
 <link rel="stylesheet" id="dashicons-css" href="https://beesayatv.com/wp-includes/css/dashicons.min.css?ver=7.0.2" media="all">
 <link rel="stylesheet" id="beesayatv-cards-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/cards.css?ver=1784397693" media="all">
 <link rel="stylesheet" id="chld_thm_cfg_parent-css" href="https://beesayatv.com/wp-content/themes/bloggerly/style.css?ver=7.0.2" media="all">
-<link rel="stylesheet" id="beesayatv-child-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1784626487" media="all">
+<link rel="stylesheet" id="beesayatv-child-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1784696326" media="all">
 <link rel="stylesheet" id="beesayatv-audio-player-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/audio-player.css?ver=1784397693" media="all">
 <link rel="stylesheet" id="bloggerly-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1.0.5.1782171480" media="all">
 <link rel="stylesheet" id="beesayatv-page-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/page.css?ver=1784397693" media="all">
@@ -354,7 +354,7 @@ margin:24px 0;
 <link rel="icon" href="https://beesayatv.com/wp-content/uploads/2026/07/cropped-09-192x192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="https://beesayatv.com/wp-content/uploads/2026/07/cropped-09-180x180.png">
 <meta name="msapplication-TileImage" content="https://beesayatv.com/wp-content/uploads/2026/07/cropped-09-270x270.png">
-<link rel="stylesheet" id="btv-explore-css" href="https://beesayatv.com/wp-content/plugins/beesayatv-explore/assets/css/explore.css?ver=1.0.0" media="all">
+<link rel="stylesheet" id="btv-explore-css" href="https://beesayatv.com/wp-content/plugins/beesayatv-explore/assets/css/explore.css?ver=1784692169" media="all">
 
 </head>
 
@@ -430,6 +430,7 @@ margin:24px 0;
 
 <li id="menu-item-22" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-22"><a href="https://beesayatv.com/">Home</a></li>
 <li id="menu-item-524" class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-520 current_page_item menu-item-524"><a href="https://beesayatv.com/explore/" aria-current="page">Explore</a></li>
+<li id="menu-item-956" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-956"><a href="https://beesayatv.com/trail-events/">Events</a></li>
 <li id="menu-item-722" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-722"><a href="https://beesayatv.com/category/fieldwork/">Fieldwork</a></li>
 <li id="menu-item-691" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-691"><a href="https://beesayatv.com/category/news/">News</a></li>
 
@@ -450,23 +451,31 @@ margin:24px 0;
             
             <div class="entry-content btv-page__content">
                 
-<div class="btv-explore">
+<section class="btv-explore" aria-labelledby="btv-explore-title">
+
+	<p class="btv-explore__intro">
+		Browse documented Cebu trail records by location, difficulty, features, and route type.
+	</p>
+
+	<div class="btv-explore__search btv-search">
+		<label class="screen-reader-text" for="btv-search">Search trail records</label>
+		<input type="search" id="btv-search" placeholder="Search the trail directory..." autocomplete="off">
+	</div>
+
+	<button type="button" class="btv-mobile-filters-toggle" aria-expanded="false" aria-controls="btv-filters-panel">
+		<span>Filters</span>
+		<span class="btv-mobile-filters-toggle__count" hidden></span>
+	</button>
 
 	<div class="btv-explore__layout">
 
-		<aside class="btv-sidebar">
+		<aside id="btv-filters-panel" class="btv-sidebar" aria-label="Trail filters">
+			<h2 class="btv-sidebar__title">Archive filters</h2>
 
-			<div class="btv-search">
-
-	<input type="search" id="btv-search" placeholder="Search the trail directory..." autocomplete="off">
-
-</div>
 			
-			
-			
-	<section class="btv-filter-group">
+		<section class="btv-filter-group">
 
-		<button type="button" class="btv-filter-toggle">
+		<button type="button" class="btv-filter-toggle" aria-expanded="false" aria-controls="btv-filter-trail_location">
 
 			<span>Location</span>
 
@@ -474,84 +483,84 @@ margin:24px 0;
 
 		</button>
 
-		<div class="btv-filter-content">
+		<div id="btv-filter-trail_location" class="btv-filter-content" hidden>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_location-118">
 
-					<input type="checkbox" name="trail_location[]" value="cebu">
+					<input id="btv-filter-trail_location-118" type="checkbox" name="trail_location[]" value="cebu">
 
 					<span>Cebu</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_location-62">
 
-					<input type="checkbox" name="trail_location[]" value="danao">
+					<input id="btv-filter-trail_location-62" type="checkbox" name="trail_location[]" value="danao">
 
 					<span>Danao</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_location-126">
 
-					<input type="checkbox" name="trail_location[]" value="dumanjug">
+					<input id="btv-filter-trail_location-126" type="checkbox" name="trail_location[]" value="dumanjug">
 
 					<span>Dumanjug</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_location-63">
 
-					<input type="checkbox" name="trail_location[]" value="liloan">
+					<input id="btv-filter-trail_location-63" type="checkbox" name="trail_location[]" value="liloan">
 
 					<span>Liloan</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_location-64">
 
-					<input type="checkbox" name="trail_location[]" value="minglanilla">
+					<input id="btv-filter-trail_location-64" type="checkbox" name="trail_location[]" value="minglanilla">
 
 					<span>Minglanilla</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_location-65">
 
-					<input type="checkbox" name="trail_location[]" value="naga">
+					<input id="btv-filter-trail_location-65" type="checkbox" name="trail_location[]" value="naga">
 
 					<span>Naga</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_location-66">
 
-					<input type="checkbox" name="trail_location[]" value="sibonga">
+					<input id="btv-filter-trail_location-66" type="checkbox" name="trail_location[]" value="sibonga">
 
 					<span>Sibonga</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_location-127">
 
-					<input type="checkbox" name="trail_location[]" value="talisay">
+					<input id="btv-filter-trail_location-127" type="checkbox" name="trail_location[]" value="talisay">
 
 					<span>Talisay</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_location-67">
 
-					<input type="checkbox" name="trail_location[]" value="toledo">
+					<input id="btv-filter-trail_location-67" type="checkbox" name="trail_location[]" value="toledo">
 
 					<span>Toledo</span>
 
@@ -563,9 +572,9 @@ margin:24px 0;
 	</section>
 
 	
-	<section class="btv-filter-group">
+		<section class="btv-filter-group">
 
-		<button type="button" class="btv-filter-toggle">
+		<button type="button" class="btv-filter-toggle" aria-expanded="false" aria-controls="btv-filter-trail_difficulty">
 
 			<span>Difficulty</span>
 
@@ -573,30 +582,30 @@ margin:24px 0;
 
 		</button>
 
-		<div class="btv-filter-content">
+		<div id="btv-filter-trail_difficulty" class="btv-filter-content" hidden>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_difficulty-102">
 
-					<input type="checkbox" name="trail_difficulty[]" value="easy">
+					<input id="btv-filter-trail_difficulty-102" type="checkbox" name="trail_difficulty[]" value="easy">
 
 					<span>Easy</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_difficulty-103">
 
-					<input type="checkbox" name="trail_difficulty[]" value="mild">
+					<input id="btv-filter-trail_difficulty-103" type="checkbox" name="trail_difficulty[]" value="mild">
 
 					<span>Mild</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_difficulty-104">
 
-					<input type="checkbox" name="trail_difficulty[]" value="tough">
+					<input id="btv-filter-trail_difficulty-104" type="checkbox" name="trail_difficulty[]" value="tough">
 
 					<span>Tough</span>
 
@@ -608,9 +617,9 @@ margin:24px 0;
 	</section>
 
 	
-	<section class="btv-filter-group">
+		<section class="btv-filter-group">
 
-		<button type="button" class="btv-filter-toggle">
+		<button type="button" class="btv-filter-toggle" aria-expanded="false" aria-controls="btv-filter-trail_feature">
 
 			<span>Features</span>
 
@@ -618,147 +627,147 @@ margin:24px 0;
 
 		</button>
 
-		<div class="btv-filter-content">
+		<div id="btv-filter-trail_feature" class="btv-filter-content" hidden>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_feature-90">
 
-					<input type="checkbox" name="trail_feature[]" value="cliff">
+					<input id="btv-filter-trail_feature-90" type="checkbox" name="trail_feature[]" value="cliff">
 
 					<span>Cliff</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_feature-92">
 
-					<input type="checkbox" name="trail_feature[]" value="farmland">
+					<input id="btv-filter-trail_feature-92" type="checkbox" name="trail_feature[]" value="farmland">
 
 					<span>Farmland</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_feature-93">
 
-					<input type="checkbox" name="trail_feature[]" value="forest">
+					<input id="btv-filter-trail_feature-93" type="checkbox" name="trail_feature[]" value="forest">
 
 					<span>Forest</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_feature-95">
 
-					<input type="checkbox" name="trail_feature[]" value="lake">
+					<input id="btv-filter-trail_feature-95" type="checkbox" name="trail_feature[]" value="lake">
 
 					<span>Lake</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_feature-96">
 
-					<input type="checkbox" name="trail_feature[]" value="peak">
+					<input id="btv-filter-trail_feature-96" type="checkbox" name="trail_feature[]" value="peak">
 
 					<span>Peak</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_feature-68">
 
-					<input type="checkbox" name="trail_feature[]" value="ridge">
+					<input id="btv-filter-trail_feature-68" type="checkbox" name="trail_feature[]" value="ridge">
 
 					<span>Ridge</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_feature-70">
 
-					<input type="checkbox" name="trail_feature[]" value="river-crossing">
+					<input id="btv-filter-trail_feature-70" type="checkbox" name="trail_feature[]" value="river-crossing">
 
 					<span>River Crossing</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_feature-71">
 
-					<input type="checkbox" name="trail_feature[]" value="roads">
+					<input id="btv-filter-trail_feature-71" type="checkbox" name="trail_feature[]" value="roads">
 
 					<span>Roads</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_feature-72">
 
-					<input type="checkbox" name="trail_feature[]" value="rock-formation">
+					<input id="btv-filter-trail_feature-72" type="checkbox" name="trail_feature[]" value="rock-formation">
 
 					<span>Rock Formation</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_feature-73">
 
-					<input type="checkbox" name="trail_feature[]" value="rolling-hills">
+					<input id="btv-filter-trail_feature-73" type="checkbox" name="trail_feature[]" value="rolling-hills">
 
 					<span>Rolling Hills</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_feature-75">
 
-					<input type="checkbox" name="trail_feature[]" value="stairs">
+					<input id="btv-filter-trail_feature-75" type="checkbox" name="trail_feature[]" value="stairs">
 
 					<span>Stairs</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_feature-76">
 
-					<input type="checkbox" name="trail_feature[]" value="sunrise-view">
+					<input id="btv-filter-trail_feature-76" type="checkbox" name="trail_feature[]" value="sunrise-view">
 
 					<span>Sunrise View</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_feature-77">
 
-					<input type="checkbox" name="trail_feature[]" value="sunset-view">
+					<input id="btv-filter-trail_feature-77" type="checkbox" name="trail_feature[]" value="sunset-view">
 
 					<span>Sunset View</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_feature-80">
 
-					<input type="checkbox" name="trail_feature[]" value="valley">
+					<input id="btv-filter-trail_feature-80" type="checkbox" name="trail_feature[]" value="valley">
 
 					<span>Valley</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_feature-81">
 
-					<input type="checkbox" name="trail_feature[]" value="viewpoint">
+					<input id="btv-filter-trail_feature-81" type="checkbox" name="trail_feature[]" value="viewpoint">
 
 					<span>Viewpoint</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_feature-84">
 
-					<input type="checkbox" name="trail_feature[]" value="waterfall">
+					<input id="btv-filter-trail_feature-84" type="checkbox" name="trail_feature[]" value="waterfall">
 
 					<span>Waterfall</span>
 
@@ -770,9 +779,9 @@ margin:24px 0;
 	</section>
 
 	
-	<section class="btv-filter-group">
+		<section class="btv-filter-group">
 
-		<button type="button" class="btv-filter-toggle">
+		<button type="button" class="btv-filter-toggle" aria-expanded="false" aria-controls="btv-filter-trail_type">
 
 			<span>Type</span>
 
@@ -780,30 +789,30 @@ margin:24px 0;
 
 		</button>
 
-		<div class="btv-filter-content">
+		<div id="btv-filter-trail_type" class="btv-filter-content" hidden>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_type-98">
 
-					<input type="checkbox" name="trail_type[]" value="loop">
+					<input id="btv-filter-trail_type-98" type="checkbox" name="trail_type[]" value="loop">
 
 					<span>Loop</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_type-100">
 
-					<input type="checkbox" name="trail_type[]" value="out-and-back">
+					<input id="btv-filter-trail_type-100" type="checkbox" name="trail_type[]" value="out-and-back">
 
 					<span>Out and Back</span>
 
 				</label>
 
-			
-				<label class="btv-checkbox">
+							
+				<label class="btv-checkbox" for="btv-filter-trail_type-101">
 
-					<input type="checkbox" name="trail_type[]" value="point-to-point">
+					<input id="btv-filter-trail_type-101" type="checkbox" name="trail_type[]" value="point-to-point">
 
 					<span>Point-to-Point</span>
 
@@ -815,26 +824,24 @@ margin:24px 0;
 	</section>
 
 	
+			<button type="button" class="btv-mobile-filters-done">Done</button>
+
 		</aside>
 
-		<div id="btv-results">
+		<section id="btv-results" class="btv-results" aria-label="Trail records">
+			<div class="btv-results-toolbar">
+				<p id="btv-results-count" class="btv-results-count" aria-live="polite">
+					21 documented trails				</p>
+				<button type="button" class="btv-clear-filters" hidden>Clear filters</button>
+			</div>
 
-			
-<div class="btv-results">
+			<p id="btv-results-status" class="btv-results-status" role="status" hidden></p>
 
-	<div class="btv-results-header">
-
-		<h2>
-			21 documented trails		</h2>
-
-		
-	</div>
-
-	<div class="btv-results-grid">
-
-		
-			
+			<div id="btv-results-grid" class="btv-results-grid">
 				
+
+	
+		
 	<article class="post-card btv-post-card post-125 trail type-trail status-publish has-post-thumbnail hentry trail_location-naga trail_feature-forest trail_feature-lake trail_feature-roads trail_feature-viewpoint trail_type-loop trail_difficulty-mild">
 
 		<a class="post-card-link btv-post-card__link" href="https://beesayatv.com/trails/alpaco-trail-loop/">
@@ -848,7 +855,7 @@ margin:24px 0;
 			
 			<h2 class="entry-title btv-post-card__title">
 
-				Alpaco Trail Loop | Alpaco, Naga City | 2026 GPX
+				Alpaco Trail Loop
 			</h2>
 
 		</a>
@@ -856,8 +863,8 @@ margin:24px 0;
 	</article>
 
 	
-			
-				
+	
+		
 	<article class="post-card btv-post-card post-205 trail type-trail status-publish has-post-thumbnail hentry trail_location-cebu trail_feature-farmland trail_feature-forest trail_feature-ridge trail_feature-valley trail_feature-viewpoint trail_type-loop trail_difficulty-tough">
 
 		<a class="post-card-link btv-post-card__link" href="https://beesayatv.com/trails/bitlang-trail-loop/">
@@ -871,7 +878,7 @@ margin:24px 0;
 			
 			<h2 class="entry-title btv-post-card__title">
 
-				Bitlang Trail Loop | Sudlon 1, Cebu City | 2026 GPX
+				Bitlang Trail Loop
 			</h2>
 
 		</a>
@@ -879,8 +886,8 @@ margin:24px 0;
 	</article>
 
 	
-			
-				
+	
+		
 	<article class="post-card btv-post-card post-298 trail type-trail status-publish has-post-thumbnail hentry trail_location-toledo trail_feature-farmland trail_feature-ridge trail_feature-roads trail_feature-rolling-hills trail_feature-viewpoint trail_type-loop trail_difficulty-mild">
 
 		<a class="post-card-link btv-post-card__link" href="https://beesayatv.com/trails/cabanbanan-community-trail-loop/">
@@ -894,7 +901,7 @@ margin:24px 0;
 			
 			<h2 class="entry-title btv-post-card__title">
 
-				Cabanbanan Community Trail Loop | Camp 8, Toledo City | 2026 GPX
+				Cabanbanan Community Trail Loop
 			</h2>
 
 		</a>
@@ -902,8 +909,8 @@ margin:24px 0;
 	</article>
 
 	
-			
-				
+	
+		
 	<article class="post-card btv-post-card post-414 trail type-trail status-publish has-post-thumbnail hentry trail_location-dumanjug trail_feature-river-crossing trail_feature-waterfall trail_type-out-and-back trail_difficulty-easy">
 
 		<a class="post-card-link btv-post-card__link" href="https://beesayatv.com/trails/cambanog-falls-dumanjug-2026-gpx/">
@@ -917,7 +924,7 @@ margin:24px 0;
 			
 			<h2 class="entry-title btv-post-card__title">
 
-				Cambanog Falls | Dumanjug | 2026 GPX
+				Cambanog Falls
 			</h2>
 
 		</a>
@@ -925,8 +932,8 @@ margin:24px 0;
 	</article>
 
 	
-			
-				
+	
+		
 	<article class="post-card btv-post-card post-264 trail type-trail status-publish has-post-thumbnail hentry trail_location-minglanilla trail_feature-cliff trail_feature-farmland trail_feature-ridge trail_feature-roads trail_feature-valley trail_feature-viewpoint trail_type-loop trail_difficulty-mild">
 
 		<a class="post-card-link btv-post-card__link" href="https://beesayatv.com/trails/camp-7-farm-trails/">
@@ -940,7 +947,7 @@ margin:24px 0;
 			
 			<h2 class="entry-title btv-post-card__title">
 
-				Camp 7 Farm Trails | Minglanilla Part 2 | 2026 GPX
+				Camp 7 Farm Trails
 			</h2>
 
 		</a>
@@ -948,8 +955,8 @@ margin:24px 0;
 	</article>
 
 	
-			
-				
+	
+		
 	<article class="post-card btv-post-card post-277 trail type-trail status-publish has-post-thumbnail hentry trail_location-minglanilla trail_feature-farmland trail_feature-forest trail_feature-river-crossing trail_feature-viewpoint trail_type-point-to-point trail_difficulty-easy">
 
 		<a class="post-card-link btv-post-card__link" href="https://beesayatv.com/trails/camp-7-lubas-farm-trails/">
@@ -963,7 +970,7 @@ margin:24px 0;
 			
 			<h2 class="entry-title btv-post-card__title">
 
-				Camp 7 Farmland Trails | Minglanilla Part 1| 2026 GPX
+				Camp 7 Farmland Trails
 			</h2>
 
 		</a>
@@ -971,8 +978,8 @@ margin:24px 0;
 	</article>
 
 	
-			
-				
+	
+		
 	<article class="post-card btv-post-card post-236 trail type-trail status-publish has-post-thumbnail hentry trail_location-minglanilla trail_feature-farmland trail_feature-valley trail_feature-viewpoint trail_type-loop trail_difficulty-easy">
 
 		<a class="post-card-link btv-post-card__link" href="https://beesayatv.com/trails/ylaya-camp-8/">
@@ -986,7 +993,7 @@ margin:24px 0;
 			
 			<h2 class="entry-title btv-post-card__title">
 
-				Camp 8 Backtrails | Minglanilla Part 3 | 2026 GPX
+				Camp 8 Backtrails
 			</h2>
 
 		</a>
@@ -994,8 +1001,8 @@ margin:24px 0;
 	</article>
 
 	
-			
-				
+	
+		
 	<article class="post-card btv-post-card post-487 trail type-trail status-publish has-post-thumbnail hentry trail_location-minglanilla trail_feature-farmland trail_feature-river-crossing trail_feature-valley trail_type-out-and-back trail_difficulty-tough">
 
 		<a class="post-card-link btv-post-card__link" href="https://beesayatv.com/trails/camp-8-to-matun-og-falls-hike-anxiety-took-over-camp-8-minglanilla-2026-gpx/">
@@ -1009,7 +1016,7 @@ margin:24px 0;
 			
 			<h2 class="entry-title btv-post-card__title">
 
-				Camp 8 to Matun-og Falls Hike (Anxiety Took Over) | Camp 8, Minglanilla | 2026 GPX
+				Camp 8 to Matun-og Falls Hike (Anxiety Took Over)
 			</h2>
 
 		</a>
@@ -1017,8 +1024,8 @@ margin:24px 0;
 	</article>
 
 	
-			
-				
+	
+		
 	<article class="post-card btv-post-card post-727 trail type-trail status-publish has-post-thumbnail hentry trail_location-minglanilla trail_feature-stairs trail_feature-viewpoint trail_type-point-to-point trail_difficulty-mild">
 
 		<a class="post-card-link btv-post-card__link" href="https://beesayatv.com/trails/campagao-community-trail-manduang-minglanilla-2025-gpx/">
@@ -1032,7 +1039,7 @@ margin:24px 0;
 			
 			<h2 class="entry-title btv-post-card__title">
 
-				Campagao Community Trail | Manduang, Minglanilla | 2025 GPX
+				Campagao Community Trail
 			</h2>
 
 		</a>
@@ -1040,8 +1047,8 @@ margin:24px 0;
 	</article>
 
 	
-			
-				
+	
+		
 	<article class="post-card btv-post-card post-770 trail type-trail status-publish has-post-thumbnail hentry trail_location-minglanilla trail_feature-cliff trail_feature-roads trail_feature-stairs trail_feature-viewpoint trail_type-loop trail_difficulty-mild">
 
 		<a class="post-card-link btv-post-card__link" href="https://beesayatv.com/trails/campagao-community-trail-loop-manduang-minglanilla-2026-gpx/">
@@ -1055,7 +1062,7 @@ margin:24px 0;
 			
 			<h2 class="entry-title btv-post-card__title">
 
-				Campagao Community Trail Loop | Manduang, Minglanilla | 2026 GPX
+				Campagao Community Trail Loop
 			</h2>
 
 		</a>
@@ -1063,8 +1070,8 @@ margin:24px 0;
 	</article>
 
 	
-			
-				
+	
+		
 	<article class="post-card btv-post-card post-862 trail type-trail status-publish has-post-thumbnail hentry trail_location-naga trail_feature-farmland trail_feature-rolling-hills trail_feature-viewpoint trail_type-loop trail_difficulty-mild">
 
 		<a class="post-card-link btv-post-card__link" href="https://beesayatv.com/trails/cogon-mt-naupa-balirong-trail-loop-cogon-balirong-naga-2026-gpx/">
@@ -1078,7 +1085,7 @@ margin:24px 0;
 			
 			<h2 class="entry-title btv-post-card__title">
 
-				Cogon-Mt. Naupa-Balirong Trail Loop | Cogon / Balirong, Naga | 2026 GPX
+				Cogon-Mt. Naupa-Balirong Trail Loop
 			</h2>
 
 		</a>
@@ -1086,8 +1093,8 @@ margin:24px 0;
 	</article>
 
 	
-			
-				
+	
+		
 	<article class="post-card btv-post-card post-132 trail type-trail status-publish has-post-thumbnail hentry trail_location-danao trail_feature-farmland trail_feature-river-crossing trail_feature-waterfall trail_type-loop trail_difficulty-mild">
 
 		<a class="post-card-link btv-post-card__link" href="https://beesayatv.com/trails/danasan-trail-loop/">
@@ -1101,7 +1108,7 @@ margin:24px 0;
 			
 			<h2 class="entry-title btv-post-card__title">
 
-				Danasan Falls Trail Loop | Danasan, Danao | 2026 GPX
+				Danasan Falls Trail Loop
 			</h2>
 
 		</a>
@@ -1109,8 +1116,8 @@ margin:24px 0;
 	</article>
 
 	
-			
-				
+	
+		
 	<article class="post-card btv-post-card post-793 trail type-trail status-publish has-post-thumbnail hentry trail_location-minglanilla trail_feature-river-crossing trail_feature-waterfall trail_type-loop trail_difficulty-easy">
 
 		<a class="post-card-link btv-post-card__link" href="https://beesayatv.com/trails/guindaruhan-estaka-trail-loop-guindaruhan-minglanilla-2026-gpx/">
@@ -1124,7 +1131,7 @@ margin:24px 0;
 			
 			<h2 class="entry-title btv-post-card__title">
 
-				Guindaruhan-Estaka Trail Loop | Guindaruhan, Minglanilla | 2026 GPX
+				Guindaruhan-Estaka Trail Loop
 			</h2>
 
 		</a>
@@ -1132,8 +1139,8 @@ margin:24px 0;
 	</article>
 
 	
-			
-				
+	
+		
 	<article class="post-card btv-post-card post-929 trail type-trail status-publish has-post-thumbnail hentry trail_location-cebu">
 
 		<a class="post-card-link btv-post-card__link" href="https://beesayatv.com/trails/incomplete-buhisan-mini-forest-loop/">
@@ -1155,8 +1162,8 @@ margin:24px 0;
 	</article>
 
 	
-			
-				
+	
+		
 	<article class="post-card btv-post-card post-775 trail type-trail status-publish has-post-thumbnail hentry trail_location-minglanilla">
 
 		<a class="post-card-link btv-post-card__link" href="https://beesayatv.com/trails/incomplete-campagao-peak-area/">
@@ -1178,8 +1185,8 @@ margin:24px 0;
 	</article>
 
 	
-			
-				
+	
+		
 	<article class="post-card btv-post-card post-213 trail type-trail status-publish has-post-thumbnail hentry trail_location-liloan trail_feature-river-crossing trail_feature-rock-formation trail_type-out-and-back trail_difficulty-easy">
 
 		<a class="post-card-link btv-post-card__link" href="https://beesayatv.com/trails/malingin-rock/">
@@ -1193,7 +1200,7 @@ margin:24px 0;
 			
 			<h2 class="entry-title btv-post-card__title">
 
-				Malingin Rock | Cotcot River, Liloan | 2026 GPX
+				Malingin Rock
 			</h2>
 
 		</a>
@@ -1201,8 +1208,8 @@ margin:24px 0;
 	</article>
 
 	
-			
-				
+	
+		
 	<article class="post-card btv-post-card post-416 trail type-trail status-publish has-post-thumbnail hentry trail_location-talisay trail_feature-roads trail_feature-rolling-hills trail_feature-viewpoint trail_type-loop trail_difficulty-easy">
 
 		<a class="post-card-link btv-post-card__link" href="https://beesayatv.com/trails/mini-switzerland-campinsa-talisay-2026-gpx/">
@@ -1216,7 +1223,7 @@ margin:24px 0;
 			
 			<h2 class="entry-title btv-post-card__title">
 
-				Mini Switzerland | Campinsa, Talisay | 2026 GPX
+				Mini Switzerland
 			</h2>
 
 		</a>
@@ -1224,8 +1231,8 @@ margin:24px 0;
 	</article>
 
 	
-			
-				
+	
+		
 	<article class="post-card btv-post-card post-221 trail type-trail status-publish has-post-thumbnail hentry trail_location-sibonga trail_feature-cliff trail_feature-peak trail_type-out-and-back trail_difficulty-easy">
 
 		<a class="post-card-link btv-post-card__link" href="https://beesayatv.com/trails/kalatkat-trail/">
@@ -1239,7 +1246,7 @@ margin:24px 0;
 			
 			<h2 class="entry-title btv-post-card__title">
 
-				Mt. Kalatkat | Sayao, Sibonga | 2026 GPX
+				Mt. Kalatkat
 			</h2>
 
 		</a>
@@ -1247,8 +1254,8 @@ margin:24px 0;
 	</article>
 
 	
-			
-				
+	
+		
 	<article class="post-card btv-post-card post-196 trail type-trail status-publish has-post-thumbnail hentry trail_location-toledo trail_feature-farmland trail_feature-ridge trail_feature-viewpoint trail_type-point-to-point trail_difficulty-easy">
 
 		<a class="post-card-link btv-post-card__link" href="https://beesayatv.com/trails/radar-trail/">
@@ -1262,7 +1269,7 @@ margin:24px 0;
 			
 			<h2 class="entry-title btv-post-card__title">
 
-				Radar Trail | Sudlon 1 / Bagakay, Toledo | 2026 GPX
+				Radar Trail
 			</h2>
 
 		</a>
@@ -1270,8 +1277,8 @@ margin:24px 0;
 	</article>
 
 	
-			
-				
+	
+		
 	<article class="post-card btv-post-card post-260 trail type-trail status-publish has-post-thumbnail hentry trail_location-cebu trail_feature-farmland trail_feature-river-crossing trail_feature-valley trail_type-point-to-point trail_difficulty-easy">
 
 		<a class="post-card-link btv-post-card__link" href="https://beesayatv.com/trails/toong-forest-trail/">
@@ -1285,7 +1292,7 @@ margin:24px 0;
 			
 			<h2 class="entry-title btv-post-card__title">
 
-				Toong Forest Trail | Toong, Pardo / Mahayahay | 2026 GPX
+				Toong Forest Trail
 			</h2>
 
 		</a>
@@ -1293,8 +1300,8 @@ margin:24px 0;
 	</article>
 
 	
-			
-				
+	
+		
 	<article class="post-card btv-post-card post-412 trail type-trail status-publish has-post-thumbnail hentry trail_location-cebu trail_feature-sunrise-view trail_feature-sunset-view trail_feature-valley trail_type-loop trail_difficulty-mild">
 
 		<a class="post-card-link btv-post-card__link" href="https://beesayatv.com/trails/toong-lumadnon-trail-pardo-buhisan-2026-gpx/">
@@ -1308,7 +1315,7 @@ margin:24px 0;
 			
 			<h2 class="entry-title btv-post-card__title">
 
-				Toong Lumadnon Trail | Pardo / Buhisan | 2026 GPX
+				Toong Lumadnon Trail
 			</h2>
 
 		</a>
@@ -1316,17 +1323,15 @@ margin:24px 0;
 	</article>
 
 	
-			
-			
-		
-	</div>
+	
+	
+				</div>
 
-</div>
-		</div>
+		</section>
 
 	</div>
 
-</div>
+</section>
 
             </div>
         </article>
@@ -1365,10 +1370,10 @@ var bloggerly_script_vars = {"dark_mode":"Dark Mode","light_mode":"Light Mode","
 <script id="bloggerly-theme-js-js" src="https://beesayatv.com/wp-content/themes/bloggerly/assets/js/theme.js?ver=1.0.5.1782171480"></script>
 <script id="beesayatv-header-script-js" src="https://beesayatv.com/wp-content/themes/bloggerly-child/js/header.js?ver=1784606759"></script>
 <script id="btv-explore-js-extra">
-var btvExplore = {"ajaxUrl":"https://beesayatv.com/wp-admin/admin-ajax.php","nonce":"2072c3f991"};
+var btvExplore = {"ajaxUrl":"https://beesayatv.com/wp-admin/admin-ajax.php","nonce":"e7569f752a"};
 //# sourceURL=btv-explore-js-extra
 </script>
-<script id="btv-explore-js" src="https://beesayatv.com/wp-content/plugins/beesayatv-explore/assets/js/explore.js?ver=1.0.0"></script>
+<script id="btv-explore-js" src="https://beesayatv.com/wp-content/plugins/beesayatv-explore/assets/js/explore.js?ver=1784692481"></script>
 <script id="wp-emoji-settings" type="application/json">
 {"baseUrl":"https://s.w.org/images/core/emoji/17.0.2/72x72/","ext":".png","svgUrl":"https://s.w.org/images/core/emoji/17.0.2/svg/","svgExt":".svg","source":{"concatemoji":"https://beesayatv.com/wp-includes/js/wp-emoji-release.min.js?ver=7.0.2"}}
 </script>

@@ -41,6 +41,8 @@
 .beesayatv-atlas-legend.is-open .beesayatv-atlas-legend__toggle::after{content:"−";}
 .beesayatv-atlas-legend__item{display:flex;align-items:center;gap:8px;white-space:nowrap;}
 .beesayatv-atlas-legend__swatch{width:16px;height:5px;border-radius:999px;box-shadow:0 0 0 1px rgba(0,0,0,.08);}
+.beesayatv-trail-atlas .btv-motortaxi-cluster{background:transparent;border:0;}
+.beesayatv-trail-atlas .btv-motortaxi-cluster__count{width:32px;height:32px;display:grid;place-items:center;box-sizing:border-box;border:2px solid #f5f2e8;border-radius:50%;background:#6e7359;color:#fff;font:700 13px/1 "Nunito Sans",sans-serif;box-shadow:0 2px 5px rgba(38,53,37,.3);}
 body.beesayatv-atlas-fullscreen-active{overflow:hidden;}
 .beesayatv-trail-atlas.is-fullscreen{position:fixed;inset:0;z-index:2000;background:#fff;padding:0;}
 .beesayatv-trail-atlas.is-fullscreen .beesayatv-atlas-search{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));left:calc(12px + env(safe-area-inset-left,0px));right:calc(12px + env(safe-area-inset-right,0px));margin:0;z-index:2100;}
