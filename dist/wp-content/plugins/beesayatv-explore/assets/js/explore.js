@@ -169,9 +169,26 @@ document.addEventListener('DOMContentLoaded', function () {
         mobileFiltersToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
     }
 
+    function positionMobileFilterGroup(button) {
+        window.setTimeout(function () {
+            const header = document.getElementById('masthead');
+            const headerOffset = header ? Math.max(0, header.getBoundingClientRect().bottom) : 0;
+            const top = window.scrollY + button.getBoundingClientRect().top - headerOffset - 16;
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            window.scrollTo({
+                top: Math.max(0, top),
+                behavior: reducedMotion ? 'auto' : 'smooth'
+            });
+        }, 100);
+    }
+
     filterToggles.forEach(function (button) {
         button.addEventListener('click', function () {
-            if (window.matchMedia('(max-width: 767px)').matches) {
+            const isMobile = window.matchMedia('(max-width: 767px)').matches;
+            const willExpand = button.getAttribute('aria-expanded') !== 'true';
+
+            if (isMobile) {
                 filterToggles.forEach(function (otherButton) {
                     if (otherButton !== button) {
                         setGroupState(otherButton, false);
@@ -179,7 +196,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }
 
-            setGroupState(button, button.getAttribute('aria-expanded') !== 'true');
+            setGroupState(button, willExpand);
+
+            if (isMobile && willExpand) {
+                positionMobileFilterGroup(button);
+            }
         });
     });
 
