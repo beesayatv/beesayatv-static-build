@@ -390,20 +390,24 @@ Route Thumbnail
 
 .beesaya-open-map{
     position:absolute;
-    top:16px;
+    top:10px;
     right:10px;
 
-    width:30px;
-    height:30px;
+    min-height:24px;
+    padding:0 8px;
 
     display:flex;
     align-items:center;
     justify-content:center;
 
-    background:rgba(245,242,232,.95);
-    border:1px solid #d8d2bf;
-    border-radius:50%;
-    z-index:5;
+    background:rgba(117,129,102,.9);
+    border:1px solid rgba(255,255,255,.3);
+    border-radius:999px;
+    color:#fff;
+    font:700 .6875rem/1 "Nunito Sans",sans-serif;
+    letter-spacing:.01em;
+    white-space:nowrap;
+    z-index:10;
 }
 
 @media (max-width:768px){
@@ -415,18 +419,15 @@ Route Thumbnail
 }
 
 .beesaya-open-map svg{
-    width:14px;
-    height:14px;
-    flex:none;
-    display:block;
+    display:none;
+}
+
+.beesaya-open-map::after{
+    content:"Open map";
 }
 
 .beesaya-route-link:hover .beesaya-open-map{
-
-    background:#4D533F;
-
-    color:#fff;
-
+    background:rgba(117,129,102,.98);
 }
 
 .beesaya-route-map > .beesaya-route-link > svg{
