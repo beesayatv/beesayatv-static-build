@@ -19,12 +19,12 @@
 .btv-trail-archive .btv-post-card__title{margin:.85rem 1rem 0;color:#263525;}
 .btv-trail-archive .btv-post-card__meta{margin:.4rem 1rem 1rem;}
 
-/* Desktop editorial archives share the page-level paper surface. */
-.btv-editorial-archive{max-width:1100px;margin:0 auto;padding:40px;background:#F5F2E8;border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,.08);}
+/* Desktop public archives share the page-level paper surface. */
+.btv-editorial-archive,.btv-trail-archive{max-width:1100px;margin:0 auto;padding:40px;background:#F5F2E8;border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,.08);}
 .btv-editorial-archive__header{margin:0 0 2rem;}
 .btv-editorial-archive__title{margin:0;color:#263525;}
 .btv-editorial-archive__intro{margin:.55rem 0 0;color:#65705f;font-size:1rem;line-height:1.6;}
-@media(max-width:768px){.btv-editorial-archive{padding:0;background:transparent;border-radius:0;box-shadow:none;}}
+@media(max-width:768px){.btv-editorial-archive,.btv-trail-archive{padding:0;background:transparent;border-radius:0;box-shadow:none;}}
 
 /* Directory/listing card migration layer. */
 .btv-directory-card{background:#fbf9f2;border:1px solid #e8e2d2;border-radius:14px;padding:22px;}
