@@ -5,9 +5,19 @@
 .btv-post-card{background:var(--bg-card);border-radius:16px;}
 .btv-post-card img{border-radius:14px 14px 0 0;}
 .btv-post-card__title{line-height:1.3;}
+.btv-post-card__meta{margin:.4rem 0 0;color:#65705f;font:600 .8125rem/1.45 "Nunito Sans",sans-serif;}
 .btv-post-card .entry-content{display:none;}
 /* Parent-theme archive cards use the legacy post-card class without the new renderer class. */
 .post-card .entry-content{display:none;}
+.btv-trail-archive__header{margin:0 0 1.75rem;}
+.btv-trail-archive__title{margin:0;color:#263525;}
+.btv-trail-archive__intro{margin:.55rem 0 0;color:#65705f;line-height:1.6;}
+.btv-trail-archive .btv-post-card__link{display:block;text-decoration:none;}
+/* The parent theme outlines every hovered link; cards are full-card links. */
+.btv-trail-archive .btv-post-card__link:hover{outline:none;}
+.btv-trail-archive .btv-post-card__link:focus-visible{outline:2px solid var(--hover-color);outline-offset:3px;border-radius:16px;}
+.btv-trail-archive .btv-post-card__title{margin:.85rem 1rem 0;color:#263525;}
+.btv-trail-archive .btv-post-card__meta{margin:.4rem 1rem 1rem;}
 
 /* Directory/listing card migration layer. */
 .btv-directory-card{background:#fbf9f2;border:1px solid #e8e2d2;border-radius:14px;padding:22px;}

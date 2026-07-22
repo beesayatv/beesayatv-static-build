@@ -41,10 +41,39 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    function getTrailLabel(trail, labelKey, valueKey) {
+        if (Array.isArray(trail[labelKey]) && trail[labelKey][0]) {
+            return trail[labelKey][0];
+        }
+
+        if (!Array.isArray(trail[valueKey]) || !trail[valueKey][0]) {
+            return '';
+        }
+
+        return trail[valueKey][0].split('-').map(function (word) {
+            return word === 'and' || word === 'to' ? word : word.charAt(0).toUpperCase() + word.slice(1);
+        }).join(' ');
+    }
+
     function renderTrailCard(trail) {
         const title = getDisplayTitle(trail);
         const trailUrl = resolveLocalUrl(trail.url);
         const thumbnailUrl = resolveLocalUrl(trail.thumbnail);
+        const metadataItems = [
+            getTrailLabel(trail, 'trail_location_labels', 'trail_location'),
+            getTrailLabel(trail, 'trail_difficulty_labels', 'trail_difficulty'),
+            getTrailLabel(trail, 'trail_type_labels', 'trail_type')
+        ].filter(Boolean);
+
+        if (metadataItems.length < 3 && trail.wip) {
+            metadataItems.push('Exploration in progress');
+        }
+
+        if (metadataItems.length < 3 && trail.documented) {
+            metadataItems.push(trail.documented);
+        }
+
+        const metadata = metadataItems.slice(0, 3).join(' · ');
 
         return `
             <article class="post-card btv-post-card">
@@ -53,6 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <img src="${thumbnailUrl}" alt="${title}">
                     </div>
                     <h2 class="entry-title btv-post-card__title">${title}</h2>
+                    ${metadata ? `<p class="btv-post-card__meta">${metadata}</p>` : ''}
                 </a>
             </article>`;
     }
@@ -141,6 +171,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     filterToggles.forEach(function (button) {
         button.addEventListener('click', function () {
+            if (window.matchMedia('(max-width: 767px)').matches) {
+                filterToggles.forEach(function (otherButton) {
+                    if (otherButton !== button) {
+                        setGroupState(otherButton, false);
+                    }
+                });
+            }
+
             setGroupState(button, button.getAttribute('aria-expanded') !== 'true');
         });
     });
