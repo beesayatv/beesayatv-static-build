@@ -410,14 +410,6 @@ Route Thumbnail
     z-index:10;
 }
 
-@media (max-width:768px){
-
-    .beesaya-open-map{
-        right:21px;
-    }
-
-}
-
 .beesaya-open-map svg{
     display:none;
 }
@@ -449,7 +441,7 @@ Route Thumbnail
         margin-top:20px;
     }
 
-    .beesaya-route-map svg{
+    .beesaya-route-map > .beesaya-route-link > svg{
         width:100%;
         max-width:320px;
         height:auto;
@@ -520,10 +512,15 @@ Route Thumbnail
     display:none;
 }
 
-.wp-block-spacer{
+.wp-block-spacer{}
+
 .beesaya-route-link:hover,
-.beesaya-route-link:focus,
-.beesaya-route-link:focus-visible{
+.beesaya-route-link:focus{
     outline: none;
+}
+
+.beesaya-route-link:focus-visible{
+    outline:2px solid var(--hover-color);
+    outline-offset:3px;
 }
 
