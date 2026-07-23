@@ -38,9 +38,16 @@
 .beesayatv-atlas-legend__toggle::after{content:"+";font-size:18px;font-weight:400;line-height:1;}
 .beesayatv-atlas-legend__items{display:none;position:absolute;top:36px;left:0;min-width:144px;padding:10px 12px;gap:7px;background:rgba(245,242,232,.96);border:1px solid rgba(70,70,60,.16);border-radius:8px;box-shadow:0 3px 12px rgba(0,0,0,.16);}
 .beesayatv-atlas-legend.is-open .beesayatv-atlas-legend__items{display:grid;}
+.beesayatv-atlas-legend.is-open .beesayatv-atlas-legend__items{position:static;margin-top:6px;}
 .beesayatv-atlas-legend.is-open .beesayatv-atlas-legend__toggle::after{content:"−";}
 .beesayatv-atlas-legend__item{display:flex;align-items:center;gap:8px;white-space:nowrap;}
 .beesayatv-atlas-legend__swatch{width:16px;height:5px;border-radius:999px;box-shadow:0 0 0 1px rgba(0,0,0,.08);}
+.beesayatv-atlas-access-control{box-sizing:border-box;font:600 13px/1 "Nunito Sans",sans-serif;}
+.beesayatv-atlas-access-control__toggle{height:30px;padding:0 10px;border:0;border-radius:4px;background:#fff;color:#333;font:inherit;cursor:pointer;box-shadow:0 1px 5px rgba(0,0,0,.35);}
+.beesayatv-atlas-access-control__toggle:hover:not(:disabled):not([aria-pressed="true"]),.beesayatv-atlas-access-control__toggle:focus:not(:disabled):not([aria-pressed="true"]){background:#f4f4f4;}
+.beesayatv-atlas-access-control__toggle[aria-pressed="true"]{background:#6e7359;color:#fff;}
+.beesayatv-atlas-access-control__toggle:disabled{opacity:.55;cursor:default;}
+.beesayatv-atlas-access-control__toggle:focus-visible{outline:2px solid #697055;outline-offset:2px;}
 .beesayatv-trail-atlas .btv-motortaxi-cluster{background:transparent;border:0;}
 .beesayatv-trail-atlas .btv-motortaxi-cluster__count{width:32px;height:32px;display:grid;place-items:center;box-sizing:border-box;border:2px solid #f5f2e8;border-radius:50%;background:#6e7359;color:#fff;font:700 13px/1 "Nunito Sans",sans-serif;box-shadow:0 2px 5px rgba(38,53,37,.3);}
 body.beesayatv-atlas-fullscreen-active{overflow:hidden;}
