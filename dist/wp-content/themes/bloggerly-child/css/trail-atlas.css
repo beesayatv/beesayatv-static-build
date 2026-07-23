@@ -48,6 +48,7 @@
 .beesayatv-atlas-access-control__toggle[aria-pressed="true"]{background:#6e7359;color:#fff;}
 .beesayatv-atlas-access-control__toggle:disabled{opacity:.55;cursor:default;}
 .beesayatv-atlas-access-control__toggle:focus-visible{outline:2px solid #697055;outline-offset:2px;}
+.btv-poi-marker.is-selected.is-motortaxi-without-outgoing-connection .btv-poi-circle{box-shadow:0 0 0 2px rgba(245,242,232,.96),0 0 0 5px #4f5148,0 2px 6px rgba(0,0,0,.25);}
 .beesayatv-trail-atlas .btv-motortaxi-cluster{background:transparent;border:0;}
 .beesayatv-trail-atlas .btv-motortaxi-cluster__count{width:32px;height:32px;display:grid;place-items:center;box-sizing:border-box;border:2px solid #f5f2e8;border-radius:50%;background:#6e7359;color:#fff;font:700 13px/1 "Nunito Sans",sans-serif;box-shadow:0 2px 5px rgba(38,53,37,.3);}
 body.beesayatv-atlas-fullscreen-active{overflow:hidden;}
