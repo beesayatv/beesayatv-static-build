@@ -31,8 +31,15 @@
 .beesayatv-atlas-fullscreen-button:hover,.beesayatv-atlas-fullscreen-button:focus{background:#f4f4f4;}
 .beesayatv-atlas-fullscreen-button:focus-visible{outline:2px solid #697055;outline-offset:-2px;}
 .beesayatv-atlas-fullscreen-button svg{width:18px;height:18px;display:block;}
+.beesayatv-trail-atlas .leaflet-control-layers{border:0;border-radius:4px;background:#fff;box-shadow:0 1px 5px rgba(0,0,0,.35);font:600 13px/1 "Nunito Sans",sans-serif;}
+.beesayatv-trail-atlas .leaflet-control-layers-toggle{width:30px!important;height:30px!important;box-sizing:border-box;padding:0;background-size:16px 16px;color:#333;text-decoration:none;}
+.beesayatv-trail-atlas .leaflet-control-layers:hover .leaflet-control-layers-toggle,.beesayatv-trail-atlas .leaflet-control-layers-toggle:focus{background:#f4f4f4;}
+.beesayatv-trail-atlas .leaflet-control-layers-expanded{padding:9px 11px;min-width:126px;line-height:1.35;}
+.beesayatv-trail-atlas .leaflet-control-layers-selector{margin:0 6px 0 0;vertical-align:middle;}
+.beesayatv-trail-atlas .leaflet-control-layers label{display:block;padding:4px 0;white-space:nowrap;cursor:pointer;}
+.beesayatv-trail-atlas .leaflet-control-layers input:focus-visible{outline:2px solid #697055;outline-offset:2px;}
 .beesayatv-atlas-legend{position:relative;box-sizing:border-box;color:#333;font:600 13px/1 "Nunito Sans",sans-serif;}
-.beesayatv-atlas-legend__toggle{display:flex;align-items:center;justify-content:space-between;gap:7px;height:30px;padding:0 10px;border:0;border-radius:4px;background:#fff;color:inherit;font:inherit;line-height:30px;cursor:pointer;box-shadow:0 1px 5px rgba(0,0,0,.35);}
+.beesayatv-atlas-legend__toggle{width:112px;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:7px;height:30px;padding:0 10px;border:0;border-radius:4px;background:#fff;color:inherit;font:inherit;line-height:30px;cursor:pointer;box-shadow:0 1px 5px rgba(0,0,0,.35);}
 .beesayatv-atlas-legend__toggle:hover,.beesayatv-atlas-legend__toggle:focus{background:#f4f4f4;}
 .beesayatv-atlas-legend__toggle:focus-visible{outline:2px solid #697055;outline-offset:2px;}
 .beesayatv-atlas-legend__toggle::after{content:"+";font-size:18px;font-weight:400;line-height:1;}
@@ -43,7 +50,7 @@
 .beesayatv-atlas-legend__item{display:flex;align-items:center;gap:8px;white-space:nowrap;}
 .beesayatv-atlas-legend__swatch{width:16px;height:5px;border-radius:999px;box-shadow:0 0 0 1px rgba(0,0,0,.08);}
 .beesayatv-atlas-access-control{box-sizing:border-box;font:600 13px/1 "Nunito Sans",sans-serif;}
-.beesayatv-atlas-access-control__toggle{height:30px;padding:0 10px;border:0;border-radius:4px;background:#fff;color:#333;font:inherit;cursor:pointer;box-shadow:0 1px 5px rgba(0,0,0,.35);}
+.beesayatv-atlas-access-control__toggle{width:112px;box-sizing:border-box;height:30px;padding:0 10px;border:0;border-radius:4px;background:#fff;color:#333;font:inherit;white-space:nowrap;cursor:pointer;box-shadow:0 1px 5px rgba(0,0,0,.35);}
 .beesayatv-atlas-access-control__toggle:hover:not(:disabled):not([aria-pressed="true"]),.beesayatv-atlas-access-control__toggle:focus:not(:disabled):not([aria-pressed="true"]){background:#f4f4f4;}
 .beesayatv-atlas-access-control__toggle[aria-pressed="true"]{background:#6e7359;color:#fff;}
 .beesayatv-atlas-access-control__toggle:disabled{opacity:.55;cursor:default;}
