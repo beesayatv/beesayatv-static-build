@@ -50,7 +50,7 @@
 .beesayatv-atlas-legend__item{display:flex;align-items:center;gap:8px;white-space:nowrap;}
 .beesayatv-atlas-legend__swatch{width:16px;height:5px;border-radius:999px;box-shadow:0 0 0 1px rgba(0,0,0,.08);}
 .beesayatv-atlas-access-control{box-sizing:border-box;font:600 13px/1 "Nunito Sans",sans-serif;}
-.beesayatv-atlas-access-control__toggle{width:112px;box-sizing:border-box;height:30px;padding:0 10px;border:0;border-radius:4px;background:#fff;color:#333;font:inherit;white-space:nowrap;cursor:pointer;box-shadow:0 1px 5px rgba(0,0,0,.35);}
+.beesayatv-atlas-access-control__toggle{width:112px;box-sizing:border-box;height:30px;padding:0 10px;border:0;border-radius:4px;background:#fff;color:#333;font:inherit;text-align:left;white-space:nowrap;cursor:pointer;box-shadow:0 1px 5px rgba(0,0,0,.35);}
 .beesayatv-atlas-access-control__toggle:hover:not(:disabled):not([aria-pressed="true"]),.beesayatv-atlas-access-control__toggle:focus:not(:disabled):not([aria-pressed="true"]){background:#f4f4f4;}
 .beesayatv-atlas-access-control__toggle[aria-pressed="true"]{background:#6e7359;color:#fff;}
 .beesayatv-atlas-access-control__toggle:disabled{opacity:.55;cursor:default;}
