@@ -1,0 +1,67 @@
+/* Trail Atlas migration layer. */
+.beesayatv-trail-atlas{position:relative;}
+.leaflet-popup-content{margin:8px 10px;}
+.leaflet-popup-content h3{margin:0 0 8px;font-size:18px;}
+.leaflet-popup-content p{margin:2px 0;font-size:16px!important;}
+.leaflet-popup-content a{display:inline;}
+.poi-popup .leaflet-popup-content p{line-height:1.3!important;}
+.trail-route-popup .leaflet-popup-content p{line-height:1.3!important;}
+.trail-route-popup .leaflet-popup-content .trail-route-popup__link{margin:8px 0 0!important;}
+.trail-route-popup .leaflet-popup-content .trail-route-popup__link + .trail-route-popup__link{margin-top:6px!important;}
+.beesayatv-atlas-search{position:relative;margin-bottom:16px;z-index:1001;}
+#trail-search{width:100%;height:54px;padding:0 94px 0 18px;box-sizing:border-box;background:#fff;border:1px solid #d6d6d6;border-radius:8px;font-size:16px;font-family:inherit;transition:border-color .2s ease,box-shadow .2s ease;}
+#trail-search::placeholder{color:#888;}
+#trail-search:focus{outline:none;border-color:#9A9D84;box-shadow:0 0 0 3px rgba(154,157,132,.18);}
+#trail-search-submit{position:absolute;top:50%;right:6px;transform:translateY(-50%);min-height:40px;padding:0 13px;border:0;border-radius:6px;background:#F5F2E8;color:#263525;font:600 14px/1 "Nunito Sans",sans-serif;cursor:pointer;}
+#trail-search-submit:hover,#trail-search-submit:focus{background:#e9e5d9;}
+#trail-search-submit:focus-visible{outline:2px solid #697055;outline-offset:2px;}
+.trail-search-results{position:absolute;top:calc(100% + 6px);left:0;right:0;max-height:324px;overflow-y:auto;background:#fff;border:1px solid #d6d6d6;border-radius:8px;box-shadow:0 8px 20px rgba(38,53,37,.18);z-index:1001;}
+.trail-search-results[hidden]{display:none;}
+.trail-search-results__item{width:100%;display:flex;align-items:center;gap:12px;padding:12px 14px;border:0;border-bottom:1px solid #ece8dc;background:#fff;color:#263525;text-align:left;font:inherit;cursor:pointer;}
+.trail-search-results__item:last-child{border-bottom:0;}
+.trail-search-results__item:hover,.trail-search-results__item:focus,.trail-search-results__item.is-active{background:#f5f2e8;outline:none;}
+.trail-search-results__title{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.trail-search-results__difficulty{margin-left:auto;flex:0 0 auto;color:#65705f;font-size:13px;text-transform:capitalize;}
+.trail-search-results__empty{padding:14px;color:#65705f;font-size:14px;}
+@media (max-width:480px){.trail-search-results{max-height:270px;}.trail-search-results__item{padding:11px 12px;}.trail-search-results__difficulty{font-size:12px;}}
+.leaflet-map{display:none;}
+#beesayatv-test-map{border:2px solid #d9d3c3;border-radius:8px;overflow:hidden;}
+.beesayatv-atlas-fullscreen-control{clear:both;}
+.beesayatv-atlas-fullscreen-button{width:30px;height:30px;padding:0;display:flex;align-items:center;justify-content:center;border:0;background:#fff;color:#333;cursor:pointer;}
+.beesayatv-atlas-fullscreen-button:hover,.beesayatv-atlas-fullscreen-button:focus{background:#f4f4f4;}
+.beesayatv-atlas-fullscreen-button:focus-visible{outline:2px solid #697055;outline-offset:-2px;}
+.beesayatv-atlas-fullscreen-button svg{width:18px;height:18px;display:block;}
+.beesayatv-trail-atlas .leaflet-control-layers{border:0;border-radius:4px;background:#fff;box-shadow:0 1px 5px rgba(0,0,0,.35);font:600 13px/1 "Nunito Sans",sans-serif;}
+.beesayatv-trail-atlas .leaflet-control-layers-toggle{width:30px!important;height:30px!important;box-sizing:border-box;padding:0;background-size:16px 16px;color:#333;text-decoration:none;}
+.beesayatv-trail-atlas .leaflet-control-layers:hover .leaflet-control-layers-toggle,.beesayatv-trail-atlas .leaflet-control-layers-toggle:focus{background:#f4f4f4;}
+.beesayatv-trail-atlas .leaflet-control-layers-expanded{padding:9px 11px;min-width:126px;line-height:1.35;}
+.beesayatv-trail-atlas .leaflet-control-layers-selector{margin:0 6px 0 0;vertical-align:middle;}
+.beesayatv-trail-atlas .leaflet-control-layers label{display:block;padding:4px 0;white-space:nowrap;cursor:pointer;}
+.beesayatv-trail-atlas .leaflet-control-layers input:focus-visible{outline:2px solid #697055;outline-offset:2px;}
+.beesayatv-atlas-legend{position:relative;box-sizing:border-box;color:#333;font:600 13px/1 "Nunito Sans",sans-serif;}
+.beesayatv-atlas-legend__toggle{width:112px;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:7px;height:30px;padding:0 10px;border:0;border-radius:4px;background:#fff;color:inherit;font:inherit;line-height:30px;cursor:pointer;box-shadow:0 1px 5px rgba(0,0,0,.35);}
+.beesayatv-atlas-legend__toggle:hover,.beesayatv-atlas-legend__toggle:focus{background:#f4f4f4;}
+.beesayatv-atlas-legend__toggle:focus-visible{outline:2px solid #697055;outline-offset:2px;}
+.beesayatv-atlas-legend__toggle::after{content:"+";font-size:18px;font-weight:400;line-height:1;}
+.beesayatv-atlas-legend__items{display:none;position:absolute;top:36px;left:0;min-width:144px;padding:10px 12px;gap:7px;background:rgba(245,242,232,.96);border:1px solid rgba(70,70,60,.16);border-radius:8px;box-shadow:0 3px 12px rgba(0,0,0,.16);}
+.beesayatv-atlas-legend.is-open .beesayatv-atlas-legend__items{display:grid;}
+.beesayatv-atlas-legend.is-open .beesayatv-atlas-legend__items{position:static;margin-top:6px;}
+.beesayatv-atlas-legend.is-open .beesayatv-atlas-legend__toggle::after{content:"−";}
+.beesayatv-atlas-legend__item{display:flex;align-items:center;gap:8px;white-space:nowrap;}
+.beesayatv-atlas-legend__swatch{width:16px;height:5px;border-radius:999px;box-shadow:0 0 0 1px rgba(0,0,0,.08);}
+.beesayatv-atlas-access-control{box-sizing:border-box;font:600 13px/1 "Nunito Sans",sans-serif;}
+.beesayatv-atlas-access-control__toggle{width:112px;box-sizing:border-box;height:30px;padding:0 10px;border:0;border-radius:4px;background:#fff;color:#333;font:inherit;white-space:nowrap;cursor:pointer;box-shadow:0 1px 5px rgba(0,0,0,.35);}
+.beesayatv-atlas-access-control__toggle:hover:not(:disabled):not([aria-pressed="true"]),.beesayatv-atlas-access-control__toggle:focus:not(:disabled):not([aria-pressed="true"]){background:#f4f4f4;}
+.beesayatv-atlas-access-control__toggle[aria-pressed="true"]{background:#6e7359;color:#fff;}
+.beesayatv-atlas-access-control__toggle:disabled{opacity:.55;cursor:default;}
+.beesayatv-atlas-access-control__toggle:focus-visible{outline:2px solid #697055;outline-offset:2px;}
+.btv-poi-marker.is-selected.is-motortaxi-without-outgoing-connection .btv-poi-circle{box-shadow:0 0 0 2px rgba(245,242,232,.96),0 0 0 5px #4f5148,0 2px 6px rgba(0,0,0,.25);}
+.beesayatv-trail-atlas .btv-motortaxi-cluster{background:transparent;border:0;}
+.beesayatv-trail-atlas .btv-motortaxi-cluster__count{width:32px;height:32px;display:grid;place-items:center;box-sizing:border-box;border:2px solid #f5f2e8;border-radius:50%;background:#6e7359;color:#fff;font:700 13px/1 "Nunito Sans",sans-serif;box-shadow:0 2px 5px rgba(38,53,37,.3);}
+body.beesayatv-atlas-fullscreen-active{overflow:hidden;}
+.beesayatv-trail-atlas.is-fullscreen{position:fixed;inset:0;z-index:2000;background:#fff;padding:0;}
+.beesayatv-trail-atlas.is-fullscreen .beesayatv-atlas-search{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));left:calc(12px + env(safe-area-inset-left,0px));right:calc(12px + env(safe-area-inset-right,0px));margin:0;z-index:2100;}
+.beesayatv-trail-atlas.is-fullscreen .leaflet-top.leaflet-left,.beesayatv-trail-atlas.is-fullscreen .leaflet-top.leaflet-right{top:calc(78px + env(safe-area-inset-top,0px));}
+.beesayatv-trail-atlas.is-fullscreen #beesayatv-test-map{height:100vh!important;height:100dvh!important;border:0;border-radius:0;}
+body.beesayatv-atlas-fullscreen-active .site-header,body.beesayatv-atlas-fullscreen-active .site-footer{visibility:hidden;}
+@media (max-width:480px){.beesayatv-trail-atlas.is-fullscreen .beesayatv-atlas-search{top:calc(8px + env(safe-area-inset-top,0px));left:calc(8px + env(safe-area-inset-left,0px));right:calc(8px + env(safe-area-inset-right,0px));}.beesayatv-trail-atlas.is-fullscreen .leaflet-top.leaflet-left,.beesayatv-trail-atlas.is-fullscreen .leaflet-top.leaflet-right{top:calc(70px + env(safe-area-inset-top,0px));}}

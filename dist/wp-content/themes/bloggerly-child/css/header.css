@@ -1,0 +1,10 @@
+.btv-site-header__actions{display:flex;align-items:center;gap:10px;}
+.btv-site-header__search{display:none;outline:none!important;}
+.btv-site-header__search:focus-visible{outline:2px solid var(--hover-color)!important;outline-offset:2px;}
+.btv-site-header__nav li{position:relative;}
+.btv-site-header__nav .sub-menu{display:none;position:absolute;z-index:1000;min-width:180px;}
+.btv-site-header__nav li:hover>.sub-menu{display:block;}
+.btv-site-header__nav .sub-menu a{display:block;padding:10px 18px;text-decoration:none;}
+.btv-site-header__nav .sub-menu a:hover{background:#E8DFC8;color:#4D533F;}
+@media (min-width:769px){.btv-site-header__nav{margin-left:auto;}.btv-site-header__actions{order:3;margin-left:1.5rem;}.btv-site-header__search{display:flex;align-items:center;justify-content:center;width:20px;height:20px;padding:8px;}}
+@media (max-width:768px){.btv-site-header__actions{margin-left:auto;gap:18px;}.btv-site-header__search{display:flex;align-items:center;justify-content:center;width:20px;height:20px;padding:12px;margin:-12px;}.btv-site-header__nav img.emoji,.btv-site-header__nav img.wp-smiley{display:none!important;}}
