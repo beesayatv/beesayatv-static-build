@@ -2,6 +2,7 @@ const ALLOWED_ORIGINS = new Set([
   'https://beesayatv.com',
   'https://www.beesayatv.com',
   'http://beesayatv.test',
+  'https://beesayatv.test',
   'http://localhost:3000',
   'http://127.0.0.1:3000'
 ]);
