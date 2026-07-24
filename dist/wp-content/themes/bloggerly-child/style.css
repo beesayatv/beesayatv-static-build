@@ -793,6 +793,46 @@ gap:20px;
     padding-bottom:12px;
 }
 
+/* Trail reports: present the existing WordPress YouTube embed as the same
+   quiet media-card family used by the Trail Photos gallery. */
+body.single-trail .wp-block-embed.is-provider-youtube{
+    background:#fff;
+    border:1px solid #e4e4e4;
+    border-radius:16px;
+    padding:0;
+    margin:32px 0;
+    box-shadow:0 6px 20px rgba(0,0,0,.06);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    transition:box-shadow .25s ease;
+}
+
+body.single-trail .wp-block-embed.is-provider-youtube > .wp-block-embed__wrapper{
+    order:1;
+    line-height:0;
+}
+
+body.single-trail .wp-block-embed.is-provider-youtube iframe{
+    width:100%;
+    border-radius:0;
+}
+
+body.single-trail .wp-block-embed.is-provider-youtube::before{
+    order:2;
+    margin:0;
+    padding:18px 22px;
+    background:none;
+    color:#222;
+    font-size:18px;
+    font-weight:600;
+    line-height:1.2;
+}
+
+body.single-trail .wp-block-embed.is-provider-youtube:hover{
+    box-shadow:0 12px 30px rgba(0,0,0,.10);
+}
+
 
     margin-bottom:0;
 }
@@ -1053,33 +1093,91 @@ gap:20px;
 */
 
 .trail-archive-links {
-    margin-top: 1.5rem;
+    margin-top:3rem;
+    padding-top:1.5rem;
+    border-top:1px solid #e8e2d2;
 }
 
-.trail-archive-item + .trail-archive-item {
-    margin-top: 1.5rem;
+.trail-archive-links .btv-single-trail__archive-heading{
+    margin:0;
+    color:#2d3a2d;
+    font-size:1.35rem;
 }
 
-.trail-archive-item h3 {
-    margin: 0;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #777;
-    line-height: 1.4;
+.trail-archive-links .btv-single-trail__archive-intro{
+    margin:.35rem 0 1rem;
+    color:#777;
+    font-size:.95rem;
 }
 
-.trail-archive-item p {
-    margin: .2rem 0 0;
-    line-height: 1.6;
+.trail-archive-pathways{
+    border-top:1px solid #ece7db;
 }
 
-.trail-archive-links a {
-    font-size: 1.05rem;
-    font-weight: 500;
-    text-decoration: none;
+.trail-archive-pathway{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    grid-template-areas:"label arrow" "description arrow";
+    gap:2px 18px;
+    padding:14px 2px;
+    border-bottom:1px solid #ece7db;
+    color:inherit;
+    text-decoration:none;
 }
 
-.trail-archive-links a:hover,
-.trail-archive-links a:focus {
-    text-decoration: underline;
+.trail-archive-pathway__label{
+    grid-area:label;
+    color:#4d533f;
+    font-size:1rem;
+    font-weight:700;
+}
+
+.trail-archive-pathway__description{
+    grid-area:description;
+    color:#777;
+    font-size:.88rem;
+    line-height:1.35;
+}
+
+.trail-archive-pathway__arrow{
+    grid-area:arrow;
+    align-self:center;
+    color:#6e7359;
+    font-size:1.1rem;
+}
+
+.trail-archive-pathway--features{
+    display:block;
+}
+
+.trail-archive-pathway--features .trail-archive-pathway__label,
+.trail-archive-pathway--features .trail-archive-pathway__description{
+    display:block;
+}
+
+.trail-archive-pathway--features .trail-archive-pathway__description a{
+    color:#4d533f;
+    font-size:inherit;
+    font-weight:inherit;
+    text-decoration:none;
+}
+
+.trail-archive-pathway--features .trail-archive-pathway__description a:hover,
+.trail-archive-pathway--features .trail-archive-pathway__description a:focus-visible{
+    text-decoration:underline;
+}
+
+.trail-archive-pathway:hover .trail-archive-pathway__label,
+.trail-archive-pathway:focus-visible .trail-archive-pathway__label{
+    text-decoration:underline;
+}
+
+.trail-archive-pathway:focus-visible{
+    outline:2px solid rgba(110,115,89,.6);
+    outline-offset:3px;
+}
+
+.trail-archive-features__separator{
+    margin:0 7px;
+    color:#b6b0a3;
 }
