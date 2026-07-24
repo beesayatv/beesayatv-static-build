@@ -8,6 +8,7 @@ const ALLOWED_ORIGINS = new Set([
 ]);
 
 const CEBU_BOUNDS = { minLat: 9.3, maxLat: 11.3, minLng: 123.2, maxLng: 124.3 };
+const RAIN_DETAIL_HOURS = ['04:00', '07:00', '10:00', '13:00', '16:00', '19:00'];
 
 function corsHeaders(request) {
   const origin = request.headers.get('Origin');
@@ -39,7 +40,19 @@ function validDailyResponse(daily) {
   return daily && Array.isArray(daily.time) && Array.isArray(daily.weather_code) && Array.isArray(daily.temperature_2m_min) && Array.isArray(daily.temperature_2m_max) && Array.isArray(daily.precipitation_probability_max) && daily.time.length >= 4 && daily.weather_code.length >= 4 && daily.temperature_2m_min.length >= 4 && daily.temperature_2m_max.length >= 4 && daily.precipitation_probability_max.length >= 4;
 }
 
-function compactForecast(daily) {
+function compactHourlyRain(date, hourly) {
+  if (!hourly || !Array.isArray(hourly.time) || !Array.isArray(hourly.precipitation_probability)) return null;
+
+  const probabilities = new Map(hourly.time.map((time, index) => [time, Number(hourly.precipitation_probability[index])]));
+  const entries = RAIN_DETAIL_HOURS.map((time) => {
+    const probability = probabilities.get(date + 'T' + time);
+    return Number.isFinite(probability) ? { time, probability } : null;
+  });
+
+  return entries.every(Boolean) ? entries : null;
+}
+
+function compactForecast(daily, hourly) {
   return [1, 2, 3].map((index) => {
     const code = Number(daily.weather_code[index]);
     const temperatureMin = Number(daily.temperature_2m_min[index]);
@@ -47,7 +60,7 @@ function compactForecast(daily) {
     const rainProbability = Number(daily.precipitation_probability_max[index]);
     if (!daily.time[index] || !Number.isFinite(code) || !Number.isFinite(temperatureMin) || !Number.isFinite(temperatureMax) || !Number.isFinite(rainProbability)) throw new Error('Incomplete forecast data');
     const weather = weatherGroup(code);
-    return { date: daily.time[index], code, description: weather.description, temperature_min: temperatureMin, temperature_max: temperatureMax, rain_probability: rainProbability, icon: weather.icon };
+    return { date: daily.time[index], code, description: weather.description, temperature_min: temperatureMin, temperature_max: temperatureMax, rain_probability: rainProbability, hourly_rain: compactHourlyRain(daily.time[index], hourly), icon: weather.icon };
   });
 }
 
@@ -67,7 +80,7 @@ export default {
 
     const origin = request.headers.get('Origin');
     const cacheOrigin = origin && ALLOWED_ORIGINS.has(origin) ? origin : 'same-origin';
-    const cacheKey = new Request('https://beesayatv-weather-cache.invalid/forecast?lat=' + lat.toFixed(2) + '&lng=' + lng.toFixed(2) + '&origin=' + encodeURIComponent(cacheOrigin));
+    const cacheKey = new Request('https://beesayatv-weather-cache.invalid/v2/forecast?lat=' + lat.toFixed(2) + '&lng=' + lng.toFixed(2) + '&origin=' + encodeURIComponent(cacheOrigin));
     const cache = caches.default;
     const cached = await cache.match(cacheKey);
     if (cached) return cached;
@@ -78,6 +91,7 @@ export default {
     upstreamUrl.searchParams.set('timezone', 'Asia/Manila');
     upstreamUrl.searchParams.set('forecast_days', '4');
     upstreamUrl.searchParams.set('daily', 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max');
+    upstreamUrl.searchParams.set('hourly', 'precipitation_probability');
 
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 6000);
@@ -86,7 +100,7 @@ export default {
       if (!upstream.ok) return json(request, { error: 'Forecast service unavailable' }, 502);
       const payload = await upstream.json();
       if (!validDailyResponse(payload.daily)) return json(request, { error: 'Forecast service returned incomplete data' }, 502);
-      const response = json(request, { forecast: compactForecast(payload.daily) }, 200, 'public, max-age=300, s-maxage=3600');
+      const response = json(request, { forecast: compactForecast(payload.daily, payload.hourly) }, 200, 'public, max-age=300, s-maxage=3600');
       context.waitUntil(cache.put(cacheKey, response.clone()));
       return response;
     } catch (error) {

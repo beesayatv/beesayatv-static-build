@@ -6,5 +6,6 @@ This Worker provides the progressive three-day forecast enhancement used by stat
 - Coordinates are limited to latitude `9.3–11.3` and longitude `123.2–124.3`, covering Cebu Island and nearby documented areas.
 - Successful normalized coordinate responses are edge-cached for one hour; browsers cache them for five minutes.
 - Open-Meteo receives the original five-decimal coordinate, `Asia/Manila`, and four daily forecast days. The Worker excludes today and returns the next three days only.
+- Each returned day includes its daily maximum precipitation probability plus six local precipitation-probability snapshots: 04:00, 07:00, 10:00, 13:00, 16:00, and 19:00.
 
 The Worker is deliberately independent of the Pages static export. Do not place Worker files in `dist`.
