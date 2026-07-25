@@ -19,7 +19,10 @@
         return new Date(item.date + 'T12:00:00+08:00');
     }
 
-    function dayName(item, style) {
+    function dayName(item, style, isToday) {
+        if (isToday) {
+            return 'Today';
+        }
         return new Intl.DateTimeFormat('en-PH', { weekday: style, timeZone: 'Asia/Manila' }).format(localDate(item));
     }
 
@@ -33,8 +36,8 @@
         return item && typeof item.date === 'string' && typeof item.description === 'string' && icons[item.icon] && Number.isFinite(Number(item.temperature_min)) && Number.isFinite(Number(item.temperature_max)) && Number.isFinite(Number(item.rain_probability)) && validHourlyRain(item);
     }
 
-    function accessibleLabel(item) {
-        return dayName(item, 'long') + ': ' + item.description.toLowerCase() + ', ' + rainLikelihoodLabel(item.rain_probability) + ' (' + Math.round(item.rain_probability) + ' percent). Show rain outlook.';
+    function accessibleLabel(item, isToday) {
+        return dayName(item, 'long', isToday) + ': ' + item.description.toLowerCase() + ', ' + rainLikelihoodLabel(item.rain_probability) + ' (' + Math.round(item.rain_probability) + ' percent). Show rain outlook.';
     }
 
     function rainLikelihoodLevel(probability) {
@@ -74,11 +77,11 @@
         });
     }
 
-    function renderRainDetail(panel, item) {
+    function renderRainDetail(panel, item, isToday) {
         var heading = document.createElement('h4');
         heading.className = 'trail-weather-detail__title';
         heading.id = panel.id + '-title';
-        heading.textContent = dayName(item, 'long') + ' rain outlook';
+        heading.textContent = dayName(item, 'long', isToday) + ' rain outlook';
         panel.setAttribute('aria-labelledby', heading.id);
         panel.replaceChildren(heading);
 
@@ -121,22 +124,23 @@
         panel.setAttribute('role', 'region');
         panel.hidden = true;
 
-        forecast.forEach(function (item) {
+        forecast.forEach(function (item, itemIndex) {
+            var isToday = itemIndex === 0;
             var button = document.createElement('button');
             button.type = 'button';
             button.className = 'trail-weather-icons__item';
             button.setAttribute('data-weather-icon', item.icon);
-            button.setAttribute('aria-label', accessibleLabel(item));
+            button.setAttribute('aria-label', accessibleLabel(item, isToday));
             button.setAttribute('aria-expanded', 'false');
             button.setAttribute('aria-controls', panelId);
-            button.innerHTML = '<span class="trail-weather-icons__day" data-day-initial="' + dayName(item, 'narrow') + '" aria-hidden="true">' + dayName(item, 'short') + '</span><span class="trail-weather-icons__symbol" aria-hidden="true">' + icons[item.icon] + '</span>' + rainSummaryMarkup(item.rain_probability);
+            button.innerHTML = '<span class="trail-weather-icons__day" data-day-initial="' + dayName(item, 'narrow', isToday) + '" aria-hidden="true">' + dayName(item, 'short', isToday) + '</span><span class="trail-weather-icons__symbol" aria-hidden="true">' + icons[item.icon] + '</span>' + rainSummaryMarkup(item.rain_probability);
             button.addEventListener('click', function () {
                 if (!panel.hidden && button.classList.contains('is-active')) {
                     panel.hidden = true;
                     setActiveButton(buttons, null);
                     return;
                 }
-                renderRainDetail(panel, item);
+                renderRainDetail(panel, item, isToday);
                 panel.hidden = false;
                 setActiveButton(buttons, button);
             });
