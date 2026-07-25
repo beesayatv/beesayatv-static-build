@@ -37,7 +37,7 @@ function weatherGroup(code) {
 }
 
 function validDailyResponse(daily) {
-  return daily && Array.isArray(daily.time) && Array.isArray(daily.weather_code) && Array.isArray(daily.temperature_2m_min) && Array.isArray(daily.temperature_2m_max) && Array.isArray(daily.precipitation_probability_max) && daily.time.length >= 4 && daily.weather_code.length >= 4 && daily.temperature_2m_min.length >= 4 && daily.temperature_2m_max.length >= 4 && daily.precipitation_probability_max.length >= 4;
+  return daily && Array.isArray(daily.time) && Array.isArray(daily.weather_code) && Array.isArray(daily.temperature_2m_min) && Array.isArray(daily.temperature_2m_max) && Array.isArray(daily.precipitation_probability_max) && daily.time.length >= 3 && daily.weather_code.length >= 3 && daily.temperature_2m_min.length >= 3 && daily.temperature_2m_max.length >= 3 && daily.precipitation_probability_max.length >= 3;
 }
 
 function compactHourlyRain(date, hourly) {
@@ -53,7 +53,7 @@ function compactHourlyRain(date, hourly) {
 }
 
 function compactForecast(daily, hourly) {
-  return [1, 2, 3].map((index) => {
+  return [0, 1, 2].map((index) => {
     const code = Number(daily.weather_code[index]);
     const temperatureMin = Number(daily.temperature_2m_min[index]);
     const temperatureMax = Number(daily.temperature_2m_max[index]);
@@ -80,7 +80,7 @@ export default {
 
     const origin = request.headers.get('Origin');
     const cacheOrigin = origin && ALLOWED_ORIGINS.has(origin) ? origin : 'same-origin';
-    const cacheKey = new Request('https://beesayatv-weather-cache.invalid/v2/forecast?lat=' + lat.toFixed(2) + '&lng=' + lng.toFixed(2) + '&origin=' + encodeURIComponent(cacheOrigin));
+    const cacheKey = new Request('https://beesayatv-weather-cache.invalid/v3/forecast?lat=' + lat.toFixed(2) + '&lng=' + lng.toFixed(2) + '&origin=' + encodeURIComponent(cacheOrigin));
     const cache = caches.default;
     const cached = await cache.match(cacheKey);
     if (cached) return cached;
@@ -89,7 +89,7 @@ export default {
     upstreamUrl.searchParams.set('latitude', lat.toFixed(5));
     upstreamUrl.searchParams.set('longitude', lng.toFixed(5));
     upstreamUrl.searchParams.set('timezone', 'Asia/Manila');
-    upstreamUrl.searchParams.set('forecast_days', '4');
+    upstreamUrl.searchParams.set('forecast_days', '3');
     upstreamUrl.searchParams.set('daily', 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max');
     upstreamUrl.searchParams.set('hourly', 'precipitation_probability');
 
