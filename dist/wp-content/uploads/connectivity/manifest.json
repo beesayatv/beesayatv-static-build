@@ -1,0 +1,17 @@
+{
+    "schema_version": 3,
+    "dataset_version": "52d7803ca68a977e",
+    "generated_at": "2026-07-26T05:04:02+00:00",
+    "bounds": [
+        [
+            10.249238200000001,
+            123.8189383
+        ],
+        [
+            10.261793300000001,
+            123.83969329999999
+        ]
+    ],
+    "display_point_count": 19,
+    "data_url": "/wp-content/uploads/connectivity/v-52d7803ca68a977e/measurements.geojson"
+}

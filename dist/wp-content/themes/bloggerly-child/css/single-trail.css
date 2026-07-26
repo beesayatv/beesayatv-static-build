@@ -249,6 +249,31 @@ until the old selectors are fully retired.
 
 }
 
+.beesaya-grid .beesaya-connectivity-dots{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+}
+
+.beesaya-connectivity-dot{
+    display:block;
+    width:12px;
+    height:12px;
+    border:1px solid;
+    border-radius:50%;
+    box-sizing:border-box;
+}
+
+.beesaya-connectivity-dot.is-service{
+    background:var(--beesaya-connectivity-service-color);
+    border-color:var(--beesaya-connectivity-service-contrast-color);
+}
+
+.beesaya-connectivity-dot.is-no-service{
+    background:var(--beesaya-connectivity-no-service-color);
+    border-color:var(--beesaya-connectivity-no-service-contrast-color);
+}
+
 /* ===========================================
    Rating Reasons
 =========================================== */
