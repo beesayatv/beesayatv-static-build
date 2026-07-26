@@ -3,8 +3,10 @@
 
     const DEFAULT_SERVICE_COLOR = '#ffffff';
     const DEFAULT_NO_SERVICE_COLOR = '#c62828';
+    const DEFAULT_EMERGENCY_ONLY_COLOR = '#f0a000';
     const DEFAULT_SERVICE_CONTRAST_COLOR = '#14181c';
     const DEFAULT_NO_SERVICE_CONTRAST_COLOR = '#14181c';
+    const DEFAULT_EMERGENCY_ONLY_CONTRAST_COLOR = '#14181c';
     var HEX_COLOR = /^#[0-9a-f]{6}$/i;
     var GRID_METRES = [
         { minimumZoom: 14, size: 175 },
@@ -136,14 +138,8 @@
 
     function create(map, options) {
         var configuredAppearance = options.appearance || {};
-        var categoryColors = {
-            service: validColor(configuredAppearance.serviceColor, DEFAULT_SERVICE_COLOR),
-            no_service: validColor(configuredAppearance.noServiceColor, DEFAULT_NO_SERVICE_COLOR)
-        };
-        var contrastColors = {
-            service: validColor(configuredAppearance.serviceContrastColor, DEFAULT_SERVICE_CONTRAST_COLOR),
-            no_service: validColor(configuredAppearance.noServiceContrastColor, DEFAULT_NO_SERVICE_CONTRAST_COLOR)
-        };
+        var categoryColors = {};
+        var contrastColors = {};
         var enabled = false;
         var requestToken = 0;
         var manifest = null;
@@ -154,6 +150,22 @@
         var button = null;
         var renderer = L.canvas({ padding: 0.5, pane: options.pane });
         var pointLayer = L.layerGroup();
+
+        function setAppearance(nextAppearance) {
+            nextAppearance = nextAppearance || {};
+            categoryColors.service = validColor(nextAppearance.serviceColor, DEFAULT_SERVICE_COLOR);
+            categoryColors.no_service = validColor(nextAppearance.noServiceColor, DEFAULT_NO_SERVICE_COLOR);
+            categoryColors.emergency_only = validColor(nextAppearance.emergencyOnlyColor, DEFAULT_EMERGENCY_ONLY_COLOR);
+            contrastColors.service = validColor(nextAppearance.serviceContrastColor, DEFAULT_SERVICE_CONTRAST_COLOR);
+            contrastColors.no_service = validColor(nextAppearance.noServiceContrastColor, DEFAULT_NO_SERVICE_CONTRAST_COLOR);
+            contrastColors.emergency_only = validColor(nextAppearance.emergencyOnlyContrastColor, DEFAULT_EMERGENCY_ONLY_CONTRAST_COLOR);
+            renderedSignature = '';
+            if (enabled) {
+                render();
+            }
+        }
+
+        setAppearance(configuredAppearance);
 
         function loadData() {
             if (measurements) {
@@ -224,7 +236,9 @@
             pointLayer.clearLayers();
             visible.forEach(function(feature) {
                 var coordinates = feature.geometry.coordinates;
-                var category = 'no_service' === feature.properties.category ? 'no_service' : 'service';
+                var category = ['service', 'no_service', 'emergency_only'].indexOf(feature.properties.category) >= 0
+                    ? feature.properties.category
+                    : 'service';
                 var color = categoryColors[category];
                 var contrastColor = contrastColors[category];
                 var logicalPoint = L.layerGroup();
@@ -332,7 +346,8 @@
         return {
             isEnabled: function() { return enabled; },
             refresh: scheduleRender,
-            setEnabled: setEnabled
+            setEnabled: setEnabled,
+            setAppearance: setAppearance
         };
     }
 

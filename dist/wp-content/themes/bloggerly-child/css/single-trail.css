@@ -265,13 +265,13 @@ until the old selectors are fully retired.
 }
 
 .beesaya-connectivity-dot.is-service{
-    background:var(--beesaya-connectivity-service-color);
-    border-color:var(--beesaya-connectivity-service-contrast-color);
+    background:#2e7d32;
+    border-color:#1b5e20;
 }
 
 .beesaya-connectivity-dot.is-no-service{
-    background:var(--beesaya-connectivity-no-service-color);
-    border-color:var(--beesaya-connectivity-no-service-contrast-color);
+    background:#c62828;
+    border-color:#8e0000;
 }
 
 /* ===========================================

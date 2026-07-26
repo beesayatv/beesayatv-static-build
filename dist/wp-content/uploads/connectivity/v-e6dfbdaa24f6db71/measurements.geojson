@@ -1,0 +1,1 @@
+{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Point","coordinates":[123.83405329999999,10.2523467]},"properties":{"category":"service","signal_dbm":-99,"preserve":true,"sequence":0,"survey_group":"e666fa9ca3e76743"}}]}

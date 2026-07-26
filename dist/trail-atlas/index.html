@@ -127,7 +127,7 @@ margin:24px 0;
 <link rel="stylesheet" id="dashicons-css" href="https://beesayatv.com/wp-includes/css/dashicons.min.css?ver=7.0.2" media="all">
 <link rel="stylesheet" id="beesayatv-cards-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/cards.css?ver=1784723148" media="all">
 <link rel="stylesheet" id="chld_thm_cfg_parent-css" href="https://beesayatv.com/wp-content/themes/bloggerly/style.css?ver=7.0.2" media="all">
-<link rel="stylesheet" id="beesayatv-child-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1785048580" media="all">
+<link rel="stylesheet" id="beesayatv-child-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1785060020" media="all">
 <link rel="stylesheet" id="beesayatv-audio-player-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/audio-player.css?ver=1784397693" media="all">
 <link rel="stylesheet" id="bloggerly-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1.0.5.1782171480" media="all">
 <link rel="stylesheet" id="beesayatv-page-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/page.css?ver=1784397693" media="all">
@@ -532,10 +532,15 @@ document.head.appendChild(locateStyle);
 
         map.createPane('motortaxiAccessPane');
         map.getPane('motortaxiAccessPane').style.zIndex = 390;
+        map.createPane('trailVisualPane');
+        map.getPane('trailVisualPane').style.zIndex = 400;
+        map.getPane('trailVisualPane').style.pointerEvents = 'none';
         map.createPane('connectivityPane');
-        map.getPane('connectivityPane').style.zIndex = 380;
+        map.getPane('connectivityPane').style.zIndex = 410;
         map.getPane('connectivityPane').style.pointerEvents = 'none';
-        var connectivityConfig = {"manifestUrl":"\/wp-content\/uploads\/connectivity\/manifest.json","connectivityAppearance":{"serviceColor":"#2e9e09","noServiceColor":"#c62828","serviceContrastColor":"#ffffff","noServiceContrastColor":"#ff1e1e"}};
+        map.createPane('trailClickPane');
+        map.getPane('trailClickPane').style.zIndex = 420;
+        var connectivityConfig = {"manifestUrl":"\/wp-content\/uploads\/connectivity\/manifest.json","connectivityAppearance":{"serviceColor":"#2e9e09","noServiceColor":"#c62828","emergencyOnlyColor":"#f0a000","serviceContrastColor":"#ffffff","noServiceContrastColor":"#ffffff","emergencyOnlyContrastColor":"#14181c","satelliteServiceColor":"#ffffff","satelliteNoServiceColor":"#ffffff","satelliteEmergencyOnlyColor":"#ffd600","satelliteServiceContrastColor":"#2e9e09","satelliteNoServiceContrastColor":"#c62828","satelliteEmergencyOnlyContrastColor":"#000000"}};
         var connectivityAppearance = connectivityConfig.connectivityAppearance || {};
         function connectivityValidColor(color, fallback) {
             return /^#[0-9a-f]{6}$/i.test(color || '') ? color.toLowerCase() : fallback;
@@ -547,6 +552,45 @@ document.head.appendChild(locateStyle);
                 parseInt(value.slice(2, 4), 16) + ',' +
                 parseInt(value.slice(4, 6), 16) + ',' +
                 alpha + ')';
+        }
+        var connectivityLegendSymbols = {};
+        function connectivityAppearanceForBasemap() {
+            if (atlasBasemapId === 'satellite') {
+                return {
+                    serviceColor: connectivityAppearance.satelliteServiceColor,
+                    noServiceColor: connectivityAppearance.satelliteNoServiceColor,
+                    emergencyOnlyColor: connectivityAppearance.satelliteEmergencyOnlyColor,
+                    serviceContrastColor: connectivityAppearance.satelliteServiceContrastColor,
+                    noServiceContrastColor: connectivityAppearance.satelliteNoServiceContrastColor,
+                    emergencyOnlyContrastColor: connectivityAppearance.satelliteEmergencyOnlyContrastColor
+                };
+            }
+            return {
+                serviceColor: connectivityAppearance.serviceColor,
+                noServiceColor: connectivityAppearance.noServiceColor,
+                emergencyOnlyColor: connectivityAppearance.emergencyOnlyColor,
+                serviceContrastColor: connectivityAppearance.serviceContrastColor,
+                noServiceContrastColor: connectivityAppearance.noServiceContrastColor,
+                emergencyOnlyContrastColor: connectivityAppearance.emergencyOnlyContrastColor
+            };
+        }
+        function updateConnectivityLegendAppearance() {
+            var appearance = connectivityAppearanceForBasemap();
+            [
+                {category: 'service', color: appearance.serviceColor, contrast: appearance.serviceContrastColor, fallback: '#ffffff'},
+                {category: 'no_service', color: appearance.noServiceColor, contrast: appearance.noServiceContrastColor, fallback: '#c62828'},
+                {category: 'emergency_only', color: appearance.emergencyOnlyColor, contrast: appearance.emergencyOnlyContrastColor, fallback: '#f0a000'}
+            ].forEach(function(entry) {
+                var symbol = connectivityLegendSymbols[entry.category];
+                if (!symbol) {
+                    return;
+                }
+                var color = connectivityValidColor(entry.color, entry.fallback);
+                var contrast = connectivityValidColor(entry.contrast, '#14181c');
+                symbol.style.setProperty('--btv-connectivity-legend-color', color);
+                symbol.style.setProperty('--btv-connectivity-legend-ring-contrast', connectivityColorWithAlpha(contrast, 0.25));
+                symbol.style.setProperty('--btv-connectivity-legend-center-contrast', connectivityColorWithAlpha(contrast, 0.35));
+            });
         }
 
         var atlasLegendControl = L.Control.extend({
@@ -591,14 +635,22 @@ document.head.appendChild(locateStyle);
 
                 [
                     {
+                        category: 'service',
                         label: 'Service signal pulse &mdash; Cellular service observed',
                         color: connectivityValidColor(connectivityAppearance.serviceColor, '#ffffff'),
                         contrast: connectivityValidColor(connectivityAppearance.serviceContrastColor, '#14181c')
                     },
                     {
+                        category: 'no_service',
                         label: 'No-service signal pulse &mdash; No cellular service observed',
                         color: connectivityValidColor(connectivityAppearance.noServiceColor, '#c62828'),
                         contrast: connectivityValidColor(connectivityAppearance.noServiceContrastColor, '#14181c')
+                    },
+                    {
+                        category: 'emergency_only',
+                        label: 'Emergency-only signal pulse &mdash; Limited emergency service observed',
+                        color: connectivityValidColor(connectivityAppearance.emergencyOnlyColor, '#f0a000'),
+                        contrast: connectivityValidColor(connectivityAppearance.emergencyOnlyContrastColor, '#14181c')
                     }
                 ].forEach(function(entry) {
                     var item = document.createElement('div');
@@ -611,6 +663,7 @@ document.head.appendChild(locateStyle);
                     symbol.style.setProperty('--btv-connectivity-legend-ring-contrast', connectivityColorWithAlpha(entry.contrast, 0.25));
                     symbol.style.setProperty('--btv-connectivity-legend-center-contrast', connectivityColorWithAlpha(entry.contrast, 0.35));
                     symbol.setAttribute('aria-hidden', 'true');
+                    connectivityLegendSymbols[entry.category] = symbol;
                     ['outer', 'middle', 'inner'].forEach(function(ringName) {
                         var ring = document.createElement('span');
                         ring.className = 'beesayatv-atlas-legend__signal-ring is-' + ringName;
@@ -644,7 +697,7 @@ document.head.appendChild(locateStyle);
             ? window.BeesayaTrailAtlasConnectivity.create(map, {
                 manifestUrl: connectivityConfig.manifestUrl,
                 pane: 'connectivityPane',
-                appearance: connectivityAppearance
+                appearance: connectivityAppearanceForBasemap()
             })
             : null;
 
@@ -768,6 +821,7 @@ document.head.appendChild(locateStyle);
             if (!selectedBasemapId || !Object.prototype.hasOwnProperty.call(atlasBasemaps, selectedBasemapId)) {
                 return;
             }
+            atlasBasemapId = selectedBasemapId;
             try {
                 window.localStorage.setItem(atlasBasemapPreferenceKey, selectedBasemapId);
             } catch (error) {
@@ -1053,6 +1107,12 @@ function setTrailCasingState(trail, isFocused) {
 }
 
 function updateAtlasBasemapVisuals() {
+    var activeConnectivityAppearance = connectivityAppearanceForBasemap();
+    if (atlasConnectivity && typeof atlasConnectivity.setAppearance === 'function') {
+        atlasConnectivity.setAppearance(activeConnectivityAppearance);
+    }
+    updateConnectivityLegendAppearance();
+
     Object.keys(trailLayers).forEach(function(slug) {
         var trail = trailLayers[slug];
         setTrailCasingState(trail, !activeFocusedTrail || activeFocusedTrail.slug === trail.slug);
@@ -1514,6 +1574,7 @@ function atlasSegmentDefinitions(geojson, trail) {
                 .then(data => {
 
 var style = {
+    pane: 'trailVisualPane',
     weight: 5,
     opacity: 0.8
 };
@@ -1529,6 +1590,7 @@ if (trail.wip === '1') {
     // Red casing
     var wipCasingLayer = L.geoJSON(data, {
         style: {
+            pane: 'trailVisualPane',
             color: '#ff0000',
             weight: 7,
             opacity: 0.8
@@ -1538,6 +1600,7 @@ if (trail.wip === '1') {
     // White center
     layer = L.geoJSON(data, {
         style: {
+            pane: 'trailVisualPane',
             color: '#ffffff',
             weight: 3,
             opacity: 1
@@ -1546,6 +1609,7 @@ if (trail.wip === '1') {
 	
 	clickLayer = L.geoJSON(data, {
     style: {
+        pane: 'trailClickPane',
         color: '#000',
         weight: 20,
         opacity: 0,
@@ -1566,21 +1630,21 @@ if (segments) {
     clickLayer = L.featureGroup().addTo(map);
     segments.forEach(function (segment) {
         var latLngs = segment.coordinates.map(function (point) { return [point[1], point[0]]; });
-        L.polyline(latLngs, { color: '#fff', weight: 8, opacity: 0, lineCap: 'round', lineJoin: 'round', interactive: false }).addTo(casingLayer);
-        var visibleSectionLayer = L.polyline(latLngs, { color: getTrailColor(segment.difficulty), weight: 5, opacity: 0.8 }).addTo(layer);
+        L.polyline(latLngs, { pane: 'trailVisualPane', color: '#fff', weight: 8, opacity: 0, lineCap: 'round', lineJoin: 'round', interactive: false }).addTo(casingLayer);
+        var visibleSectionLayer = L.polyline(latLngs, { pane: 'trailVisualPane', color: getTrailColor(segment.difficulty), weight: 5, opacity: 0.8 }).addTo(layer);
         // Preserve the existing 25px invisible mobile-friendly interaction layer per section.
-        var clickSectionLayer = L.polyline(latLngs, { color: '#000', weight: 25, opacity: 0, interactive: true, bubblingMouseEvents: false }).addTo(clickLayer);
+        var clickSectionLayer = L.polyline(latLngs, { pane: 'trailClickPane', color: '#000', weight: 25, opacity: 0, interactive: true, bubblingMouseEvents: false }).addTo(clickLayer);
         visibleSectionLayer._atlasSectionDifficulty = segment.difficulty;
         clickSectionLayer._atlasSectionDifficulty = segment.difficulty;
     });
 } else {
     casingLayer = L.geoJSON(data, {
         interactive: false,
-        style: { color: '#fff', weight: 8, opacity: 0, lineCap: 'round', lineJoin: 'round' }
+        style: { pane: 'trailVisualPane', color: '#fff', weight: 8, opacity: 0, lineCap: 'round', lineJoin: 'round' }
     }).addTo(map);
     var visibleLayer = L.geoJSON(data, { style: style }).addTo(map);
     layer = visibleLayer;
-    clickLayer = L.geoJSON(data, { style: { color: '#000', weight: 25, opacity: 0, interactive: true, bubblingMouseEvents: false } }).addTo(map);
+    clickLayer = L.geoJSON(data, { style: { pane: 'trailClickPane', color: '#000', weight: 25, opacity: 0, interactive: true, bubblingMouseEvents: false } }).addTo(map);
 }
 
     visualLayers = [layer];
@@ -1913,7 +1977,7 @@ var bloggerly_script_vars = {"dark_mode":"Dark Mode","light_mode":"Light Mode","
 <script id="bloggerly-theme-js-js" src="https://beesayatv.com/wp-content/themes/bloggerly/assets/js/theme.js?ver=1.0.5.1782171480"></script>
 <script id="beesayatv-header-script-js" src="https://beesayatv.com/wp-content/themes/bloggerly-child/js/header.js?ver=1784606759"></script>
 <script id="beesayatv-leaflet-markercluster-js" src="https://beesayatv.com/wp-content/themes/bloggerly-child/assets/vendor/leaflet.markercluster/leaflet.markercluster.js?ver=1784695657"></script>
-<script id="beesayatv-trail-atlas-connectivity-js" src="https://beesayatv.com/wp-content/themes/bloggerly-child/js/trail-atlas-connectivity.js?ver=1785041931"></script>
+<script id="beesayatv-trail-atlas-connectivity-js" src="https://beesayatv.com/wp-content/themes/bloggerly-child/js/trail-atlas-connectivity.js?ver=1785059589"></script>
 <script id="wp_leaflet_map-js" src="https://beesayatv.com/wp-content/plugins/leaflet-map/scripts/construct-leaflet-map.js?ver=3.4.6"></script>
 <script id="wp-emoji-settings" type="application/json">
 {"baseUrl":"https://s.w.org/images/core/emoji/17.0.2/72x72/","ext":".png","svgUrl":"https://s.w.org/images/core/emoji/17.0.2/svg/","svgExt":".svg","source":{"concatemoji":"https://beesayatv.com/wp-includes/js/wp-emoji-release.min.js?ver=7.0.2"}}
