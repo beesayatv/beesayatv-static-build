@@ -10,6 +10,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const mobileFiltersCount = document.querySelector('.btv-mobile-filters-toggle__count');
     const mobileDoneButton = document.querySelector('.btv-mobile-filters-done');
     const filterToggles = document.querySelectorAll('.btv-filter-toggle');
+    const filterParameters = {
+        location: 'trail_location',
+        difficulty: 'trail_difficulty',
+        feature: 'trail_feature',
+        type: 'trail_type'
+    };
     let allTrails = [];
     let searchTimer;
 
@@ -91,6 +97,50 @@ document.addEventListener('DOMContentLoaded', function () {
         return Array.from(document.querySelectorAll(`input[name="${name}[]"]:checked`)).map(function (checkbox) {
             return checkbox.value;
         });
+    }
+
+    function managedCheckboxes(name) {
+        return Array.from(sidebar.querySelectorAll(`input[name="${name}[]"]`));
+    }
+
+    function applyUrlFilters() {
+        const parameters = new URLSearchParams(window.location.search);
+
+        Object.keys(filterParameters).forEach(function (parameter) {
+            const checkboxes = managedCheckboxes(filterParameters[parameter]);
+            const checkboxesByValue = new Map(checkboxes.map(function (checkbox) {
+                return [checkbox.value, checkbox];
+            }));
+            const values = new Set(parameters.getAll(parameter).filter(function (value) {
+                return value !== '';
+            }));
+
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = false;
+            });
+
+            values.forEach(function (value) {
+                const checkbox = checkboxesByValue.get(value);
+                if (checkbox) {
+                    checkbox.checked = true;
+                }
+            });
+        });
+    }
+
+    function pushUrlFilters() {
+        const url = new URL(window.location.href);
+
+        Object.keys(filterParameters).forEach(function (parameter) {
+            url.searchParams.delete(parameter);
+            selectedValues(filterParameters[parameter]).forEach(function (value) {
+                url.searchParams.append(parameter, value);
+            });
+        });
+
+        if (url.href !== window.location.href) {
+            window.history.pushState(null, '', url);
+        }
     }
 
     function hasOverlap(values, selected) {
@@ -207,6 +257,10 @@ document.addEventListener('DOMContentLoaded', function () {
     sidebar.addEventListener('change', function (event) {
         if (event.target.matches('input[type="checkbox"]')) {
             renderResults();
+
+            if (Object.values(filterParameters).includes(event.target.name.replace(/\[\]$/, ''))) {
+                pushUrlFilters();
+            }
         }
     });
 
@@ -225,6 +279,7 @@ document.addEventListener('DOMContentLoaded', function () {
             search.value = '';
         }
         renderResults();
+        pushUrlFilters();
     });
 
     mobileFiltersToggle.addEventListener('click', function () {
@@ -234,6 +289,13 @@ document.addEventListener('DOMContentLoaded', function () {
     mobileDoneButton.addEventListener('click', function () {
         setMobileFiltersOpen(false);
     });
+
+    window.addEventListener('popstate', function () {
+        applyUrlFilters();
+        renderResults();
+    });
+
+    applyUrlFilters();
 
     fetch('/wp-content/uploads/trail-data.json')
         .then(function (response) {

@@ -700,6 +700,38 @@
         "wip": false
     },
     {
+        "title": "Temporary empty-description trail",
+        "full_title": "Temporary empty-description trail",
+        "url": "http://beesayatv.test/trails/temporary-empty-description-trail/",
+        "thumbnail": false,
+        "trail_location": [],
+        "trail_location_labels": [],
+        "trail_difficulty": [],
+        "trail_difficulty_labels": [],
+        "trail_feature": [],
+        "trail_feature_labels": [],
+        "trail_type": [],
+        "trail_type_labels": [],
+        "documented": "",
+        "wip": false
+    },
+    {
+        "title": "Temporary no-image trail",
+        "full_title": "Temporary no-image trail",
+        "url": "http://beesayatv.test/trails/temporary-no-image-trail/",
+        "thumbnail": false,
+        "trail_location": [],
+        "trail_location_labels": [],
+        "trail_difficulty": [],
+        "trail_difficulty_labels": [],
+        "trail_feature": [],
+        "trail_feature_labels": [],
+        "trail_type": [],
+        "trail_type_labels": [],
+        "documented": "",
+        "wip": false
+    },
+    {
         "title": "Toong Forest Trail",
         "full_title": "Toong Forest Trail | Toong, Pardo / Mahayahay | 2026 GPX",
         "url": "http://beesayatv.test/trails/toong-forest-trail/",
