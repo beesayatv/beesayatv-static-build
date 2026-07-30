@@ -16,7 +16,6 @@
         var button = row && row.querySelector("[data-news-play]");
         if (!button) return;
         button.classList.toggle("is-playing", playing);
-        button.querySelector("span").textContent = playing ? "❚❚" : "▶";
         button.setAttribute("aria-label", playing ? "Pause audio" : button.getAttribute("aria-label").replace("Pause", "Play"));
     }
     function play(audio) {
@@ -38,6 +37,17 @@
         playlistIndex = 0;
         setTodayButton(false);
     }
+    function formatRemaining(seconds) {
+        if (!Number.isFinite(seconds) || seconds < 0) return "--:--";
+        seconds = Math.ceil(seconds);
+        return Math.floor(seconds / 60) + ":" + String(seconds % 60).padStart(2, "0");
+    }
+    function updateRemaining(audio) {
+        var row = audio.closest(".btv-news-row");
+        var timer = row && row.querySelector("[data-news-remaining]");
+        if (!timer) return;
+        timer.textContent = formatRemaining(Math.max(audio.duration - audio.currentTime, 0));
+    }
     document.addEventListener("click", function (event) {
         var playButton = event.target.closest("[data-news-play]");
         if (playButton) {
@@ -58,9 +68,13 @@
         if (row && (event.key === "Enter" || event.key === " ")) { event.preventDefault(); window.location.href = row.dataset.newsUrl; }
     });
     document.querySelectorAll(".btv-news-row audio,[data-news-today-audio]").forEach(function (audio) {
+        audio.addEventListener("loadedmetadata", function () { updateRemaining(audio); });
+        audio.addEventListener("durationchange", function () { updateRemaining(audio); });
+        audio.addEventListener("timeupdate", function () { updateRemaining(audio); });
         audio.addEventListener("pause", function () { if (!audio.ended) setButton(audio, false); });
         audio.addEventListener("ended", function () {
             setButton(audio, false);
+            updateRemaining(audio);
             if (playlist.length && playlist[playlistIndex] === audio && ++playlistIndex < playlist.length) play(playlist[playlistIndex]);
             else { playlist = []; setTodayButton(false); }
         });
