@@ -10,14 +10,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const mobileFiltersCount = document.querySelector('.btv-mobile-filters-toggle__count');
     const mobileDoneButton = document.querySelector('.btv-mobile-filters-done');
     const filterToggles = document.querySelectorAll('.btv-filter-toggle');
-    const filterParameters = {
-        location: 'trail_location',
-        difficulty: 'trail_difficulty',
-        feature: 'trail_feature',
-        type: 'trail_type'
-    };
     let allTrails = [];
     let searchTimer;
+    let trailsReady = false;
+    let invalidUrlFilters = new Set();
 
     if (!explore || !sidebar || !resultsGrid || !resultsCount) {
         return;
@@ -103,17 +99,34 @@ document.addEventListener('DOMContentLoaded', function () {
         return Array.from(sidebar.querySelectorAll(`input[name="${name}[]"]`));
     }
 
+    function filterParameters() {
+        return Array.from(sidebar.querySelectorAll('.btv-filter-group')).map(function (group) {
+            const checkbox = group.querySelector('input[type="checkbox"][name$="[]"]');
+            const label = group.querySelector('.btv-filter-toggle span');
+            const name = checkbox ? checkbox.name.replace(/\[\]$/, '') : '';
+            const parameter = label ? label.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-') : '';
+
+            return { name: name, parameter: parameter };
+        }).filter(function (filter) {
+            return filter.name && filter.parameter;
+        });
+    }
+
     function applyUrlFilters() {
         const parameters = new URLSearchParams(window.location.search);
+        invalidUrlFilters = new Set();
 
-        Object.keys(filterParameters).forEach(function (parameter) {
-            const checkboxes = managedCheckboxes(filterParameters[parameter]);
+        filterParameters().forEach(function (filter) {
+            const checkboxes = managedCheckboxes(filter.name);
             const checkboxesByValue = new Map(checkboxes.map(function (checkbox) {
                 return [checkbox.value, checkbox];
             }));
-            const values = new Set(parameters.getAll(parameter).filter(function (value) {
-                return value !== '';
-            }));
+            const values = new Set((parameters.get(filter.parameter) || '').split(',').map(function (value) {
+                return value.trim();
+            }).filter(Boolean));
+            const hasMatchingValue = Array.from(values).some(function (value) {
+                return checkboxesByValue.has(value);
+            });
 
             checkboxes.forEach(function (checkbox) {
                 checkbox.checked = false;
@@ -125,18 +138,26 @@ document.addEventListener('DOMContentLoaded', function () {
                     checkbox.checked = true;
                 }
             });
+
+            if (parameters.has(filter.parameter) && values.size && !hasMatchingValue) {
+                invalidUrlFilters.add(filter.name);
+            }
         });
     }
 
     function pushUrlFilters() {
         const url = new URL(window.location.href);
 
-        Object.keys(filterParameters).forEach(function (parameter) {
-            url.searchParams.delete(parameter);
-            selectedValues(filterParameters[parameter]).forEach(function (value) {
-                url.searchParams.append(parameter, value);
-            });
+        filterParameters().forEach(function (filter) {
+            const values = selectedValues(filter.name);
+
+            url.searchParams.delete(filter.parameter);
+            if (values.length) {
+                url.searchParams.set(filter.parameter, values.join(','));
+            }
         });
+
+        invalidUrlFilters.clear();
 
         if (url.href !== window.location.href) {
             window.history.pushState(null, '', url);
@@ -150,6 +171,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function getFilteredTrails() {
+        if (invalidUrlFilters.size) {
+            return [];
+        }
+
         const keyword = search ? search.value.trim().toLowerCase() : '';
         const locations = selectedValues('trail_location');
         const difficulties = selectedValues('trail_difficulty');
@@ -171,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function hasActiveCriteria() {
-        return activeFilterCount() > 0 || (search && search.value.trim() !== '');
+        return invalidUrlFilters.size > 0 || activeFilterCount() > 0 || (search && search.value.trim() !== '');
     }
 
     function updateToolbar(trailCount) {
@@ -201,8 +226,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         resultsGrid.innerHTML = '';
-        resultsStatus.textContent = 'No documented trails match these filters.';
-        resultsStatus.hidden = false;
+        resultsStatus.textContent = '';
+        resultsStatus.hidden = true;
     }
 
     function setGroupState(button, expanded) {
@@ -256,11 +281,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     sidebar.addEventListener('change', function (event) {
         if (event.target.matches('input[type="checkbox"]')) {
-            renderResults();
-
-            if (Object.values(filterParameters).includes(event.target.name.replace(/\[\]$/, ''))) {
+            if (filterParameters().some(function (filter) {
+                return filter.name === event.target.name.replace(/\[\]$/, '');
+            })) {
                 pushUrlFilters();
             }
+
+            renderResults();
         }
     });
 
@@ -278,8 +305,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (search) {
             search.value = '';
         }
-        renderResults();
         pushUrlFilters();
+        renderResults();
     });
 
     mobileFiltersToggle.addEventListener('click', function () {
@@ -291,11 +318,13 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     window.addEventListener('popstate', function () {
+        if (!trailsReady) {
+            return;
+        }
+
         applyUrlFilters();
         renderResults();
     });
-
-    applyUrlFilters();
 
     fetch('/wp-content/uploads/trail-data.json')
         .then(function (response) {
@@ -306,6 +335,8 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(function (trails) {
             allTrails = Array.isArray(trails) ? trails : [];
+            trailsReady = true;
+            applyUrlFilters();
             renderResults();
         })
         .catch(function () {
