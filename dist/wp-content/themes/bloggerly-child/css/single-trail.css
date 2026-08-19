@@ -611,11 +611,16 @@ Route Thumbnail
 }
 .beesaya-grid div.trail-elevation-panel {
     display: block;
-    margin: 0 0 20px;
-    padding: 15px 0 0;
+    margin: 0 0 10px;
+    padding: 15px 0 15px;
     border-top: none;
     border-bottom: 1px solid #ece7db;
     width: 100%;
+}
+.beesaya-grid div.trail-elevation-panel div {
+    display: block;
+    border-bottom: none;
+    padding: 0;
 }
 .beesaya-grid div.trail-elevation-panel[hidden] {
     display: none;

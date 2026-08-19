@@ -139,6 +139,7 @@
                                     plugins: {
                                         legend: { display: false },
                                         tooltip: {
+                                            displayColors: false,
                                             callbacks: {
                                                 title: function(context) {
                                                     return context[0].label + ' km';
