@@ -570,3 +570,60 @@ Route Thumbnail
     outline-offset:3px;
 }
 
+/* ===========================================
+   Elevation Profile Accordion
+=========================================== */
+.beesaya-elevation-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 9px 0;
+    border: none;
+    border-bottom: 1px solid #ece7db;
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+}
+.beesaya-elevation-btn span {
+    color: #666;
+    font-size: .95rem;
+}
+.beesaya-elevation-btn strong {
+    color: #222;
+    font-size: 1rem;
+    font-weight: 700;
+}
+.beesaya-elevation-btn:hover span,
+.beesaya-elevation-btn:hover strong {
+    color: #4d533f;
+}
+.beesaya-elevation-btn[aria-expanded="true"] .beesaya-elevation-chevron {
+    transform: rotate(180deg);
+}
+.beesaya-elevation-chevron {
+    display: inline-block;
+    transition: transform 0.2s ease;
+    width: 14px;
+    height: 14px;
+    vertical-align: middle;
+    margin-left: 4px;
+}
+.beesaya-grid div.trail-elevation-panel {
+    display: block;
+    margin: 0 0 20px;
+    padding: 15px 0 0;
+    border-top: none;
+    border-bottom: 1px solid #ece7db;
+    width: 100%;
+}
+.beesaya-grid div.trail-elevation-panel[hidden] {
+    display: none;
+}
+.trail-elevation-loading,
+.trail-elevation-error {
+    text-align: center;
+    padding: 20px;
+    color: #89867e;
+    font-size: 0.9rem;
+}
