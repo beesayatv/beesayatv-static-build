@@ -53,30 +53,27 @@
 
             if (!sequenceLoaded) {
                 sequenceLoaded = true;
-                panel.innerHTML = '<div class="trail-elevation-loading">Loading connectivity data...</div>';
+                
+                var sequenceDataElement = document.getElementById('trail-connectivity-sequence-' + trailId);
+                if (!sequenceDataElement) {
+                    panel.innerHTML = '<div class="trail-elevation-error">Timeline unavailable.</div>';
+                    return;
+                }
 
-                var url = BeesayaSmartLTEData.ajaxUrl + '?action=beesayatv_trail_connectivity_sequence&trail_id=' + trailId;
-
-                fetch(url)
-                    .then(function(response) {
-                        if (!response.ok) throw new Error('Network response was not ok');
-                        return response.json();
-                    })
-                    .then(function(data) {
-                        if (!data.success || !data.data || !data.data.sequence) {
-                            throw new Error('Invalid data');
-                        }
-
-                        var sequence = data.data.sequence;
-                        
-                        panel.innerHTML = `
-                            <div class="trail-connectivity-labels" style="position:relative; height:16px; margin-bottom:4px; width:100%;"></div>
-                            <div class="trail-connectivity-canvas-wrapper" style="position:relative; width:100%; height:24px; border-radius:4px; overflow:hidden;">
-                                <canvas class="trail-connectivity-canvas" style="display:block; width:100%; height:100%;"></canvas>
-                            </div>
-                        `;
-                        
-                        var canvas = panel.querySelector('canvas');
+                try {
+                    var sequence = JSON.parse(sequenceDataElement.textContent);
+                    if (!sequence || !sequence.length) {
+                        throw new Error('Empty sequence');
+                    }
+                    
+                    panel.innerHTML = `
+                        <div class="trail-connectivity-labels" style="position:relative; height:16px; margin-bottom:4px; width:100%;"></div>
+                        <div class="trail-connectivity-canvas-wrapper" style="position:relative; width:100%; height:24px; border-radius:4px; overflow:hidden;">
+                            <canvas class="trail-connectivity-canvas" style="display:block; width:100%; height:100%;"></canvas>
+                        </div>
+                    `;
+                    
+                    var canvas = panel.querySelector('canvas');
                         var ctx = canvas.getContext('2d');
                         var labelsContainer = panel.querySelector('.trail-connectivity-labels');
                         
@@ -124,22 +121,24 @@
                         var labelsHtml = '<span style="position:absolute; left:0; bottom:0; font-size:10px; color:#888; transform:translateX(0); font-weight:600;">0km</span>';
                         
                         var lastPercent = 0;
+                        
                         for (var j=0; j<transitions.length; j++) {
                             var t = transitions[j];
-                            if (t.percent > 0.15 && t.percent < 0.85 && (t.percent - lastPercent) > 0.15) {
-                                labelsHtml += '<span style="position:absolute; left:'+(t.percent*100)+'%; bottom:0; font-size:10px; color:#888; transform:translateX(-50%);">' + t.dist.toFixed(1) + 'km</span>';
-                                lastPercent = t.percent;
+                            if (t.percent > 0.05 && t.percent < 0.95) {
+                                if (t.percent - lastPercent > 0.12) {
+                                    labelsHtml += '<span style="position:absolute; left:'+(t.percent*100)+'%; bottom:0; font-size:10px; color:#555; transform:translateX(-50%);">' + t.dist.toFixed(1) + 'km</span>';
+                                    lastPercent = t.percent;
+                                }
                             }
                         }
                         
                         labelsHtml += '<span style="position:absolute; right:0; bottom:0; font-size:10px; color:#888; transform:translateX(0); font-weight:600;">' + cumulativeDistance.toFixed(1) + 'km</span>';
                         labelsContainer.innerHTML = labelsHtml;
 
-                    })
-                    .catch(function(error) {
-                        console.error('Error fetching connectivity sequence:', error);
-                        panel.innerHTML = '<div class="trail-elevation-error">Timeline unavailable.</div>';
-                    });
+                } catch (error) {
+                    console.error('Error rendering connectivity sequence:', error);
+                    panel.innerHTML = '<div class="trail-elevation-error">Timeline unavailable.</div>';
+                }
             }
         });
     });
