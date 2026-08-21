@@ -241,46 +241,28 @@
                     : 'service';
                 var color = categoryColors[category];
                 var contrastColor = contrastColors[category];
-                var logicalPoint = L.layerGroup();
                 var closeDetail = zoom >= CLOSE_DETAIL_MINIMUM_ZOOM && zoom < FULL_DETAIL_MINIMUM_ZOOM;
-                [
-                    { radius: closeDetail ? 7.5 : 8.5, opacity: closeDetail ? 0.16 : 0.22 },
-                    { radius: closeDetail ? 5.75 : 6.5, opacity: closeDetail ? 0.32 : 0.40 },
-                    { radius: closeDetail ? 4 : 4.5, opacity: closeDetail ? 0.56 : 0.65 }
-                ].forEach(function(ring) {
-                    L.circleMarker([coordinates[1], coordinates[0]], {
-                        pane: options.pane,
-                        renderer: renderer,
-                        radius: ring.radius,
-                        color: contrastColor,
-                        weight: 2,
-                        opacity: Math.min(0.28, ring.opacity * 0.45),
-                        fill: false,
-                        interactive: false
-                    }).addTo(logicalPoint);
-                    L.circleMarker([coordinates[1], coordinates[0]], {
-                        pane: options.pane,
-                        renderer: renderer,
-                        radius: ring.radius,
-                        color: color,
-                        weight: 1,
-                        opacity: ring.opacity,
-                        fill: false,
-                        interactive: false
-                    }).addTo(logicalPoint);
+
+                var className = 'btv-connectivity-marker' + (closeDetail ? ' is-close-detail' : '');
+                var html = '<div style="position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; --ring-color: ' + color + '; --contrast-color: ' + contrastColor + ';">' +
+                           '<div class="btv-connectivity-dot"></div>' +
+                           '<div class="btv-connectivity-ring btv-ring-inner"></div>' +
+                           '<div class="btv-connectivity-ring btv-ring-middle"></div>' +
+                           '<div class="btv-connectivity-ring btv-ring-outer"></div>' +
+                           '</div>';
+
+                var icon = L.divIcon({
+                    className: className,
+                    html: html,
+                    iconSize: [20, 20],
+                    iconAnchor: [10, 10]
                 });
-                L.circleMarker([coordinates[1], coordinates[0]], {
+
+                L.marker([coordinates[1], coordinates[0]], {
                     pane: options.pane,
-                    renderer: renderer,
-                    radius: 2.5,
-                    color: contrastColor,
-                    weight: 1,
-                    opacity: 0.35,
-                    fillColor: color,
-                    fillOpacity: 0.95,
+                    icon: icon,
                     interactive: false
-                }).addTo(logicalPoint);
-                logicalPoint.addTo(pointLayer);
+                }).addTo(pointLayer);
             });
         }
 
