@@ -66,11 +66,18 @@
                         throw new Error('Empty sequence');
                     }
                     
+                    var interpretationElement = document.getElementById('trail-connectivity-interpretation-' + trailId);
+                    var interpretationHtml = '';
+                    if (interpretationElement) {
+                        interpretationHtml = '<div class="trail-connectivity-interpretation-text" style="margin-top: 12px; font-size: 13px; line-height: 1.5; color: #555;">' + interpretationElement.innerHTML + '</div>';
+                    }
+                    
                     panel.innerHTML = `
                         <div class="trail-connectivity-labels" style="position:relative; height:16px; margin-bottom:4px; width:100%;"></div>
                         <div class="trail-connectivity-canvas-wrapper" style="position:relative; width:100%; height:24px; border-radius:4px; overflow:hidden;">
                             <canvas class="trail-connectivity-canvas" style="display:block; width:100%; height:100%;"></canvas>
                         </div>
+                        ${interpretationHtml}
                     `;
                     
                     var canvas = panel.querySelector('canvas');
