@@ -109,7 +109,16 @@
                             labels.push(cumulativeDistance.toFixed(2));
                         }
 
-                        panel.innerHTML = '<div style="position:relative;height:140px;width:100%;"><canvas class="trail-elevation-canvas"></canvas></div>';
+                        var interpretationHtml = '';
+                        var trailId = button.getAttribute('data-trail-id');
+                        if (trailId) {
+                            var interpretationElement = document.getElementById('trail-elevation-interpretation-' + trailId);
+                            if (interpretationElement) {
+                                interpretationHtml = '<div class="trail-elevation-interpretation-text" style="margin-top: 12px; font-size: 13px; line-height: 1.5; color: #555;">' + interpretationElement.innerHTML + '</div>';
+                            }
+                        }
+
+                        panel.innerHTML = '<div style="position:relative;height:140px;width:100%;"><canvas class="trail-elevation-canvas"></canvas></div>' + interpretationHtml;
                         var canvas = panel.querySelector('canvas');
                         
                         if (typeof Chart !== 'undefined') {
