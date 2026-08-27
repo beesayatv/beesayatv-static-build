@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?><?xml-stylesheet type='text/xsl' href='https://beesayatv.com/wp-content/plugins/google-sitemap-generator/sitemap.xsl'?><!-- sitemap-generator-url='http://www.arnebrachhold.de' sitemap-generator-version='4.1.24' -->
-<!-- generated-on='August 26, 2026 11:50 pm' -->
+<!-- generated-on='August 27, 2026 10:47 am' -->
 <urlset xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd' xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>	<url>
 		<loc>https://beesayatv.com/trails/alpaco-trail-loop-pinamungahan-alpaco-naga-city-2026-gpx/</loc>
 		<lastmod>2026-07-26T13:26:55+00:00</lastmod>
@@ -138,4 +138,4 @@
 		<changefreq>monthly</changefreq>
 		<priority>0.6</priority>
 	</url>
-</urlset><!-- <p>Please edit wp-db.inc.php in wp-includes and set SAVEQUERIES to true if you want to see the queries.</p> --> <!-- Request ID: 64a925bd96af0bb019110271566bbf59; Queries for sitemap: 4; Total queries: 16; Seconds: 0.01; Memory for sitemap: 1KB; Total memory: 6MB -->
+</urlset><!-- <p>Please edit wp-db.inc.php in wp-includes and set SAVEQUERIES to true if you want to see the queries.</p> --> <!-- Request ID: 8dc4a2ac3f1faccbdca2dbf16d0fed01; Queries for sitemap: 4; Total queries: 16; Seconds: 0.01; Memory for sitemap: 1KB; Total memory: 6MB -->
