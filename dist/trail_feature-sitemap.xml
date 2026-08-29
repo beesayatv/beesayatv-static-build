@@ -1,20 +1,26 @@
 <?xml version='1.0' encoding='UTF-8'?><?xml-stylesheet type='text/xsl' href='https://beesayatv.com/wp-content/plugins/google-sitemap-generator/sitemap.xsl'?><!-- sitemap-generator-url='http://www.arnebrachhold.de' sitemap-generator-version='4.1.24' -->
-<!-- generated-on='August 27, 2026 10:47 am' -->
+<!-- generated-on='August 29, 2026 10:45 am' -->
 <urlset xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd' xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>	<url>
+		<loc>https://beesayatv.com/trail-feature/bridge/</loc>
+		<lastmod>2026-08-29T17:32:12+00:00</lastmod>
+		<changefreq>weekly</changefreq>
+		<priority>0.3</priority>
+	</url>
+	<url>
 		<loc>https://beesayatv.com/trail-feature/cliff/</loc>
-		<lastmod>2026-08-21T13:37:09+00:00</lastmod>
+		<lastmod>2026-08-29T17:32:12+00:00</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.3</priority>
 	</url>
 	<url>
 		<loc>https://beesayatv.com/trail-feature/farmland/</loc>
-		<lastmod>2026-07-18T23:17:16+00:00</lastmod>
+		<lastmod>2026-08-29T17:32:12+00:00</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.3</priority>
 	</url>
 	<url>
 		<loc>https://beesayatv.com/trail-feature/forest/</loc>
-		<lastmod>2026-08-21T13:37:09+00:00</lastmod>
+		<lastmod>2026-08-29T17:32:12+00:00</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.3</priority>
 	</url>
@@ -32,7 +38,7 @@
 	</url>
 	<url>
 		<loc>https://beesayatv.com/trail-feature/ridge/</loc>
-		<lastmod>2026-06-27T11:31:05+00:00</lastmod>
+		<lastmod>2026-08-29T17:32:12+00:00</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.3</priority>
 	</url>
@@ -44,7 +50,7 @@
 	</url>
 	<url>
 		<loc>https://beesayatv.com/trail-feature/roads/</loc>
-		<lastmod>2026-08-21T13:37:09+00:00</lastmod>
+		<lastmod>2026-08-29T17:32:12+00:00</lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.3</priority>
 	</url>
@@ -96,4 +102,4 @@
 		<changefreq>weekly</changefreq>
 		<priority>0.3</priority>
 	</url>
-</urlset><!-- <p>Please edit wp-db.inc.php in wp-includes and set SAVEQUERIES to true if you want to see the queries.</p> --> <!-- Request ID: 62f9235ca8bc4151d14a3ae23876a077; Queries for sitemap: 18; Total queries: 30; Seconds: 0.02; Memory for sitemap: 1KB; Total memory: 6MB -->
+</urlset><!-- <p>Please edit wp-db.inc.php in wp-includes and set SAVEQUERIES to true if you want to see the queries.</p> --> <!-- Request ID: aed6202e06cec89ca3874a80ee837dbb; Queries for sitemap: 19; Total queries: 31; Seconds: 0.02; Memory for sitemap: 1KB; Total memory: 6MB -->
