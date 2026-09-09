@@ -1,7 +1,62 @@
 (function () {
     'use strict';
 
+    function layoutSurfaceAxis(axis) {
+        var labels = Array.prototype.slice.call(axis.querySelectorAll('span'));
+        if (labels.length < 2) return;
+
+        var gap = 4;
+        var lastLabel = labels[labels.length - 1];
+        var lastRect;
+        var lastVisibleRight;
+
+        labels.forEach(function(label) {
+            label.style.display = '';
+            label.style.top = '';
+        });
+
+        axis.style.height = '16px';
+        lastRect = lastLabel.getBoundingClientRect();
+        lastVisibleRight = labels[0].getBoundingClientRect().right;
+
+        labels.slice(1, -1).forEach(function(label) {
+            var rect = label.getBoundingClientRect();
+            var overlapsPrevious = rect.left < lastVisibleRight + gap;
+            var overlapsEnd = rect.right > lastRect.left - gap;
+
+            if (overlapsPrevious || overlapsEnd) {
+                label.style.display = 'none';
+            } else {
+                lastVisibleRight = rect.right;
+            }
+        });
+    }
+
+    function layoutVisibleSurfaceAxes() {
+        document.querySelectorAll('.beesaya-surface-axis').forEach(function(axis) {
+            if (axis.offsetParent !== null) layoutSurfaceAxis(axis);
+        });
+    }
+
+    var surfaceAxisResizeTimer;
+    window.addEventListener('resize', function() {
+        window.clearTimeout(surfaceAxisResizeTimer);
+        surfaceAxisResizeTimer = window.setTimeout(layoutVisibleSurfaceAxes, 100);
+    });
+
     var buttons = document.querySelectorAll('.beesaya-connectivity-btn');
+    document.querySelectorAll('.beesaya-surface-btn').forEach(function(button) {
+        var panel = document.getElementById(button.getAttribute('aria-controls'));
+        if (!panel) return;
+        button.addEventListener('click', function() {
+            var isExpanded = button.getAttribute('aria-expanded') === 'true';
+            button.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
+            panel.hidden = isExpanded;
+            if (!isExpanded) {
+                window.requestAnimationFrame(layoutVisibleSurfaceAxes);
+            }
+        });
+    });
     if (!buttons.length || !window.fetch || typeof BeesayaSmartLTEData === 'undefined') {
         return;
     }
@@ -92,9 +147,9 @@
                         var widthPerSample = canvas.width / totalSamples;
                         
                         var colors = {
-                            's': '#4CAF50',
-                            'n': '#c62828',
-                            'e': '#F28C28'
+                            's': '#6F9A70',
+                            'n': '#C76D63',
+                            'e': '#C49A58'
                         };
 
                         var cumulativeDistance = 0;
@@ -118,7 +173,7 @@
                                 currentState = state;
                             }
 
-                            ctx.fillStyle = colors[state] || '#e0e0e0';
+                            ctx.fillStyle = colors[state] || '#C9C3B8';
                             
                             var startX = i * widthPerSample;
                             var drawWidth = Math.ceil(widthPerSample) + 0.5; 
