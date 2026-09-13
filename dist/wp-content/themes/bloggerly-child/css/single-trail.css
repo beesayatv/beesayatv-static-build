@@ -682,11 +682,11 @@ Route Thumbnail
 }
 .beesaya-surface-bar span { min-width: 0; align-self: stretch; }
 .beesaya-surface-bar .is-paved,
-.beesaya-surface-key .is-paved { background: #7b8262; }
+.beesaya-surface-key .is-paved { background: #d3d0c7; }
 .beesaya-surface-bar .is-unpaved,
-.beesaya-surface-key .is-unpaved { background: #a8793f; }
+.beesaya-surface-key .is-unpaved { background: #9aa06a; }
 .beesaya-surface-bar .is-trail,
-.beesaya-surface-key .is-trail { background: #4d6b4b; }
+.beesaya-surface-key .is-trail { background: #66774b; }
 .beesaya-grid div.trail-elevation-panel .beesaya-surface-timeline{display:block!important;width:100%!important;box-sizing:border-box;}
 .beesaya-grid div.trail-elevation-panel .beesaya-surface-bar{display:flex!important;width:100%!important;box-sizing:border-box;}
 .beesaya-grid div.trail-elevation-panel .beesaya-surface-bar span{display:block;flex-grow:0;flex-shrink:1;}

@@ -1,7 +1,7 @@
 {
     "schema_version": 4,
-    "dataset_version": "0468596c4dd96acd",
-    "generated_at": "2026-09-12T08:11:07+00:00",
+    "dataset_version": "3ef7695bc9980bf2",
+    "generated_at": "2026-09-13T09:03:04+00:00",
     "bounds": [
         [
             10.236730100000001,
@@ -9,9 +9,9 @@
         ],
         [
             10.3613131,
-            123.88328
+            123.83495069999999
         ]
     ],
-    "display_point_count": 166,
-    "data_url": "/wp-content/uploads/connectivity/v-0468596c4dd96acd/measurements.geojson"
+    "display_point_count": 156,
+    "data_url": "/wp-content/uploads/connectivity/v-3ef7695bc9980bf2/measurements.geojson"
 }
