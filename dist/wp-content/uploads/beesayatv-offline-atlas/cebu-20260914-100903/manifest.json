@@ -1,0 +1,294 @@
+{
+    "schema_version": 1,
+    "bundle_id": "cebu-20260914-100903",
+    "region": {
+        "id": "cebu",
+        "name": "Cebu",
+        "bounds": {
+            "west": 123.25,
+            "south": 9.25,
+            "east": 124.3,
+            "north": 11.35
+        }
+    },
+    "generated_at": "2026-09-14T10:09:03+00:00",
+    "generator": {
+        "name": "beesayatv-offline-atlas",
+        "version": "0.1.0"
+    },
+    "contents": {
+        "trail_count": 25,
+        "habal_route_count": 23,
+        "surface_network_included": true,
+        "connectivity_included": true
+    },
+    "assets": [
+        {
+            "path": "data/routes/alpaco-trail-loop-pinamungahan-alpaco-naga-city-2026-gpx.geojson",
+            "bytes": 99600,
+            "sha256": "f5bc095770937af96b32b0939f1d5d52caf092b84eef3ca6cdc0a37d30832021"
+        },
+        {
+            "path": "data/routes/bitlang-trail-loop.geojson",
+            "bytes": 48825,
+            "sha256": "18e874fd00198eb815be23bb0da654402d676494c64a0e6f35273aa7cd497fe6"
+        },
+        {
+            "path": "data/routes/buot-guila-cabatbatan-samboryo-trail-loop-buot-taup-cebu-city-2026-gpx.geojson",
+            "bytes": 111502,
+            "sha256": "16a858326b9e7d33fe84d9bbcc66e3e7d71c19e1606889920f842dd1f4a734ea"
+        },
+        {
+            "path": "data/routes/buot-samboryo-babag-ridge-guila-trail-buot-taup-cebu-city-2026-gpx.geojson",
+            "bytes": 97260,
+            "sha256": "ec0e7ce5d50d4c4c24ff0732ed97226cccd134eec51bfb13abed4701c12be430"
+        },
+        {
+            "path": "data/routes/cabanbanan-community-trail-loop.geojson",
+            "bytes": 92659,
+            "sha256": "d69e58ae1d788c2ecdc7d62abf5fdd97151f2a164cd72c60a4791604ab12fe45"
+        },
+        {
+            "path": "data/routes/cambanog-falls-dumanjug-2026-gpx.geojson",
+            "bytes": 14278,
+            "sha256": "fb3cf31c96284a7566e756e6d44231673890b39338b1c0495d23eb0cc197205b"
+        },
+        {
+            "path": "data/routes/camp-7-farm-trails.geojson",
+            "bytes": 42018,
+            "sha256": "b3fd6587d0b307b213f2b0051d8928ce92e17dba8b82d5a268be7f6fea5cdefc"
+        },
+        {
+            "path": "data/routes/camp-7-lubas-farm-trails.geojson",
+            "bytes": 24198,
+            "sha256": "9654092b49b4f2c84b8be18a80d4c2d17cc485819a57d0de8e7e0a1b8a277d70"
+        },
+        {
+            "path": "data/routes/ylaya-camp-8.geojson",
+            "bytes": 31892,
+            "sha256": "babe4ba0944eed8300489a3d1c729422e749a36bd811b05163dc1a437c9d84c7"
+        },
+        {
+            "path": "data/routes/camp-8-to-matun-og-falls-hike-anxiety-took-over-camp-8-minglanilla-2026-gpx.geojson",
+            "bytes": 64667,
+            "sha256": "64ed76af8507db31da94ac8695040b740bee750650817cf2b16c6de3385fabed"
+        },
+        {
+            "path": "data/routes/campagao-community-trail-manduang-minglanilla-2025-gpx.geojson",
+            "bytes": 50463,
+            "sha256": "3ee6427c1b7b133319a51cf144d79ae0c748a7aaf8262260e47a2b1d0142d69a"
+        },
+        {
+            "path": "data/routes/campagao-community-trail-loop-manduang-minglanilla-2026-gpx.geojson",
+            "bytes": 83818,
+            "sha256": "219d016597adb1b5f24a7c3f8461b390b6d014a8aa9081e645f20a975038caa7"
+        },
+        {
+            "path": "data/routes/cogon-mt-naupa-balirong-trail-loop-cogon-balirong-naga-2026-gpx.geojson",
+            "bytes": 89752,
+            "sha256": "9527724c129f7007a67d600643b75ba289dc23f46c5a0df0725870dc19c371e4"
+        },
+        {
+            "path": "data/routes/danasan-trail-loop.geojson",
+            "bytes": 23683,
+            "sha256": "8e0e07c8c770487801b557b7e5ac6bdbd116f47aac2629553f45454d85457c78"
+        },
+        {
+            "path": "data/routes/guindaruhan-estaka-trail-loop-guindaruhan-minglanilla-2026-gpx.geojson",
+            "bytes": 12665,
+            "sha256": "c0e8de67791fc4c5939bb9ba8bfd4f985383ae9b2cf8c60eef6eb0f298d6544b"
+        },
+        {
+            "path": "data/routes/inayagan-cantao-an-pangilatan-peak-community-trail-loop-cantao-an-naga-city-2026-gpx.geojson",
+            "bytes": 20705,
+            "sha256": "4db541cfee0842c5495eeec7c92c6af62d68fb51fa5e670b9c03403da2e5c1f8"
+        },
+        {
+            "path": "data/routes/incomplete-buhisan-mini-forest-loop.geojson",
+            "bytes": 4337,
+            "sha256": "c18850988c39e003c7f2458da020ac38012e426da62504828a1aec06c40f7c05"
+        },
+        {
+            "path": "data/routes/incomplete-campagao-peak-area.geojson",
+            "bytes": 11563,
+            "sha256": "96f25b6adbef1bf503246e9587904813c5e3b25732b9d161219ff62dc984a665"
+        },
+        {
+            "path": "data/routes/malingin-rock.geojson",
+            "bytes": 6689,
+            "sha256": "394bca2c5e6def1f4678bc29fc5dec18225dd5caa1d6e9fd68ec0a100f2aa7cf"
+        },
+        {
+            "path": "data/routes/mini-switzerland-campinsa-talisay-2026-gpx.geojson",
+            "bytes": 19608,
+            "sha256": "90019b4cadfead00b52c991db5f7094824b8e153e4ec7b7e60309fae61a387e7"
+        },
+        {
+            "path": "data/routes/kalatkat-trail.geojson",
+            "bytes": 8029,
+            "sha256": "59de7ac8b6e952d79ab6663ce38f75745469346f18288c790b68e95bcf9aa1b5"
+        },
+        {
+            "path": "data/routes/pangilatan-peak-loop-cantao-an-naga-city-2024-gpx.geojson",
+            "bytes": 6014,
+            "sha256": "68eaad834da822bb3e209c90d9d423bffbec2c2a681661486cce00569c70f9b1"
+        },
+        {
+            "path": "data/routes/radar-trail.geojson",
+            "bytes": 22491,
+            "sha256": "0581eb50f7fa1a2c1405cb4f69cbc271908399c8a84ea490aabca4eb26826ac7"
+        },
+        {
+            "path": "data/routes/toong-forest-trail.geojson",
+            "bytes": 20628,
+            "sha256": "48e09cb73f0b8305a755a971981862b1983c387b130d4cec5f2cf71dc3005e59"
+        },
+        {
+            "path": "data/routes/toong-lumadnon-trail-pardo-buhisan-2026-gpx.geojson",
+            "bytes": 24929,
+            "sha256": "cc3ce040af1e9f18ebaabefb79fcf461c5600ea83ac3cd0900f1c3c2f76fbf47"
+        },
+        {
+            "path": "data/habal/1006-taboc-binaliw-cahumayan-lawaan-danasan.geojson",
+            "bytes": 34598,
+            "sha256": "7d392c16b5cc9be96d1b24c1e2560a178ab6e8ec947bb0c08e05965cae60a60f"
+        },
+        {
+            "path": "data/habal/1007-babag-tugop-near-pt-power-trade-gas-station.geojson",
+            "bytes": 4767,
+            "sha256": "20930b1c22fb38777e88b68a525116f6ee5b50951241f6278d020bc8873f8a1c"
+        },
+        {
+            "path": "data/habal/1008-ocana-napo-kalangyawan.geojson",
+            "bytes": 10207,
+            "sha256": "78c3830d767b09694d4046a68a5b8eba2f59abaa0ee0eff6aaec30498fe8d2ad"
+        },
+        {
+            "path": "data/habal/1009-yahay-maghaway-tapul-camp-8.geojson",
+            "bytes": 16088,
+            "sha256": "05b0341cdb9caf916f7338ab1d5955c3646427a06edc0d8f2092fb4dbe5bf7a0"
+        },
+        {
+            "path": "data/habal/1010-from-highway-to-tinubdan-tabionan-magsico-bugho.geojson",
+            "bytes": 21952,
+            "sha256": "4a29494a6f6254c0769396e754fb27d017c13049c60f3fbc142c4bc662746004"
+        },
+        {
+            "path": "data/habal/1011-from-sinsin-nat-high-school-to-bacagay-near-radar-trail-exit.geojson",
+            "bytes": 7766,
+            "sha256": "703b3c1881c23bb11b3c96a709e1765ea37d257997d69aa31bb8517075ffb9b3"
+        },
+        {
+            "path": "data/habal/1012-from-toong-brgy-hall-to-office-of-the-brgy-tanod.geojson",
+            "bytes": 6817,
+            "sha256": "2787f8010734466304ceddb333fea045729a5725363d03d7bf52a771489ca919"
+        },
+        {
+            "path": "data/habal/1013-from-toong-brgy-hall-to-kawa-jump-off-point.geojson",
+            "bytes": 2079,
+            "sha256": "376287751ae127df7908e1619acd53e4b1c20afef4d1189eb2f4c3549256bb6c"
+        },
+        {
+            "path": "data/habal/1014-from-jollibee-labangon-to-toong-brgy-hall.geojson",
+            "bytes": 8130,
+            "sha256": "c13a5d0ed34fe7041b890039ac6291ff88b0bc5352c47b3b33e1b806e34ff820"
+        },
+        {
+            "path": "data/habal/1015-tabunok-pub-market-lagtang-jaclupan-camp-4-manipis-cnr-going-sinsin.geojson",
+            "bytes": 17413,
+            "sha256": "ddedb549c8b389c5a4613b4268293f077fb4ffc935c4b2f87b44bf7c08226767"
+        },
+        {
+            "path": "data/habal/1016-near-bonbon-elem-school-buot-taup-mak-ak.geojson",
+            "bytes": 10159,
+            "sha256": "0c24bb49b5ecfe99ec02b165cf5790029744acee6d89cdcd57677a62382e324e"
+        },
+        {
+            "path": "data/habal/1017-cnr-loay-to-sinsin-sudlon-1-2-transcentral-highway.geojson",
+            "bytes": 23174,
+            "sha256": "c9101597a327fcb9f30f6b7c1fe5e3e47ff5fc53a860d3f27015591aa9f6608e"
+        },
+        {
+            "path": "data/habal/1018-corner-going-brgy-loay-to-brgy-loay-before-biga-pit-trail.geojson",
+            "bytes": 4507,
+            "sha256": "6f77bee87cc8029737a59b4245b3482d10bd677c9e7933036402f168883ee656"
+        },
+        {
+            "path": "data/habal/1019-corner-brgy-loay-camp-8-cantabaco-lutupan-wet-market.geojson",
+            "bytes": 8007,
+            "sha256": "ad26c878701edf6cdc087e426c59f008d96f5c364f84613fc1513a4aedc4bdcb"
+        },
+        {
+            "path": "data/habal/1020-estaka-guindaruhan-cogon-balirong.geojson",
+            "bytes": 17854,
+            "sha256": "cfb11e897204c33b91a8c0a550360e5de99423b88efe0de7bd5935262d05b288"
+        },
+        {
+            "path": "data/habal/1021-cnr-pakigne-to-manduang-integrated-school.geojson",
+            "bytes": 5333,
+            "sha256": "8ce999354cfef57a2b330104da7f68cfac13277c073001d4a6800c65253baa05"
+        },
+        {
+            "path": "data/habal/1022-balirong-to-cnr-naga-uling-road-near-shell.geojson",
+            "bytes": 9839,
+            "sha256": "8cad869793f507b4c3088e5f98e6e6196ac8dadc91052ee582d8449f31a30e0e"
+        },
+        {
+            "path": "data/habal/1023-balirong-to-sibago.geojson",
+            "bytes": 15019,
+            "sha256": "75cdfc92d80a54da0c7fad95251b9fe15f6dd03021a1a60a7fa3e7fdae6a43c7"
+        },
+        {
+            "path": "data/habal/1064-balirong-lanas-cabuan.geojson",
+            "bytes": 9207,
+            "sha256": "424423af0c75707441aa78e931ce3d9702f4c26a9fb38940d6baa050842b611c"
+        },
+        {
+            "path": "data/habal/1065-from-highway-near-inayagan-brgy-hall-to-pangilatan-peak.geojson",
+            "bytes": 6026,
+            "sha256": "90d951bb7a472d166e6becd952d8ddd4d0e2b702925b8814a6508298fdecf4b4"
+        },
+        {
+            "path": "data/habal/1218-taboan-to-crasher.geojson",
+            "bytes": 6556,
+            "sha256": "67c6c75eef0fadf8b6e4edb2eba8197b9c87956312b8f6b257743018f1c95ceb"
+        },
+        {
+            "path": "data/habal/1229-loay-road-branches-out.geojson",
+            "bytes": 11009,
+            "sha256": "8fc5e8f67d53fb6239b20f5ee4c7a480c3fba27f8f70ff41994435b11aaacb92"
+        },
+        {
+            "path": "data/habal/1238-habal_routes_cantao_an_gpx.geojson",
+            "bytes": 11237,
+            "sha256": "6279716417792cc76b17a2d32fcf32c3e9760be4965e1758bb7ff72c969d9b23"
+        },
+        {
+            "path": "data/surface/canonical-surface.geojson",
+            "bytes": 62976,
+            "sha256": "3f791015b52cce2acc1b5cc131f4e9cfdb53e02aa11baa337dfeab1951b03b4d"
+        },
+        {
+            "path": "data/connectivity/measurements.geojson",
+            "bytes": 32900,
+            "sha256": "3ef7695bc9980bf23d60745811a18a7667c7c682529904a6b6d5a84908f181db"
+        },
+        {
+            "path": "data/connectivity/manifest.json",
+            "bytes": 385,
+            "sha256": "03e74967ebebf27e7a9027de3eac694bc428415d0464bf2a1afed2d93302f4c3"
+        },
+        {
+            "path": "data/atlas.json",
+            "bytes": 1021271,
+            "sha256": "6d617e1fd9af7205c1ce52f4f32189cdd73f50146445ccc2e6c516982a0f935b"
+        }
+    ],
+    "deferred_features": [
+        "trail_reports",
+        "videos",
+        "external_links",
+        "live_weather",
+        "online_database"
+    ]
+}
