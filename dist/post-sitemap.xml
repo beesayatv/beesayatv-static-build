@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?><?xml-stylesheet type='text/xsl' href='https://beesayatv.com/wp-content/plugins/google-sitemap-generator/sitemap.xsl'?><!-- sitemap-generator-url='http://www.arnebrachhold.de' sitemap-generator-version='4.1.24' -->
-<!-- generated-on='September 15, 2026 1:35 pm' -->
+<!-- generated-on='September 18, 2026 5:09 am' -->
 <urlset xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd' xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>	<url>
 		<loc>https://beesayatv.com/proposed-cebu-city-ordinance-seeks-safety-standards-for-upland-tourism/</loc>
 		<lastmod>2026-07-21T00:50:23+00:00</lastmod>
@@ -174,4 +174,10 @@
 		<changefreq>monthly</changefreq>
 		<priority>0.2</priority>
 	</url>
-</urlset><!-- <p>Please edit wp-db.inc.php in wp-includes and set SAVEQUERIES to true if you want to see the queries.</p> --> <!-- Request ID: d185fdd0a677545dbc54291ad0492b41; Queries for sitemap: 4; Total queries: 32; Seconds: 0.01; Memory for sitemap: 1KB; Total memory: 6MB -->
+	<url>
+		<loc>https://beesayatv.com/vandalism-at-spartan-trail-raises-concerns-over-trail-protection/</loc>
+		<lastmod>2026-09-18T05:08:14+00:00</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.2</priority>
+	</url>
+</urlset><!-- <p>Please edit wp-db.inc.php in wp-includes and set SAVEQUERIES to true if you want to see the queries.</p> --> <!-- Request ID: 804aea80ba4a8fbca360736cc113ffe0; Queries for sitemap: 4; Total queries: 32; Seconds: 0.01; Memory for sitemap: 1KB; Total memory: 6MB -->
