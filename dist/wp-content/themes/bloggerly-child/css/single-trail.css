@@ -687,14 +687,26 @@ Route Thumbnail
 .beesaya-surface-key .is-unpaved { background: #9aa06a; }
 .beesaya-surface-bar .is-trail,
 .beesaya-surface-key .is-trail { background: #66774b; }
-.beesaya-grid div.trail-elevation-panel .beesaya-surface-timeline{display:block!important;width:100%!important;box-sizing:border-box;}
-.beesaya-grid div.trail-elevation-panel .beesaya-surface-bar{display:flex!important;width:100%!important;box-sizing:border-box;}
-.beesaya-grid div.trail-elevation-panel .beesaya-surface-bar span{display:block;flex-grow:0;flex-shrink:1;}
+.beesaya-difficulty-btn { appearance: none; border: 0; cursor: pointer; }
+.beesaya-difficulty-btn .beesaya-elevation-chevron { width: 15px; height: 15px; margin-left: 5px; transition: transform .2s ease; }
+.beesaya-difficulty-btn[aria-expanded="true"] .beesaya-elevation-chevron { transform: rotate(180deg); }
+.beesaya-difficulty-panel { margin: -8px 0 18px; padding: 12px 0 0 !important; border-top: 1px solid #e3decf; }
+.beesaya-difficulty-bar .is-easy,
+.beesaya-difficulty-panel .beesaya-surface-key .is-easy { background: #5b9b60; }
+.beesaya-difficulty-bar .is-mild,
+.beesaya-difficulty-panel .beesaya-surface-key .is-mild { background: #356eb5; }
+.beesaya-difficulty-bar .is-tough,
+.beesaya-difficulty-panel .beesaya-surface-key .is-tough { background: #db8436; }
+.beesaya-difficulty-bar .is-epic,
+.beesaya-difficulty-panel .beesaya-surface-key .is-epic { background: #7d4d96; }
+.beesaya-surface-panel .beesaya-surface-timeline{display:block!important;width:100%!important;box-sizing:border-box;}
+.beesaya-surface-panel .beesaya-surface-bar{display:flex!important;width:100%!important;box-sizing:border-box;}
+.beesaya-surface-panel .beesaya-surface-bar span{display:block;flex-grow:0;flex-shrink:1;}
 .beesaya-surface-axis{position:relative;height:16px;margin:0 0 4px;width:100%;font:400 10px/18px "Nunito Sans",sans-serif;}
-.beesaya-grid div.trail-elevation-panel .beesaya-surface-axis span{position:absolute;transform:translateX(-50%);white-space:nowrap;color:#555!important;font:400 10px/18px "Nunito Sans",sans-serif!important;}
-.beesaya-grid div.trail-elevation-panel .beesaya-surface-axis span:first-child{left:0;transform:none;color:#888!important;font-weight:600!important;}
-.beesaya-grid div.trail-elevation-panel .beesaya-surface-axis span:last-child{left:100%!important;transform:translateX(-100%);color:#888!important;font-weight:600!important;}
-.beesaya-grid div.trail-elevation-panel .beesaya-surface-key {
+.beesaya-surface-panel .beesaya-surface-axis span{position:absolute;transform:translateX(-50%);white-space:nowrap;color:#555!important;font:400 10px/18px "Nunito Sans",sans-serif!important;}
+.beesaya-surface-panel .beesaya-surface-axis span:first-child{left:0;transform:none;color:#888!important;font-weight:600!important;}
+.beesaya-surface-panel .beesaya-surface-axis span:last-child{left:100%!important;transform:translateX(-100%);color:#888!important;font-weight:600!important;}
+.beesaya-surface-panel .beesaya-surface-key {
     display: flex !important;
     justify-content: flex-start;
     flex-wrap: wrap;
@@ -702,8 +714,8 @@ Route Thumbnail
     color: #555;
     font: 400 10px/18px "Nunito Sans", sans-serif;
 }
-.beesaya-grid div.trail-elevation-panel .beesaya-surface-key > .beesaya-surface-key__item { display: inline-flex; align-items: center; gap: 6px; color: #555!important; font: 400 10px/18px "Nunito Sans", sans-serif!important; }
-.beesaya-grid div.trail-elevation-panel .beesaya-surface-key__label { display: inline-block; color: inherit!important; font: inherit!important; }
+.beesaya-surface-panel .beesaya-surface-key > .beesaya-surface-key__item { display: inline-flex; align-items: center; gap: 6px; color: #555!important; font: 400 10px/18px "Nunito Sans", sans-serif!important; }
+.beesaya-surface-panel .beesaya-surface-key__label { display: inline-block; color: inherit!important; font: inherit!important; }
 .beesaya-surface-key i { display: block; flex: 0 0 9px; width: 9px; height: 9px; border-radius: 2px; }
-.beesaya-grid div.trail-elevation-panel .beesaya-surface-key strong { color: #555!important; font: 600 10px/18px "Nunito Sans", sans-serif!important; }
+.beesaya-surface-panel .beesaya-surface-key strong { color: #555!important; font: 600 10px/18px "Nunito Sans", sans-serif!important; }
 .trail-surface-interpretation-text { margin: 0; color: #555; font-size: .9rem; line-height: 1.5; }
