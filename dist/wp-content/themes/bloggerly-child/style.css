@@ -1139,6 +1139,7 @@ body.single-trail .wp-block-embed.is-provider-youtube:hover{
     background:#fbf9f2;
     color:inherit;
     text-decoration:none;
+    line-height:1.2;
     transition:border-color .16s ease,background-color .16s ease,transform .16s ease;
 }
 
@@ -1156,15 +1157,18 @@ body.single-trail .wp-block-embed.is-provider-youtube:hover{
 
 .trail-archive-pathway__icon svg{width:17px;height:17px;}
 
-.trail-archive-pathway__content{display:grid;gap:2px;min-width:0;}
+.trail-archive-pathway__content{display:grid;gap:2px;min-width:0;line-height:1.2;}
 
 .trail-archive-pathway__label{
+    display:block;
     color:#4d533f;
     font-size:.94rem;
     font-weight:700;
+    line-height:1.25;
 }
 
 .trail-archive-pathway__description{
+    display:block;
     color:#777;
     font-size:.78rem;
     line-height:1.35;
@@ -1185,7 +1189,7 @@ body.single-trail .wp-block-embed.is-provider-youtube:hover{
     padding-top:4px;
 }
 
-.trail-archive-features__label{color:#777;font-size:.78rem;font-weight:600;}
+.trail-archive-features__label{color:#777;font-size:.78rem;font-weight:600;line-height:1.3;}
 
 .trail-archive-features .trail-archive-pathway__description{display:flex;flex-wrap:wrap;gap:6px;}
 
@@ -1239,4 +1243,5 @@ body.single-trail .wp-block-embed.is-provider-youtube:hover{
 @media(max-width:620px){
     .trail-archive-links{padding:20px;}
     .trail-archive-pathways{grid-template-columns:1fr;}
+    .trail-archive-pathway{padding:12px;}
 }
