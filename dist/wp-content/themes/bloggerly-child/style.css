@@ -1093,83 +1093,127 @@ body.single-trail .wp-block-embed.is-provider-youtube:hover{
 */
 
 .trail-archive-links {
-    margin-top:3rem;
-    padding-top:1.5rem;
-    border-top:1px solid #e8e2d2;
+    margin-top:2rem;
+    padding:22px 24px;
+    background:#fbf9f2;
+    border:1px solid #e8e2d2;
+    border-radius:10px;
 }
 
 .trail-archive-links .btv-single-trail__archive-heading{
     margin:0;
     color:#2d3a2d;
-    font-size:1.35rem;
+    font-size:1.2rem;
+}
+
+.trail-archive-links .btv-single-trail__archive-heading::after{
+    content:"";
+    display:block;
+    width:60px;
+    height:2px;
+    margin-top:8px;
+    background:#d9cda9;
 }
 
 .trail-archive-links .btv-single-trail__archive-intro{
-    margin:.35rem 0 1rem;
+    margin:.25rem 0 0;
     color:#777;
-    font-size:.95rem;
+    font-size:.88rem;
 }
 
 .trail-archive-pathways{
-    border-top:1px solid #ece7db;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
+    margin-top:22px;
 }
 
 .trail-archive-pathway{
-    display:grid;
-    grid-template-columns:minmax(0,1fr) auto;
-    grid-template-areas:"label arrow" "description arrow";
-    gap:2px 18px;
-    padding:14px 2px;
-    border-bottom:1px solid #ece7db;
+    display:flex;
+    align-items:center;
+    gap:11px;
+    min-width:0;
+    padding:14px;
+    border:1px solid #e8e2d2;
+    border-radius:7px;
+    background:#fbf9f2;
     color:inherit;
     text-decoration:none;
+    transition:border-color .16s ease,background-color .16s ease,transform .16s ease;
 }
 
+.trail-archive-pathway__icon{
+    display:flex;
+    flex:0 0 32px;
+    width:32px;
+    height:32px;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:#eef0e5;
+    color:#627154;
+}
+
+.trail-archive-pathway__icon svg{width:17px;height:17px;}
+
+.trail-archive-pathway__content{display:grid;gap:2px;min-width:0;}
+
 .trail-archive-pathway__label{
-    grid-area:label;
     color:#4d533f;
-    font-size:1rem;
+    font-size:.94rem;
     font-weight:700;
 }
 
 .trail-archive-pathway__description{
-    grid-area:description;
     color:#777;
-    font-size:.88rem;
+    font-size:.78rem;
     line-height:1.35;
 }
 
 .trail-archive-pathway__arrow{
-    grid-area:arrow;
-    align-self:center;
+    margin-left:auto;
     color:#6e7359;
     font-size:1.1rem;
 }
 
-.trail-archive-pathway--features{
-    display:block;
+.trail-archive-features{
+    grid-column:1 / -1;
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:7px 10px;
+    padding-top:4px;
 }
 
-.trail-archive-pathway--features .trail-archive-pathway__label,
-.trail-archive-pathway--features .trail-archive-pathway__description{
-    display:block;
-}
+.trail-archive-features__label{color:#777;font-size:.78rem;font-weight:600;}
 
-.trail-archive-pathway--features .trail-archive-pathway__description a{
+.trail-archive-features .trail-archive-pathway__description{display:flex;flex-wrap:wrap;gap:6px;}
+
+.trail-archive-features .trail-archive-pathway__description a{
+    display:inline-flex;
+    align-items:center;
+    min-height:25px;
+    padding:2px 9px;
+    border-radius:999px;
+    background:#eef0e5;
     color:#4d533f;
-    font-size:inherit;
-    font-weight:inherit;
+    font-size:.76rem;
+    font-weight:600;
     text-decoration:none;
 }
 
-.trail-archive-pathway--features .trail-archive-pathway__description a:hover,
-.trail-archive-pathway--features .trail-archive-pathway__description a:focus-visible{
-    text-decoration:underline;
+.trail-archive-features .trail-archive-pathway__description a:hover,
+.trail-archive-features .trail-archive-pathway__description a:focus-visible{background:#dfe5d1;}
+
+.trail-archive-pathway:hover{
+    border-color:#cfd7bd;
+    background:#fbf9f2;
+    transform:translateY(-1px);
 }
 
 .trail-archive-pathway:hover .trail-archive-pathway__label,
 .trail-archive-pathway:focus-visible .trail-archive-pathway__label{
-    text-decoration:underline;
+    color:#36422f;
 }
 
 .trail-archive-pathway:focus-visible{
@@ -1178,6 +1222,21 @@ body.single-trail .wp-block-embed.is-provider-youtube:hover{
 }
 
 .trail-archive-features__separator{
-    margin:0 7px;
-    color:#b6b0a3;
+    display:none;
+}
+
+.single .entry-content .trail-archive-attribution{
+    margin:8px 0 12px;
+    color:#89867e;
+    font-size:10px;
+    line-height:1.3;
+    text-align:left;
+}
+
+.trail-archive-attribution a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+.trail-archive-attribution a:hover,.trail-archive-attribution a:focus-visible{color:#4d533f;}
+
+@media(max-width:620px){
+    .trail-archive-links{padding:20px;}
+    .trail-archive-pathways{grid-template-columns:1fr;}
 }

@@ -147,9 +147,9 @@
                         var widthPerSample = canvas.width / totalSamples;
                         
                         var colors = {
-                            's': '#6F9A70',
-                            'n': '#C76D63',
-                            'e': '#C49A58'
+                            's': '#4d9a5d',
+                            'n': '#d25c55',
+                            'e': '#d8962e'
                         };
 
                         var cumulativeDistance = 0;
