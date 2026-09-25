@@ -126,7 +126,7 @@ margin:24px 0;
 <link rel="stylesheet" id="dashicons-css" href="https://beesayatv.com/wp-includes/css/dashicons.min.css?ver=7.1.2" media="all">
 <link rel="stylesheet" id="beesayatv-cards-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/cards.css?ver=1784723148" media="all">
 <link rel="stylesheet" id="chld_thm_cfg_parent-css" href="https://beesayatv.com/wp-content/themes/bloggerly/style.css?ver=7.1.2" media="all">
-<link rel="stylesheet" id="beesayatv-child-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1790299347" media="all">
+<link rel="stylesheet" id="beesayatv-child-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1790315314" media="all">
 <link rel="stylesheet" id="beesayatv-audio-player-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/audio-player.css?ver=1784397693" media="all">
 <link rel="stylesheet" id="bloggerly-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1.0.5.1782171480" media="all">
 <link rel="stylesheet" id="leaflet_stylesheet-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/assets/vendor/leaflet/leaflet.css?ver=1789287969" media="all">
@@ -531,6 +531,9 @@ document.head.appendChild(locateStyle);
 
         map.createPane('motortaxiAccessPane');
         map.getPane('motortaxiAccessPane').style.zIndex = 390;
+        map.createPane('droneSurveyPathPane');
+        map.getPane('droneSurveyPathPane').style.zIndex = 395;
+        map.getPane('droneSurveyPathPane').style.pointerEvents = 'none';
         map.createPane('trailVisualPane');
         map.getPane('trailVisualPane').style.zIndex = 400;
         map.getPane('trailVisualPane').style.pointerEvents = 'none';
@@ -752,7 +755,7 @@ document.head.appendChild(locateStyle);
         function setDroneFlightsEnabled(enabled) {
             droneFlightsEnabled = !!enabled;
             droneFlightsButton.setAttribute('aria-pressed', droneFlightsEnabled ? 'true' : 'false');
-            droneFlightsButton.setAttribute('aria-label', droneFlightsEnabled ? 'Hide Drone Flights' : 'Show Drone Flights');
+            droneFlightsButton.setAttribute('aria-label', droneFlightsEnabled ? 'Hide Drone Surveys' : 'Show Drone Surveys');
             if (droneFlightsEnabled) {
                 if (!map.hasLayer(droneFlightsLayer)) { droneFlightsLayer.addTo(map); }
             } else {
@@ -760,6 +763,7 @@ document.head.appendChild(locateStyle);
                     clearSelectedPoi();
                     closeAtlasInspector();
                 }
+                clearActiveDroneFlightPath();
                 if (map.hasLayer(droneFlightsLayer)) { map.removeLayer(droneFlightsLayer); }
             }
         }
@@ -769,9 +773,9 @@ document.head.appendChild(locateStyle);
                 var container = L.DomUtil.create('div', 'beesayatv-atlas-access-control leaflet-control');
                 droneFlightsButton = L.DomUtil.create('button', 'beesayatv-atlas-access-control__toggle', container);
                 droneFlightsButton.type = 'button';
-                droneFlightsButton.textContent = 'Drone Flights';
+                droneFlightsButton.textContent = 'Drone Surveys';
                 droneFlightsButton.disabled = !droneSurveys.length;
-                droneFlightsButton.setAttribute('aria-label', 'Show Drone Flights');
+                droneFlightsButton.setAttribute('aria-label', 'Show Drone Surveys');
                 droneFlightsButton.setAttribute('aria-pressed', 'false');
                 L.DomEvent.disableClickPropagation(container);
                 L.DomEvent.on(droneFlightsButton, 'click', function() { setDroneFlightsEnabled(!droneFlightsEnabled); });
@@ -2057,6 +2061,7 @@ document.addEventListener('keydown', function(e) {
 map.on('click dragstart zoomstart', closeSearchResults);
 map.on('click', function() {
     clearRouteFocus();
+    clearActiveDroneFlightPath();
     closeAtlasInspector();
 });
 
@@ -2068,11 +2073,89 @@ function getDroneSurveyIcon() {
     });
 }
 
+var activeDroneFlightMarker = null;
+var activeDroneFlightLayers = null;
+var activeDroneFlightRequest = 0;
+
+function clearActiveDroneFlightPath() {
+    activeDroneFlightRequest += 1;
+    activeDroneFlightMarker = null;
+    if (activeDroneFlightLayers && map.hasLayer(activeDroneFlightLayers)) {
+        map.removeLayer(activeDroneFlightLayers);
+    }
+    activeDroneFlightLayers = null;
+}
+
+function droneFlightPathStyle() {
+    var zoom = map.getZoom();
+    if (zoom < 12) { return { weight: 2, casingWeight: 5, dashArray: '5 7' }; }
+    if (zoom < 15) { return { weight: 3, casingWeight: 6, dashArray: '8 9' }; }
+    return { weight: 4, casingWeight: 7, dashArray: '12 10' };
+}
+
+function updateActiveDroneFlightPathStyle() {
+    if (!activeDroneFlightLayers) { return; }
+    var style = droneFlightPathStyle();
+    activeDroneFlightLayers.eachLayer(function(layer) {
+        if (!layer.setStyle) { return; }
+        layer.setStyle(layer._atlasDroneFlightCasing
+            ? { weight: style.casingWeight }
+            : { weight: style.weight, dashArray: style.dashArray });
+    });
+}
+
+function showDroneFlightPath(marker, survey) {
+    if (!survey.telemetry_url) { return; }
+    var request = ++activeDroneFlightRequest;
+    activeDroneFlightMarker = marker;
+    fetch(survey.telemetry_url, { credentials: 'same-origin', headers: { Accept: 'application/json' } })
+        .then(function(response) {
+            if (!response.ok) { throw new Error('Drone telemetry is unavailable.'); }
+            return response.json();
+        })
+        .then(function(flight) {
+            if (request !== activeDroneFlightRequest || activeDroneFlightMarker !== marker || !Array.isArray(flight.samples)) { return; }
+            var segments = {};
+            flight.samples.forEach(function(sample) {
+                if (!Array.isArray(sample) || !Number.isFinite(Number(sample[1])) || !Number.isFinite(Number(sample[2]))) { return; }
+                var segmentId = String(sample[4] || 0);
+                if (!segments[segmentId]) { segments[segmentId] = []; }
+                segments[segmentId].push([Number(sample[1]), Number(sample[2])]);
+            });
+            var style = droneFlightPathStyle();
+            var layers = [];
+            Object.keys(segments).forEach(function(segmentId) {
+                if (segments[segmentId].length < 2) { return; }
+                var casing = L.polyline(segments[segmentId], {
+                    pane: 'droneSurveyPathPane', color: '#f5f2e8', opacity: 0.9,
+                    weight: style.casingWeight, interactive: false, lineCap: 'butt', lineJoin: 'round'
+                });
+                casing._atlasDroneFlightCasing = true;
+                layers.push(casing, L.polyline(segments[segmentId], {
+                    pane: 'droneSurveyPathPane', color: '#6e7359', opacity: 0.95,
+                    weight: style.weight, dashArray: style.dashArray,
+                    interactive: false, lineCap: 'butt', lineJoin: 'round'
+                }));
+            });
+            if (!layers.length || request !== activeDroneFlightRequest) { return; }
+            activeDroneFlightLayers = L.layerGroup(layers).addTo(map);
+        })
+        .catch(function() {
+            if (request === activeDroneFlightRequest) { clearActiveDroneFlightPath(); }
+        });
+}
+
 droneSurveys.forEach(function(survey) {
     var marker = L.marker([survey.lat, survey.lng], { icon: getDroneSurveyIcon(), title: survey.title });
     marker._atlasDroneSurvey = survey;
     marker.on('click', function(event) {
         if (event.originalEvent) { L.DomEvent.stopPropagation(event.originalEvent); }
+        if (activeDroneFlightMarker === marker) {
+            clearActiveDroneFlightPath();
+        } else {
+            clearActiveDroneFlightPath();
+            showDroneFlightPath(marker, survey);
+        }
         selectPoiMarker(marker);
         var details = [];
         if (survey.location) { details.push(survey.location); }
@@ -2089,7 +2172,10 @@ droneSurveys.forEach(function(survey) {
     droneFlightsLayer.addLayer(marker);
 });
 map.on('dragstart', closeAtlasInspector);
-map.on('zoomend', refreshSelectedTrailDetails);
+map.on('zoomend', function() {
+    refreshSelectedTrailDetails();
+    updateActiveDroneFlightPathStyle();
+});
     });
     </script>
 
