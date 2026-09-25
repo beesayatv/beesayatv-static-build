@@ -364,10 +364,14 @@ Route Thumbnail
 }
 
 .beesaya-trail-features{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:6px;
     margin:4px 0 0;
     font-size:15px !important;
     line-height:1.5;
-     width:100%;
+    width:100%;
 }
 
 .beesaya-trail-features span{
@@ -377,17 +381,27 @@ Route Thumbnail
 
 .beesaya-trail-features a,
 .beesaya-trail-features a:visited{
-    color:#999;
+    display:inline-flex;
+    align-items:center;
+    min-height:25px;
+    padding:2px 9px;
+    border-radius:999px;
+    background:#eef0e5;
+    color:#4d533f;
+    font-size:.76rem;
+    font-weight:600;
     text-decoration:none;
 }
 
-.beesaya-trail-features a:hover{
+.beesaya-trail-features a:hover,
+.beesaya-trail-features a:focus-visible{
+    background:#dfe5d1;
     color:#4D533F;
-    text-decoration:underline;
+    text-decoration:none;
 }
 
 .beesaya-feature-separator{
-    color:#bbb;
+    display:none;
 }
 
 

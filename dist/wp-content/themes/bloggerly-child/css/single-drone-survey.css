@@ -1,0 +1,15 @@
+.btv-single-drone-survey{max-width:920px;margin:0 auto;}
+.single-drone_survey .site-header{z-index:1101;}
+.btv-single-drone-survey__header{margin-bottom:20px;}
+.btv-drone-survey-heading{display:block;}
+.btv-drone-survey-heading .entry-title{margin-bottom:0;}
+.btv-drone-survey-video{margin:0 0 28px;border-radius:12px;overflow:hidden;background:#111;box-shadow:0 8px 24px rgba(38,53,37,.14);}
+.btv-drone-survey-video video{display:block;width:100%;height:auto;max-height:75vh;background:#111;}
+.btv-drone-survey-featured{margin:0 0 28px;}
+.btv-drone-survey-featured img{display:block;width:100%;height:auto;border-radius:12px;}
+.btv-drone-survey-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;padding-top:22px;border-top:1px solid #e3decf;}
+@media(max-width:640px){.btv-single-drone-survey{width:100%;}.btv-drone-survey-video{border-radius:8px;}.btv-drone-survey-links{align-items:stretch;flex-direction:column;}.btv-drone-survey-links .button{text-align:center;}}
+.btv-single-drone-survey.btv-drone-prototype{max-width:1380px;box-sizing:border-box;margin-right:auto;margin-left:auto;}
+.btv-single-drone-survey.btv-drone-prototype .btv-single-drone-survey__content{max-width:none;}
+.btv-single-drone-survey.btv-drone-prototype .btv-drone-survey-links{margin-top:24px;}
+@media(max-width:1000px){.btv-single-drone-survey.btv-drone-prototype{width:100%;}}

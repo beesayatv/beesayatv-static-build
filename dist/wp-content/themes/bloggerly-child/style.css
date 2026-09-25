@@ -1103,7 +1103,7 @@ body.single-trail .wp-block-embed.is-provider-youtube:hover{
 .trail-archive-links .btv-single-trail__archive-heading{
     margin:0;
     color:#2d3a2d;
-    font-size:1.2rem;
+    font-size:1.5rem;
 }
 
 .trail-archive-links .btv-single-trail__archive-heading::after{
@@ -1213,6 +1213,12 @@ body.single-trail .wp-block-embed.is-provider-youtube:hover{
     border-color:#cfd7bd;
     background:#fbf9f2;
     transform:translateY(-1px);
+}
+
+.btv-single-trail__archive-links .trail-archive-pathway:hover,
+.btv-single-trail__archive-links .trail-archive-pathway:focus,
+.btv-single-trail__archive-links .trail-archive-pathway:focus-visible{
+    text-decoration:none;
 }
 
 .trail-archive-pathway:hover .trail-archive-pathway__label,
