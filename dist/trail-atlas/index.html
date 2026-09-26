@@ -126,7 +126,7 @@ margin:24px 0;
 <link rel="stylesheet" id="dashicons-css" href="https://beesayatv.com/wp-includes/css/dashicons.min.css?ver=7.1.2" media="all">
 <link rel="stylesheet" id="beesayatv-cards-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/cards.css?ver=1784723148" media="all">
 <link rel="stylesheet" id="chld_thm_cfg_parent-css" href="https://beesayatv.com/wp-content/themes/bloggerly/style.css?ver=7.1.2" media="all">
-<link rel="stylesheet" id="beesayatv-child-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1790389986" media="all">
+<link rel="stylesheet" id="beesayatv-child-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1790396601" media="all">
 <link rel="stylesheet" id="beesayatv-audio-player-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/audio-player.css?ver=1784397693" media="all">
 <link rel="stylesheet" id="bloggerly-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1.0.5.1782171480" media="all">
 <link rel="stylesheet" id="leaflet_stylesheet-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/assets/vendor/leaflet/leaflet.css?ver=1789287969" media="all">
@@ -475,6 +475,11 @@ border:2px solid #F5F2E8;
 box-shadow:0 2px 6px rgba(0,0,0,.25);
 }
 .btv-poi-marker.is-selected .btv-poi-circle{box-shadow:0 0 0 2px rgba(245,242,232,.96),0 0 0 5px var(--btv-poi-color),0 2px 6px rgba(0,0,0,.25);}
+.btv-drone-survey-marker .btv-poi-circle{position:relative;isolation:isolate;}
+.btv-drone-survey-marker .btv-poi-circle::before{position:absolute;z-index:-1;inset:-6px;border-radius:50%;content:"";background:conic-gradient(from 0deg,#6e7359 0 30%,#d9cda9 42%,transparent 54% 72%,#8e9872 84% 94%,#6e7359 100%);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));opacity:0;}
+.is-drone-surveys-enabled .btv-drone-survey-marker .btv-poi-circle::before{opacity:1;animation:btv-atlas-drone-halo 2.8s linear infinite;}
+@keyframes btv-atlas-drone-halo{to{transform:rotate(1turn);}}
+@media (prefers-reduced-motion:reduce){.is-drone-surveys-enabled .btv-drone-survey-marker .btv-poi-circle::before{animation:none;}}
 .btv-poi-circle svg{
     width:15px;
     height:15px;
@@ -756,8 +761,10 @@ document.head.appendChild(locateStyle);
             droneFlightsEnabled = !!enabled;
             droneFlightsButton.setAttribute('aria-pressed', droneFlightsEnabled ? 'true' : 'false');
             droneFlightsButton.setAttribute('aria-label', droneFlightsEnabled ? 'Hide Drone Surveys' : 'Show Drone Surveys');
+            map.getContainer().classList.toggle('is-drone-surveys-enabled', droneFlightsEnabled);
             if (droneFlightsEnabled) {
                 if (!map.hasLayer(droneFlightsLayer)) { droneFlightsLayer.addTo(map); }
+                showAllDroneFlightPaths();
             } else {
                 if (selectedPoiMarker && selectedPoiMarker._atlasDroneSurvey) {
                     clearSelectedPoi();
@@ -2061,25 +2068,24 @@ document.addEventListener('keydown', function(e) {
 map.on('click dragstart zoomstart', closeSearchResults);
 map.on('click', function() {
     clearRouteFocus();
-    clearActiveDroneFlightPath();
     closeAtlasInspector();
 });
 
 function getDroneSurveyIcon() {
-    return getPoiIcon({
+    var icon = getPoiIcon({
         category: 'motortaxi',
         parent_category: '',
         lucide: '<path d="M7 12h10M9 9l-2 3 2 3m6-6 2 3-2 3M12 8v8"/><circle cx="6" cy="8" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="6" cy="16" r="2"/><circle cx="18" cy="16" r="2"/>'
     });
+    icon.options.className += ' btv-drone-survey-marker';
+    return icon;
 }
 
-var activeDroneFlightMarker = null;
 var activeDroneFlightLayers = null;
 var activeDroneFlightRequest = 0;
 
 function clearActiveDroneFlightPath() {
     activeDroneFlightRequest += 1;
-    activeDroneFlightMarker = null;
     if (activeDroneFlightLayers && map.hasLayer(activeDroneFlightLayers)) {
         map.removeLayer(activeDroneFlightLayers);
     }
@@ -2104,17 +2110,15 @@ function updateActiveDroneFlightPathStyle() {
     });
 }
 
-function showDroneFlightPath(marker, survey) {
+function showDroneFlightPath(survey, request) {
     if (!survey.telemetry_url) { return; }
-    var request = ++activeDroneFlightRequest;
-    activeDroneFlightMarker = marker;
     fetch(survey.telemetry_url, { credentials: 'same-origin', cache: 'no-store', headers: { Accept: 'application/json' } })
         .then(function(response) {
             if (!response.ok) { throw new Error('Drone telemetry is unavailable.'); }
             return response.json();
         })
         .then(function(flight) {
-            if (request !== activeDroneFlightRequest || activeDroneFlightMarker !== marker || !Array.isArray(flight.samples)) { return; }
+            if (request !== activeDroneFlightRequest || !activeDroneFlightLayers || !Array.isArray(flight.samples)) { return; }
             var windowStart = Number(flight.flightOffset);
             var windowEnd = Number(flight.playbackEnd);
             if (!Number.isFinite(windowStart) || !Number.isFinite(windowEnd) || windowEnd <= windowStart) { return; }
@@ -2142,12 +2146,17 @@ function showDroneFlightPath(marker, survey) {
                     interactive: false, lineCap: 'butt', lineJoin: 'round'
                 }));
             });
-            if (!layers.length || request !== activeDroneFlightRequest) { return; }
-            activeDroneFlightLayers = L.layerGroup(layers).addTo(map);
+            if (!layers.length || request !== activeDroneFlightRequest || !activeDroneFlightLayers) { return; }
+            layers.forEach(function(layer) { activeDroneFlightLayers.addLayer(layer); });
         })
-        .catch(function() {
-            if (request === activeDroneFlightRequest) { clearActiveDroneFlightPath(); }
-        });
+        .catch(function() {});
+}
+
+function showAllDroneFlightPaths() {
+    clearActiveDroneFlightPath();
+    var request = activeDroneFlightRequest;
+    activeDroneFlightLayers = L.layerGroup().addTo(map);
+    droneSurveys.forEach(function(survey) { showDroneFlightPath(survey, request); });
 }
 
 droneSurveys.forEach(function(survey) {
@@ -2155,12 +2164,6 @@ droneSurveys.forEach(function(survey) {
     marker._atlasDroneSurvey = survey;
     marker.on('click', function(event) {
         if (event.originalEvent) { L.DomEvent.stopPropagation(event.originalEvent); }
-        if (activeDroneFlightMarker === marker) {
-            clearActiveDroneFlightPath();
-        } else {
-            clearActiveDroneFlightPath();
-            showDroneFlightPath(marker, survey);
-        }
         selectPoiMarker(marker);
         var details = [];
         if (survey.location) { details.push(survey.location); }
@@ -2170,7 +2173,7 @@ droneSurveys.forEach(function(survey) {
         }
         showAtlasInspector({
             title: survey.title,
-            description: details.join(' &middot; '),
+            description: details.join(' \u00b7 '),
             links: [{ href: survey.url, label: 'View Drone Survey' }]
         });
     });

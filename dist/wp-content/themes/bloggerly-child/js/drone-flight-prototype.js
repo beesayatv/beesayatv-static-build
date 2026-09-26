@@ -48,6 +48,7 @@
     var hudTime = document.querySelector('[data-drone-hud="time"]');
     var overlayGps = document.querySelector('[data-drone-overlay="gps"]');
     var animationFrame = null;
+    var lastCameraFollow = 0;
     var currentOffset = Number(config.flightOffset);
     if (!Number.isFinite(currentOffset)) { currentOffset = Number(flight.defaultOffset) || 0; }
 
@@ -69,10 +70,12 @@
     var pathLayers = [];
     var pathGroup = L.featureGroup();
     var initialFitPending = true;
+    var publicViewInitialized = false;
 
     function refreshMapSize(forceFit) {
         if (mapElement.offsetWidth < 2 || mapElement.offsetHeight < 2) { return; }
         map.invalidateSize({ pan: false, animate: false });
+        if (!config.editor && publicViewInitialized) { return; }
         if ((initialFitPending || forceFit) && pathLayers.length && pathGroup.getBounds().isValid()) {
             map.fitBounds(pathGroup.getBounds(), { padding: [24, 24], animate: false });
             initialFitPending = false;
@@ -190,7 +193,16 @@
         if (hudEndGps) {
             hudEndGps.textContent = endPosition ? endPosition.lat.toFixed(6) + '°, ' + endPosition.lng.toFixed(6) + '°' : 'NO TELEMETRY';
         }
-        refreshMapSize(true);
+        if (!config.editor && startPosition) {
+            map.invalidateSize({ pan: false, animate: false });
+            if (!publicViewInitialized) {
+                map.setView([startPosition.lat, startPosition.lng], 18, { animate: false });
+                publicViewInitialized = true;
+            }
+            initialFitPending = false;
+        } else {
+            refreshMapSize(true);
+        }
     }
 
     function distanceMetres(a, b) {
@@ -252,7 +264,28 @@
             return;
         }
         if (!map.hasLayer(positionMarker)) { positionMarker.addTo(map); }
-        positionMarker.setLatLng([position.lat, position.lng]);
+        var markerPosition = [position.lat, position.lng];
+        positionMarker.setLatLng(markerPosition);
+        if (!config.editor && publicViewInitialized) {
+            var now = window.performance.now();
+            var mapSize = map.getSize();
+            var markerPoint = map.latLngToContainerPoint(markerPosition);
+            var centerPoint = mapSize.divideBy(2);
+            var outsideCenterZone = Math.abs(markerPoint.x - centerPoint.x) > Math.max(28, mapSize.x * 0.1)
+                || Math.abs(markerPoint.y - centerPoint.y) > Math.max(24, mapSize.y * 0.1);
+            if (video.seeking || video.paused || video.ended) {
+                map.panTo(markerPosition, { animate: false, noMoveStart: true });
+                lastCameraFollow = now;
+            } else if (outsideCenterZone && now - lastCameraFollow >= 700) {
+                map.panTo(markerPosition, {
+                    animate: true,
+                    duration: 0.62,
+                    easeLinearity: 0.22,
+                    noMoveStart: true
+                });
+                lastCameraFollow = now;
+            }
+        }
         if (playbackStatus) { playbackStatus.textContent = (prefix || 'Flight ' + flightTime.toFixed(1) + ' s') + ' · ' + position.lat.toFixed(6) + ', ' + position.lng.toFixed(6) + (null === position.alt ? '' : ' · ' + position.alt.toFixed(1) + ' ft above takeoff'); }
         updateHud(position, flightTime);
     }
