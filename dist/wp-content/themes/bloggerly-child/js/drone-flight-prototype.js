@@ -3,8 +3,116 @@
 
     var config = window.beesayatvDroneFlightPrototype;
     var mapElement = document.getElementById('btv-drone-prototype-map');
-    var video = document.getElementById('btv-drone-prototype-video');
-    if (!config || !mapElement || !video || !window.L) { return; }
+    var mediaHost = document.getElementById('btv-drone-prototype-video');
+    var video = null;
+    if (!config || !mapElement || !mediaHost || !window.L) { return; }
+
+    function loadYouTubeApi() {
+        return new Promise(function (resolve, reject) {
+            if (window.YT && window.YT.Player) { resolve(window.YT); return; }
+            var previousReady = window.onYouTubeIframeAPIReady;
+            window.onYouTubeIframeAPIReady = function () {
+                if (typeof previousReady === 'function') { previousReady(); }
+                resolve(window.YT);
+            };
+            var existing = document.getElementById('btv-youtube-iframe-api');
+            if (!existing) {
+                var script = document.createElement('script');
+                script.id = 'btv-youtube-iframe-api';
+                script.src = 'https://www.youtube.com/iframe_api';
+                script.async = true;
+                script.onerror = function () { reject(new Error('YouTube player API failed to load.')); };
+                document.head.appendChild(script);
+            }
+        });
+    }
+
+    function createYouTubeMedia(host) {
+        return loadYouTubeApi().then(function (YT) {
+            return new Promise(function (resolve) {
+                var playButton = host.parentNode.querySelector('.btv-drone-youtube-play');
+                var listeners = {};
+                var playerState = -1;
+                var isSeeking = false;
+                var ready = false;
+                var requestedPlay = false;
+                var lastTime = 0;
+                var player;
+                function emit(name) {
+                    (listeners[name] || []).forEach(function (listener) { listener(); });
+                }
+                var media = {
+                    addEventListener: function (name, listener) {
+                        if (!listeners[name]) { listeners[name] = []; }
+                        listeners[name].push(listener);
+                    },
+                    play: function () {
+                        player.playVideo();
+                        return Promise.resolve();
+                    }
+                };
+                function requestPlay(event) {
+                    if (event) { event.preventDefault(); }
+                    if (ready && player) {
+                        player.playVideo();
+                    } else {
+                        requestedPlay = true;
+                    }
+                }
+                if (playButton) {
+                    playButton.addEventListener('click', requestPlay);
+                    playButton.addEventListener('touchend', requestPlay, { passive: false });
+                }
+                Object.defineProperties(media, {
+                    currentTime: { get: function () { return ready ? Number(player.getCurrentTime()) || 0 : 0; } },
+                    duration: { get: function () { return ready ? Number(player.getDuration()) || NaN : NaN; } },
+                    paused: { get: function () { return playerState !== YT.PlayerState.PLAYING; } },
+                    ended: { get: function () { return playerState === YT.PlayerState.ENDED; } },
+                    seeking: { get: function () { return isSeeking; } },
+                    readyState: { get: function () { return ready ? 1 : 0; } }
+                });
+                player = new YT.Player(host, {
+                    videoId: host.getAttribute('data-youtube-id'),
+                    playerVars: { controls: 1, playsinline: 1, rel: 0, origin: window.location.origin },
+                    events: {
+                        onReady: function () {
+                            ready = true;
+                            lastTime = media.currentTime;
+                            if (requestedPlay) { player.playVideo(); }
+                            resolve(media);
+                            window.setTimeout(function () { emit('loadedmetadata'); }, 0);
+                            window.setInterval(function () {
+                                if (!ready) { return; }
+                                var nextTime = media.currentTime;
+                                if (Math.abs(nextTime - lastTime) > 0.05) {
+                                    var expectedAdvance = playerState === YT.PlayerState.PLAYING ? 0.8 : 0.05;
+                                    if (Math.abs(nextTime - lastTime) > expectedAdvance) {
+                                        isSeeking = true;
+                                        emit('seeking');
+                                    }
+                                    lastTime = nextTime;
+                                    emit('timeupdate');
+                                    if (isSeeking) {
+                                        isSeeking = false;
+                                        emit('seeked');
+                                    }
+                                }
+                            }, 250);
+                        },
+                        onStateChange: function (event) {
+                            playerState = event.data;
+                            if (event.data === YT.PlayerState.PLAYING) {
+                                if (playButton) { playButton.hidden = true; }
+                                emit('play');
+                            }
+                            if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.BUFFERING) { emit('pause'); }
+                            if (event.data === YT.PlayerState.ENDED) { emit('ended'); }
+                        }
+                    }
+                });
+            });
+        });
+    }
 
     function normalizeFlight(rawFlight) {
         var flight = rawFlight;
@@ -400,19 +508,31 @@
     if (video.readyState >= 1) { fitFlightPathAfterLayout(); }
     }
 
-    if (config.flight) {
-        initializeFlightViewer(config.flight);
-    } else if (config.telemetryUrl) {
-        var loadingStatus = document.getElementById('btv-drone-prototype-status');
-        if (loadingStatus) { loadingStatus.textContent = 'Loading processed flight telemetry…'; }
-        fetch(config.telemetryUrl, { credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
-            .then(function (response) {
-                if (!response.ok) { throw new Error('Telemetry request failed.'); }
-                return response.json();
-            })
-            .then(initializeFlightViewer)
-            .catch(function () {
-                if (loadingStatus) { loadingStatus.textContent = 'Synchronized flight telemetry could not be loaded.'; }
-            });
+    function initializeWithMedia(media) {
+        video = media;
+        if (config.flight) {
+            initializeFlightViewer(config.flight);
+        } else if (config.telemetryUrl) {
+            var loadingStatus = document.getElementById('btv-drone-prototype-status');
+            if (loadingStatus) { loadingStatus.textContent = 'Loading processed flight telemetry…'; }
+            fetch(config.telemetryUrl, { credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
+                .then(function (response) {
+                    if (!response.ok) { throw new Error('Telemetry request failed.'); }
+                    return response.json();
+                })
+                .then(initializeFlightViewer)
+                .catch(function () {
+                    if (loadingStatus) { loadingStatus.textContent = 'Synchronized flight telemetry could not be loaded.'; }
+                });
+        }
+    }
+
+    if (config.videoType === 'youtube') {
+        createYouTubeMedia(mediaHost).then(initializeWithMedia).catch(function () {
+            var status = document.getElementById('btv-drone-prototype-status');
+            if (status) { status.textContent = 'The YouTube player could not be loaded.'; }
+        });
+    } else {
+        initializeWithMedia(mediaHost);
     }
 }());

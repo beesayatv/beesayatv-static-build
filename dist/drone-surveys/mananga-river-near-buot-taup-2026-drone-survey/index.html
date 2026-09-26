@@ -126,14 +126,14 @@ margin:24px 0;
 <link rel="stylesheet" id="dashicons-css" href="https://beesayatv.com/wp-includes/css/dashicons.min.css?ver=7.1.2" media="all">
 <link rel="stylesheet" id="beesayatv-cards-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/cards.css?ver=1784723148" media="all">
 <link rel="stylesheet" id="chld_thm_cfg_parent-css" href="https://beesayatv.com/wp-content/themes/bloggerly/style.css?ver=7.1.2" media="all">
-<link rel="stylesheet" id="beesayatv-child-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1790396580" media="all">
+<link rel="stylesheet" id="beesayatv-child-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1790461649" media="all">
 <link rel="stylesheet" id="beesayatv-audio-player-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/audio-player.css?ver=1784397693" media="all">
 <link rel="stylesheet" id="bloggerly-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1.0.5.1782171480" media="all">
 <link rel="stylesheet" id="beesayatv-header-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/header.css?ver=1784722941" media="all">
 <link rel="stylesheet" id="beesayatv-footer-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/footer.css?ver=1784397693" media="all">
-<link rel="stylesheet" id="beesayatv-single-drone-survey-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/single-drone-survey.css?ver=1790313411" media="all">
+<link rel="stylesheet" id="beesayatv-single-drone-survey-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/single-drone-survey.css?ver=1790460440" media="all">
 <link rel="stylesheet" id="beesayatv-drone-prototype-leaflet-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/assets/vendor/leaflet/leaflet.css?ver=1789287969" media="all">
-<link rel="stylesheet" id="beesayatv-drone-prototype-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/drone-flight-prototype.css?ver=1790396003" media="all">
+<link rel="stylesheet" id="beesayatv-drone-prototype-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/drone-flight-prototype.css?ver=1790461506" media="all">
 <link rel="stylesheet" id="beesayatv-background-illustrations-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/background-illustrations.css?ver=1784397693" media="all">
 <link rel="https://api.w.org/" href="https://beesayatv.com/wp-json/"><link rel="alternate" title="JSON" type="application/json" href="https://beesayatv.com/wp-json/wp/v2/drone_survey/1677"><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://beesayatv.com/xmlrpc.php?rsd">
 <meta name="generator" content="WordPress 7.1.2">
@@ -425,18 +425,13 @@ margin:24px 0;
                 <h2 id="btv-drone-survey-about" class="beesaya-title">About this aerial survey</h2>
                 <dl class="btv-drone-prototype__facts beesaya-grid">
                     <div><dt>Location</dt><dd>Buot-Taup, Cebu City</dd></div>                    <div><dt>Survey date</dt><dd>September 26, 2026</dd></div>                    <div><dt>Duration</dt><dd id="btv-drone-video-duration">Available when video loads</dd></div>
-                    <div class="btv-drone-prototype__description-row"><dt>Description</dt><dd class="btv-drone-prototype__description">
-<p class="wp-block-paragraph">The 2026 drone survey follows a stretch of Mananga River near Buot-Taup, Cebu City, from a riverside community into a densely vegetated valley. Aerial footage documents the river&rsquo;s rocky bed, exposed boulders, winding course, and surrounding landscape.</p>
-</dd></div>                </dl>
+                </dl>
             </section>
             <div class="btv-drone-prototype__viewer-card">
-                <div class="btv-drone-prototype__video">
-                    <video id="btv-drone-prototype-video" controls playsinline preload="metadata"><source src="https://beesayatv-drone.b-cdn.net/mananga%20river%20near%20buot%20taup.mp4" type="video/mp4">Your browser does not support HTML5 video. <a href="https://beesayatv-drone.b-cdn.net/mananga%20river%20near%20buot%20taup.mp4">Open the video</a>.</source></video>
-                    <div class="btv-drone-video-telemetry" aria-hidden="true">
-                        <span>Current GPS coordinates</span>
-                        <b data-drone-overlay="gps">&mdash;</b>
-                    </div>
-                </div>
+                <div class="btv-drone-prototype__video is-youtube">
+                                            <div id="btv-drone-prototype-video" class="btv-drone-youtube-player" data-youtube-id="ebFR04QX4ac"></div>
+                        <button class="btv-drone-youtube-play" type="button" aria-label="Play video"><span aria-hidden="true"></span></button>
+                                    </div>
             </div>
             <div class="btv-drone-prototype__details-grid">
                 <section class="btv-drone-prototype__information btv-drone-prototype__telemetry-card beesaya-snapshot" aria-labelledby="btv-drone-live-telemetry-title">
@@ -450,7 +445,9 @@ margin:24px 0;
                             <div><dt>Ground speed</dt><dd data-drone-hud="speed">&mdash;</dd></div>
                             <div><dt>Heading</dt><dd data-drone-hud="heading">&mdash;</dd></div>
                             <div><dt>Video time</dt><dd data-drone-hud="time">00:00.0</dd></div>
-                        </dl>
+                            <div class="btv-drone-live-telemetry__description"><dt>Description</dt><dd class="btv-drone-prototype__description">
+<p class="wp-block-paragraph">The 2026 drone survey follows a stretch of Mananga River near Buot-Taup, Cebu City, from a riverside community into a densely vegetated valley. Aerial footage documents the river&rsquo;s rocky bed, exposed boulders, winding course, and surrounding landscape.</p>
+</dd></div>                        </dl>
                     </div>
                 </section>
                 <div class="btv-drone-prototype__map-column">
@@ -496,10 +493,10 @@ var bloggerly_script_vars = {"dark_mode":"Dark Mode","light_mode":"Light Mode","
 <script id="beesayatv-header-script-js" src="https://beesayatv.com/wp-content/themes/bloggerly-child/js/header.js?ver=1784606759"></script>
 <script id="beesayatv-drone-prototype-leaflet-js" src="https://beesayatv.com/wp-content/themes/bloggerly-child/assets/vendor/leaflet/leaflet.js?ver=1789287969"></script>
 <script id="beesayatv-drone-prototype-js-before">
-window.beesayatvDroneFlightPrototype = {"telemetryUrl":"https:\/\/beesayatv.com\/wp-json\/beesayatv\/v1\/drone-surveys\/1677\/telemetry","surveyTitle":"Mananga River Near Buot-Taup | 2026 Drone Survey","flightOffset":39.200000000000003};
+window.beesayatvDroneFlightPrototype = {"telemetryUrl":"https:\/\/beesayatv.com\/wp-json\/beesayatv\/v1\/drone-surveys\/1677\/telemetry","surveyTitle":"Mananga River Near Buot-Taup | 2026 Drone Survey","flightOffset":42,"videoType":"youtube"};
 //# sourceURL=beesayatv-drone-prototype-js-before
 </script>
-<script id="beesayatv-drone-prototype-js" src="https://beesayatv.com/wp-content/themes/bloggerly-child/js/drone-flight-prototype.js?ver=1790395638"></script>
+<script id="beesayatv-drone-prototype-js" src="https://beesayatv.com/wp-content/themes/bloggerly-child/js/drone-flight-prototype.js?ver=1790461276"></script>
 <script id="wp-emoji-settings" type="application/json">
 {"baseUrl":"https://s.w.org/images/core/emoji/17.0.2/72x72/","ext":".png","svgUrl":"https://s.w.org/images/core/emoji/17.0.2/svg/","svgExt":".svg","source":{"concatemoji":"https://beesayatv.com/wp-includes/js/wp-emoji-release.min.js?ver=7.1.2"}}
 </script>
