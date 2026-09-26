@@ -38,11 +38,15 @@
     var confirmedInput = document.getElementById('btv-drone-alignment-confirmed');
     var confirmationStatus = document.getElementById('btv-drone-confirmation-status');
     var durationOutput = document.getElementById('btv-drone-video-duration');
+    var durationInput = document.getElementById('btv-drone-video-duration-value');
     var hudGps = document.querySelector('[data-drone-hud="gps"]');
+    var hudStartGps = document.querySelector('[data-drone-hud="start-gps"]');
+    var hudEndGps = document.querySelector('[data-drone-hud="end-gps"]');
     var hudAltitude = document.querySelector('[data-drone-hud="altitude"]');
     var hudSpeed = document.querySelector('[data-drone-hud="speed"]');
     var hudHeading = document.querySelector('[data-drone-hud="heading"]');
     var hudTime = document.querySelector('[data-drone-hud="time"]');
+    var overlayGps = document.querySelector('[data-drone-overlay="gps"]');
     var animationFrame = null;
     var currentOffset = Number(config.flightOffset);
     if (!Number.isFinite(currentOffset)) { currentOffset = Number(flight.defaultOffset) || 0; }
@@ -62,10 +66,8 @@
         L.control.scale({ imperial: false, maxWidth: 100, position: 'bottomright' }).addTo(map);
     }
 
-    var pathLayers = flight.segments.map(function (segment) {
-        return L.polyline(segment, { color: '#6e7359', weight: 4, opacity: 0.85, lineCap: 'round', lineJoin: 'round' }).addTo(map);
-    });
-    var pathGroup = L.featureGroup(pathLayers);
+    var pathLayers = [];
+    var pathGroup = L.featureGroup();
     var initialFitPending = true;
 
     function refreshMapSize(forceFit) {
@@ -130,8 +132,65 @@
             lat: previous.lat + (next.lat - previous.lat) * ratio,
             lng: previous.lng + (next.lng - previous.lng) * ratio,
             alt: null === previous.alt || null === next.alt ? null : previous.alt + (next.alt - previous.alt) * ratio,
-            t: time
+            t: time,
+            segment: previous.segment
         };
+    }
+
+    function rebuildPlaybackPath() {
+        pathLayers.forEach(function (layer) { map.removeLayer(layer); });
+        pathLayers = [];
+        pathGroup = L.featureGroup();
+
+        if (!Number.isFinite(video.duration) || video.duration <= 0) { return; }
+
+        var windowStart = Math.max(samples[0].t, offset());
+        var windowEnd = Math.min(samples[samples.length - 1].t, offset() + video.duration);
+        var segments = [];
+        var currentSegment = [];
+        var currentSegmentId = null;
+
+        function addPosition(position) {
+            if (!position) {
+                if (currentSegment.length > 1) { segments.push(currentSegment); }
+                currentSegment = [];
+                currentSegmentId = null;
+                return;
+            }
+            if (null !== currentSegmentId && position.segment !== currentSegmentId) {
+                if (currentSegment.length > 1) { segments.push(currentSegment); }
+                currentSegment = [];
+            }
+            currentSegmentId = position.segment;
+            var point = [position.lat, position.lng];
+            var previousPoint = currentSegment[currentSegment.length - 1];
+            if (!previousPoint || previousPoint[0] !== point[0] || previousPoint[1] !== point[1]) {
+                currentSegment.push(point);
+            }
+        }
+
+        var startPosition = samplePosition(windowStart);
+        var endPosition = samplePosition(windowEnd);
+        addPosition(startPosition);
+        samples.forEach(function (sample) {
+            if (sample.t > windowStart && sample.t < windowEnd) { addPosition(sample); }
+        });
+        addPosition(endPosition);
+        if (currentSegment.length > 1) { segments.push(currentSegment); }
+
+        pathLayers = segments.map(function (segment) {
+            return L.polyline(segment, { color: '#6e7359', weight: 4, opacity: 0.85, lineCap: 'round', lineJoin: 'round' }).addTo(map);
+        });
+        pathGroup = L.featureGroup(pathLayers);
+        initialFitPending = true;
+
+        if (hudStartGps) {
+            hudStartGps.textContent = startPosition ? startPosition.lat.toFixed(6) + '°, ' + startPosition.lng.toFixed(6) + '°' : 'NO TELEMETRY';
+        }
+        if (hudEndGps) {
+            hudEndGps.textContent = endPosition ? endPosition.lat.toFixed(6) + '°, ' + endPosition.lng.toFixed(6) + '°' : 'NO TELEMETRY';
+        }
+        refreshMapSize(true);
     }
 
     function distanceMetres(a, b) {
@@ -181,6 +240,7 @@
         hudSpeed.textContent = motion ? motion.speed.toFixed(1) + ' m/s' : '—';
         hudHeading.textContent = motion && motion.speed >= 0.3 ? String(Math.round(motion.heading)).padStart(3, '0') + '° ' + compassDirection(motion.heading) : '—';
         hudTime.textContent = formatElapsed(video.currentTime);
+        if (overlayGps) { overlayGps.textContent = hudGps.textContent; }
     }
 
     function showPosition(flightTime, prefix) {
@@ -236,6 +296,7 @@
         }
         currentOffset = next;
         if (changedByEditor) { invalidateConfirmation(); }
+        rebuildPlaybackPath();
         updateWindow();
     }
 
@@ -273,7 +334,9 @@
         });
     }
     function updateDuration() {
-        if (!durationOutput || !Number.isFinite(video.duration)) { return; }
+        if (!Number.isFinite(video.duration)) { return; }
+        if (durationInput) { durationInput.value = video.duration.toFixed(3); }
+        if (!durationOutput) { return; }
         var totalSeconds = Math.max(0, Math.round(video.duration));
         var minutes = Math.floor(totalSeconds / 60);
         var seconds = totalSeconds % 60;

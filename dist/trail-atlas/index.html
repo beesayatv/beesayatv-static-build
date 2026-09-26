@@ -126,7 +126,7 @@ margin:24px 0;
 <link rel="stylesheet" id="dashicons-css" href="https://beesayatv.com/wp-includes/css/dashicons.min.css?ver=7.1.2" media="all">
 <link rel="stylesheet" id="beesayatv-cards-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/cards.css?ver=1784723148" media="all">
 <link rel="stylesheet" id="chld_thm_cfg_parent-css" href="https://beesayatv.com/wp-content/themes/bloggerly/style.css?ver=7.1.2" media="all">
-<link rel="stylesheet" id="beesayatv-child-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1790336889" media="all">
+<link rel="stylesheet" id="beesayatv-child-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1790389986" media="all">
 <link rel="stylesheet" id="beesayatv-audio-player-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/audio-player.css?ver=1784397693" media="all">
 <link rel="stylesheet" id="bloggerly-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1.0.5.1782171480" media="all">
 <link rel="stylesheet" id="leaflet_stylesheet-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/assets/vendor/leaflet/leaflet.css?ver=1789287969" media="all">
@@ -548,7 +548,7 @@ document.head.appendChild(locateStyle);
 		map.createPane('trailClickPane');
         map.getPane('trailClickPane').style.zIndex = 420;
         var connectivityConfig = {"manifestUrl":"\/wp-content\/uploads\/connectivity\/manifest.json","connectivityAppearance":{"serviceColor":"#2e9e09","noServiceColor":"#c62828","emergencyOnlyColor":"#f0a000","serviceContrastColor":"#ffffff","noServiceContrastColor":"#ffffff","emergencyOnlyContrastColor":"#14181c","satelliteServiceColor":"#ffffff","satelliteNoServiceColor":"#ffffff","satelliteEmergencyOnlyColor":"#ffd600","satelliteServiceContrastColor":"#2e9e09","satelliteNoServiceContrastColor":"#c62828","satelliteEmergencyOnlyContrastColor":"#000000"}};
-        var droneSurveys = [{"id":1674,"title":"Mananga SRP Hiway","url":"https:\/\/beesayatv.com\/drone-surveys\/mananga-srp-hiway\/","telemetry_url":"https:\/\/beesayatv.com\/wp-json\/beesayatv\/v1\/drone-surveys\/1674\/telemetry","recording_date":"2026-09-25","location":"Talisay","lat":10.252294019667,"lng":123.83396432657}];
+        var droneSurveys = [{"id":1677,"title":"Mananga River Near Buot-Taup | 2026 Drone Survey","url":"https:\/\/beesayatv.com\/drone-surveys\/mananga-river-near-buot-taup-2026-drone-survey\/","telemetry_url":"https:\/\/beesayatv.com\/wp-json\/beesayatv\/v1\/drone-surveys\/1677\/telemetry","recording_date":"2026-09-26","location":"Buot-Taup, Cebu City","lat":10.348698626292,"lng":123.80954151955}];
         var droneFlightsLayer = typeof L.markerClusterGroup === 'function'
             ? L.markerClusterGroup({ showCoverageOnHover: false, spiderfyOnMaxZoom: true, zoomToBoundsOnClick: true, disableClusteringAtZoom: 17 })
             : L.layerGroup();
@@ -2108,16 +2108,21 @@ function showDroneFlightPath(marker, survey) {
     if (!survey.telemetry_url) { return; }
     var request = ++activeDroneFlightRequest;
     activeDroneFlightMarker = marker;
-    fetch(survey.telemetry_url, { credentials: 'same-origin', headers: { Accept: 'application/json' } })
+    fetch(survey.telemetry_url, { credentials: 'same-origin', cache: 'no-store', headers: { Accept: 'application/json' } })
         .then(function(response) {
             if (!response.ok) { throw new Error('Drone telemetry is unavailable.'); }
             return response.json();
         })
         .then(function(flight) {
             if (request !== activeDroneFlightRequest || activeDroneFlightMarker !== marker || !Array.isArray(flight.samples)) { return; }
+            var windowStart = Number(flight.flightOffset);
+            var windowEnd = Number(flight.playbackEnd);
+            if (!Number.isFinite(windowStart) || !Number.isFinite(windowEnd) || windowEnd <= windowStart) { return; }
             var segments = {};
             flight.samples.forEach(function(sample) {
                 if (!Array.isArray(sample) || !Number.isFinite(Number(sample[1])) || !Number.isFinite(Number(sample[2]))) { return; }
+                var sampleTime = Number(sample[0]);
+                if (!Number.isFinite(sampleTime) || sampleTime < windowStart || sampleTime > windowEnd) { return; }
                 var segmentId = String(sample[4] || 0);
                 if (!segments[segmentId]) { segments[segmentId] = []; }
                 segments[segmentId].push([Number(sample[1]), Number(sample[2])]);
