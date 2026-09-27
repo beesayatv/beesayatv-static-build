@@ -54,7 +54,11 @@
                 function requestPlay(event) {
                     if (event) { event.preventDefault(); }
                     if (ready && player) {
-                        player.playVideo();
+                        if (playerState === YT.PlayerState.PLAYING) {
+                            player.pauseVideo();
+                        } else {
+                            player.playVideo();
+                        }
                     } else {
                         requestedPlay = true;
                     }
@@ -102,11 +106,29 @@
                         onStateChange: function (event) {
                             playerState = event.data;
                             if (event.data === YT.PlayerState.PLAYING) {
-                                if (playButton) { playButton.hidden = true; }
+                                if (playButton) {
+                                    playButton.classList.add('has-started', 'is-playing');
+                                    playButton.setAttribute('aria-label', 'Pause video');
+                                }
                                 emit('play');
                             }
-                            if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.BUFFERING) { emit('pause'); }
-                            if (event.data === YT.PlayerState.ENDED) { emit('ended'); }
+                            if (event.data === YT.PlayerState.PAUSED) {
+                                if (playButton) {
+                                    playButton.classList.add('has-started');
+                                    playButton.classList.remove('is-playing');
+                                    playButton.setAttribute('aria-label', 'Resume video');
+                                }
+                                emit('pause');
+                            }
+                            if (event.data === YT.PlayerState.BUFFERING) { emit('pause'); }
+                            if (event.data === YT.PlayerState.ENDED) {
+                                if (playButton) {
+                                    playButton.classList.add('has-started');
+                                    playButton.classList.remove('is-playing');
+                                    playButton.setAttribute('aria-label', 'Replay video');
+                                }
+                                emit('ended');
+                            }
                         }
                     }
                 });
@@ -118,7 +140,14 @@
         var flight = rawFlight;
         flight.samples = flight.samples.map(function (sample) {
             if (!Array.isArray(sample)) { return sample; }
-            return { t: sample[0], lat: sample[1], lng: sample[2], alt: sample[3], segment: sample[4] };
+            return {
+                t: sample[0], lat: sample[1], lng: sample[2], alt: sample[3], segment: sample[4],
+                satellites: sample.length > 5 ? sample[5] : null,
+                distance: sample.length > 6 ? sample[6] : null,
+                battery: sample.length > 7 ? sample[7] : null,
+                gimbalHeading: sample.length > 8 ? sample[8] : null,
+                gimbalPitch: sample.length > 9 ? sample[9] : null
+            };
         });
         if (!Array.isArray(flight.segments)) {
             var grouped = {};
@@ -150,13 +179,20 @@
     var hudGps = document.querySelector('[data-drone-hud="gps"]');
     var hudStartGps = document.querySelector('[data-drone-hud="start-gps"]');
     var hudEndGps = document.querySelector('[data-drone-hud="end-gps"]');
-    var hudAltitude = document.querySelector('[data-drone-hud="altitude"]');
+    var hudFlightTime = document.querySelector('[data-drone-hud="flight-time"]');
+    var hudSatellites = document.querySelector('[data-drone-hud="satellites"]');
+    var hudDistance = document.querySelector('[data-drone-hud="distance"]');
+    var hudBattery = document.querySelector('[data-drone-hud="battery"]');
+    var hudGimbalHeading = document.querySelector('[data-drone-hud="gimbal-heading"]');
+    var hudGimbalPitch = document.querySelector('[data-drone-hud="gimbal-pitch"]');
     var hudSpeed = document.querySelector('[data-drone-hud="speed"]');
     var hudHeading = document.querySelector('[data-drone-hud="heading"]');
     var hudTime = document.querySelector('[data-drone-hud="time"]');
     var overlayGps = document.querySelector('[data-drone-overlay="gps"]');
     var animationFrame = null;
     var lastCameraFollow = 0;
+    var smoothedMarkerPosition = null;
+    var lastMarkerFrame = 0;
     var currentOffset = Number(config.flightOffset);
     if (!Number.isFinite(currentOffset)) { currentOffset = Number(flight.defaultOffset) || 0; }
 
@@ -177,6 +213,12 @@
 
     var pathLayers = [];
     var pathGroup = L.featureGroup();
+    var completedPathLayers = [];
+    var upcomingPathLayers = [];
+    var pulsePathLayers = [];
+    var playbackWindowStart = null;
+    var playbackWindowEnd = null;
+    var lastRouteProgressUpdate = 0;
     var initialFitPending = true;
     var publicViewInitialized = false;
 
@@ -243,20 +285,17 @@
             lat: previous.lat + (next.lat - previous.lat) * ratio,
             lng: previous.lng + (next.lng - previous.lng) * ratio,
             alt: null === previous.alt || null === next.alt ? null : previous.alt + (next.alt - previous.alt) * ratio,
+            satellites: ratio < 0.5 ? previous.satellites : next.satellites,
+            distance: null == previous.distance || null == next.distance ? null : previous.distance + (next.distance - previous.distance) * ratio,
+            battery: null == previous.battery || null == next.battery ? null : previous.battery + (next.battery - previous.battery) * ratio,
+            gimbalHeading: ratio < 0.5 ? previous.gimbalHeading : next.gimbalHeading,
+            gimbalPitch: null == previous.gimbalPitch || null == next.gimbalPitch ? null : previous.gimbalPitch + (next.gimbalPitch - previous.gimbalPitch) * ratio,
             t: time,
             segment: previous.segment
         };
     }
 
-    function rebuildPlaybackPath() {
-        pathLayers.forEach(function (layer) { map.removeLayer(layer); });
-        pathLayers = [];
-        pathGroup = L.featureGroup();
-
-        if (!Number.isFinite(video.duration) || video.duration <= 0) { return; }
-
-        var windowStart = Math.max(samples[0].t, offset());
-        var windowEnd = Math.min(samples[samples.length - 1].t, offset() + video.duration);
+    function routeSegmentsBetween(windowStart, windowEnd) {
         var segments = [];
         var currentSegment = [];
         var currentSegmentId = null;
@@ -288,10 +327,68 @@
         });
         addPosition(endPosition);
         if (currentSegment.length > 1) { segments.push(currentSegment); }
+        return { segments: segments, start: startPosition, end: endPosition };
+    }
 
-        pathLayers = segments.map(function (segment) {
-            return L.polyline(segment, { color: '#6e7359', weight: 4, opacity: 0.85, lineCap: 'round', lineJoin: 'round' }).addTo(map);
+    function replaceRouteLayers(target, segments, options) {
+        while (target.length > segments.length) {
+            map.removeLayer(target.pop());
+        }
+        segments.forEach(function (segment, index) {
+            if (!target[index]) {
+                target[index] = L.polyline(segment, options).addTo(map);
+            } else {
+                target[index].setLatLngs(segment);
+            }
         });
+        return target;
+    }
+
+    function updatePublicRouteProgress(flightTime, force) {
+        if (config.editor || null === playbackWindowStart || null === playbackWindowEnd) { return; }
+        var now = window.performance.now();
+        if (!force && now - lastRouteProgressUpdate < 220) { return; }
+        lastRouteProgressUpdate = now;
+        var current = Math.max(playbackWindowStart, Math.min(playbackWindowEnd, flightTime));
+        var completed = routeSegmentsBetween(playbackWindowStart, current).segments;
+        var upcoming = routeSegmentsBetween(current, playbackWindowEnd).segments;
+        completedPathLayers = replaceRouteLayers(completedPathLayers, completed, {
+            color: '#6e7359', weight: 4, opacity: 0.34, lineCap: 'round', lineJoin: 'round', className: 'btv-drone-route-completed'
+        });
+        upcomingPathLayers = replaceRouteLayers(upcomingPathLayers, upcoming, {
+            color: '#6e7359', weight: 4, opacity: 0.42, dashArray: '8 12', lineCap: 'round', lineJoin: 'round', className: 'btv-drone-route-upcoming'
+        });
+        pulsePathLayers = replaceRouteLayers(pulsePathLayers, upcoming, {
+            color: '#d9cda9', weight: 4, opacity: 0.95, dashArray: '8 32', lineCap: 'round', lineJoin: 'round', className: 'btv-drone-route-pulse'
+        });
+        pathLayers = completedPathLayers.concat(upcomingPathLayers, pulsePathLayers);
+    }
+
+    function rebuildPlaybackPath() {
+        pathLayers.forEach(function (layer) { map.removeLayer(layer); });
+        pathLayers = [];
+        completedPathLayers = [];
+        upcomingPathLayers = [];
+        pulsePathLayers = [];
+        pathGroup = L.featureGroup();
+
+        if (!Number.isFinite(video.duration) || video.duration <= 0) { return; }
+
+        var windowStart = Math.max(samples[0].t, offset());
+        var windowEnd = Math.min(samples[samples.length - 1].t, offset() + video.duration);
+        var route = routeSegmentsBetween(windowStart, windowEnd);
+        var startPosition = route.start;
+        var endPosition = route.end;
+        playbackWindowStart = windowStart;
+        playbackWindowEnd = windowEnd;
+
+        if (config.editor) {
+            pathLayers = route.segments.map(function (segment) {
+                return L.polyline(segment, { color: '#6e7359', weight: 4, opacity: 0.85, lineCap: 'round', lineJoin: 'round' }).addTo(map);
+            });
+        } else {
+            updatePublicRouteProgress(windowStart, true);
+        }
         pathGroup = L.featureGroup(pathLayers);
         initialFitPending = true;
 
@@ -352,30 +449,66 @@
         return String(minutes).padStart(2, '0') + ':' + remainder;
     }
 
+    function formatFlightTime(flightTime) {
+        if (!flight.firstUtc) { return '—'; }
+        var start = new Date(String(flight.firstUtc).replace(' ', 'T') + 'Z');
+        if (Number.isNaN(start.getTime())) { return '—'; }
+        var moment = new Date(start.getTime() + flightTime * 1000);
+        var options = { hour: 'numeric', minute: '2-digit', second: '2-digit' };
+        if (config.timeZone && !/^[+-]/.test(config.timeZone)) { options.timeZone = config.timeZone; }
+        try { return new Intl.DateTimeFormat(undefined, options).format(moment); }
+        catch (error) { return moment.toISOString().slice(11, 19) + ' UTC'; }
+    }
+
     function updateHud(position, flightTime) {
         if (!hudGps) { return; }
         var motion = position ? motionAtTime(flightTime) : null;
         hudGps.textContent = position ? position.lat.toFixed(6) + '°, ' + position.lng.toFixed(6) + '°' : 'NO TELEMETRY';
-        hudAltitude.textContent = position && null !== position.alt ? position.alt.toFixed(1) + ' ft' : '—';
+        if (hudFlightTime) { hudFlightTime.textContent = position ? formatFlightTime(flightTime) : '—'; }
+        if (hudSatellites) { hudSatellites.textContent = position && null != position.satellites ? String(Math.round(position.satellites)) : '—'; }
+        if (hudDistance) {
+            var distanceFeet = position && null != position.distance ? position.distance : (position ? distanceMetres(samples[0], position) * 3.280839895 : null);
+            hudDistance.textContent = null !== distanceFeet ? distanceFeet.toFixed(1) + ' ft' : '—';
+        }
+        if (hudBattery) { hudBattery.textContent = position && null != position.battery ? Math.round(position.battery) + '%' : '—'; }
+        if (hudGimbalHeading) { hudGimbalHeading.textContent = position && null != position.gimbalHeading ? String(Math.round(position.gimbalHeading)).padStart(3, '0') + '° ' + compassDirection(position.gimbalHeading) : '—'; }
+        if (hudGimbalPitch) { hudGimbalPitch.textContent = position && null != position.gimbalPitch ? position.gimbalPitch.toFixed(1) + '°' : '—'; }
         hudSpeed.textContent = motion ? motion.speed.toFixed(1) + ' m/s' : '—';
         hudHeading.textContent = motion && motion.speed >= 0.3 ? String(Math.round(motion.heading)).padStart(3, '0') + '° ' + compassDirection(motion.heading) : '—';
-        hudTime.textContent = formatElapsed(video.currentTime);
+        if (hudTime) { hudTime.textContent = formatElapsed(video.currentTime); }
         if (overlayGps) { overlayGps.textContent = hudGps.textContent; }
     }
 
     function showPosition(flightTime, prefix) {
+        updatePublicRouteProgress(flightTime, video.seeking || video.paused || video.ended);
         var position = samplePosition(flightTime);
+        var isPreRoll = flightTime < samples[0].t;
+        if (!position && isPreRoll) {
+            position = samples[0];
+        }
         if (!position) {
             if (map.hasLayer(positionMarker)) { map.removeLayer(positionMarker); }
+            smoothedMarkerPosition = null;
+            lastMarkerFrame = 0;
             if (playbackStatus) { playbackStatus.textContent = (prefix || 'Flight ' + flightTime.toFixed(1) + ' s') + ' — no interpolated position in this telemetry gap or outside the flight record.'; }
             updateHud(null, flightTime);
             return;
         }
         if (!map.hasLayer(positionMarker)) { positionMarker.addTo(map); }
-        var markerPosition = [position.lat, position.lng];
+        var now = window.performance.now();
+        var shouldSnapMarker = config.editor || video.seeking || video.paused || video.ended || isPreRoll || !smoothedMarkerPosition || !lastMarkerFrame;
+        if (shouldSnapMarker) {
+            smoothedMarkerPosition = { lat: position.lat, lng: position.lng };
+        } else {
+            var markerDeltaSeconds = Math.min(0.25, Math.max(0.001, (now - lastMarkerFrame) / 1000));
+            var markerBlend = 1 - Math.exp(-markerDeltaSeconds / 0.28);
+            smoothedMarkerPosition.lat += (position.lat - smoothedMarkerPosition.lat) * markerBlend;
+            smoothedMarkerPosition.lng += (position.lng - smoothedMarkerPosition.lng) * markerBlend;
+        }
+        lastMarkerFrame = now;
+        var markerPosition = [smoothedMarkerPosition.lat, smoothedMarkerPosition.lng];
         positionMarker.setLatLng(markerPosition);
         if (!config.editor && publicViewInitialized) {
-            var now = window.performance.now();
             var mapSize = map.getSize();
             var markerPoint = map.latLngToContainerPoint(markerPosition);
             var centerPoint = mapSize.divideBy(2);
@@ -384,18 +517,24 @@
             if (video.seeking || video.paused || video.ended) {
                 map.panTo(markerPosition, { animate: false, noMoveStart: true });
                 lastCameraFollow = now;
-            } else if (outsideCenterZone && now - lastCameraFollow >= 700) {
-                map.panTo(markerPosition, {
-                    animate: true,
-                    duration: 0.62,
-                    easeLinearity: 0.22,
-                    noMoveStart: true
-                });
+            } else if (outsideCenterZone && now - lastCameraFollow >= 50) {
+                var mapCenter = map.getCenter();
+                var cameraDeltaSeconds = Math.min(0.25, Math.max(0.016, (now - lastCameraFollow) / 1000));
+                var cameraBlend = 1 - Math.exp(-cameraDeltaSeconds / 0.45);
+                map.panTo([
+                    mapCenter.lat + (smoothedMarkerPosition.lat - mapCenter.lat) * cameraBlend,
+                    mapCenter.lng + (smoothedMarkerPosition.lng - mapCenter.lng) * cameraBlend
+                ], { animate: false, noMoveStart: true });
                 lastCameraFollow = now;
             }
         }
-        if (playbackStatus) { playbackStatus.textContent = (prefix || 'Flight ' + flightTime.toFixed(1) + ' s') + ' · ' + position.lat.toFixed(6) + ', ' + position.lng.toFixed(6) + (null === position.alt ? '' : ' · ' + position.alt.toFixed(1) + ' ft above takeoff'); }
-        updateHud(position, flightTime);
+        if (isPreRoll) {
+            if (playbackStatus) { playbackStatus.textContent = (prefix || 'Flight ' + flightTime.toFixed(1) + ' s') + ' — telemetry begins at flight ' + samples[0].t.toFixed(1) + ' s.'; }
+            updateHud(null, flightTime);
+        } else {
+            if (playbackStatus) { playbackStatus.textContent = (prefix || 'Flight ' + flightTime.toFixed(1) + ' s') + ' · ' + position.lat.toFixed(6) + ', ' + position.lng.toFixed(6) + (null === position.alt ? '' : ' · ' + position.alt.toFixed(1) + ' ft above takeoff'); }
+            updateHud(position, flightTime);
+        }
     }
 
     function updatePosition() {
