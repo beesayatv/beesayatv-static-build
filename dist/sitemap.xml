@@ -1,24 +1,24 @@
 <?xml version='1.0' encoding='UTF-8'?><?xml-stylesheet type='text/xsl' href='https://beesayatv.com/wp-content/plugins/google-sitemap-generator/sitemap.xsl'?><!-- sitemap-generator-url='http://www.arnebrachhold.de' sitemap-generator-version='4.1.25' -->
-<!-- generated-on='September 29, 2026 9:54 am' -->
+<!-- generated-on='September 29, 2026 10:38 am' -->
 <sitemapindex xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd' xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>	<sitemap>
 		<loc>https://beesayatv.com/sitemap-misc.xml</loc>
-		<lastmod>2026-09-29T08:54:51+00:00</lastmod>
+		<lastmod>2026-09-29T10:21:02+00:00</lastmod>
 	</sitemap>
 	<sitemap>
 		<loc>https://beesayatv.com/trail_location-sitemap.xml</loc>
-		<lastmod>2026-09-29T08:54:51+00:00</lastmod>
+		<lastmod>2026-09-29T10:21:02+00:00</lastmod>
 	</sitemap>
 	<sitemap>
 		<loc>https://beesayatv.com/trail_feature-sitemap.xml</loc>
-		<lastmod>2026-09-29T08:54:51+00:00</lastmod>
+		<lastmod>2026-09-29T10:21:02+00:00</lastmod>
 	</sitemap>
 	<sitemap>
 		<loc>https://beesayatv.com/trail_type-sitemap.xml</loc>
-		<lastmod>2026-09-29T08:54:51+00:00</lastmod>
+		<lastmod>2026-09-29T10:21:02+00:00</lastmod>
 	</sitemap>
 	<sitemap>
 		<loc>https://beesayatv.com/trail_difficulty-sitemap.xml</loc>
-		<lastmod>2026-09-29T08:54:51+00:00</lastmod>
+		<lastmod>2026-09-29T10:21:02+00:00</lastmod>
 	</sitemap>
 	<sitemap>
 		<loc>https://beesayatv.com/trail-sitemap.xml</loc>
@@ -32,4 +32,4 @@
 		<loc>https://beesayatv.com/page-sitemap.xml</loc>
 		<lastmod>2026-09-27T23:45:52+00:00</lastmod>
 	</sitemap>
-</sitemapindex><!-- <p>Please edit wp-db.inc.php in wp-includes and set SAVEQUERIES to true if you want to see the queries.</p> --> <!-- Request ID: e69d77d03b854caf5359602f23a873d0; Queries for sitemap: 10; Total queries: 26; Seconds: 0.03; Memory for sitemap: 1KB; Total memory: 6MB -->
+</sitemapindex><!-- <p>Please edit wp-db.inc.php in wp-includes and set SAVEQUERIES to true if you want to see the queries.</p> --> <!-- Request ID: a57f15f82450bbd8ba5485fdfb96a52d; Queries for sitemap: 10; Total queries: 26; Seconds: 0.02; Memory for sitemap: 1KB; Total memory: 6MB -->
