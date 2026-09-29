@@ -11,6 +11,26 @@
 .btv-drone-survey-featured img{display:block;width:100%;height:auto;border-radius:12px;}
 .btv-drone-survey-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;padding-top:22px;border-top:1px solid #e3decf;}
 @media(max-width:640px){.btv-single-drone-survey{width:100%;}.btv-drone-survey-video{border-radius:8px;}.btv-drone-survey-links{align-items:stretch;flex-direction:column;}.btv-drone-survey-links .button{text-align:center;}}
+
+/* Continue exploring follows the survey window header/body treatment. */
+.btv-drone-continue{margin-top:12px;overflow:hidden;border:1px solid #e3decf;border-radius:11px;background:#fbf9f2}
+.btv-drone-continue .btv-drone-window__header{display:flex;align-items:center;gap:12px;min-height:68px;padding:10px 17px;box-sizing:border-box;color:#263525}
+.btv-drone-continue .btv-drone-window__header>span:last-child{display:flex;min-width:0;flex:1;flex-direction:column}
+.btv-drone-continue .btv-drone-window__header strong{font-family:var(--font-heading,"Nunito Sans",Arial,sans-serif);font-size:1.08rem;font-weight:700;line-height:1.25}
+.btv-drone-continue .btv-drone-window__header small{margin-top:2px;color:#4f584f;font-size:.76rem}
+.btv-drone-continue .btv-drone-card-icon{display:inline-grid;width:28px;height:28px;flex:0 0 28px;place-items:center;color:#163b39}
+.btv-drone-continue .btv-drone-card-icon svg{width:22px;height:22px}
+.btv-drone-continue__pathways{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:15px 16px 16px;border-top:1px solid #e7e1d5}
+.btv-drone-pathway{display:flex;align-items:center;gap:11px;min-width:0;padding:14px;border:1px solid #e8e2d2;border-radius:8px;background:#fff;color:inherit!important;line-height:1.2;text-decoration:none!important;transition:border-color .16s ease,background-color .16s ease,transform .16s ease}
+.btv-drone-pathway:hover,.btv-drone-pathway:focus-visible{border-color:#cfd7bd;background:#f7f6ef;transform:translateY(-1px)}
+.btv-drone-pathway:focus-visible{outline:2px solid rgba(110,115,89,.6);outline-offset:2px}
+.btv-drone-pathway__icon{display:flex;width:32px;height:32px;flex:0 0 32px;align-items:center;justify-content:center;border-radius:50%;background:#eef0e5;color:#627154}
+.btv-drone-pathway__icon svg{width:18px;height:18px}
+.btv-drone-pathway__content{display:grid;gap:2px;min-width:0}
+.btv-drone-pathway__label{color:#3f4b3c;font-size:.94rem;font-weight:700;line-height:1.25}
+.btv-drone-pathway__description{color:#777;font-size:.78rem;line-height:1.35}
+.btv-drone-pathway__arrow{margin-left:auto;color:#6e7359;font-size:1.1rem}
+@media(max-width:700px){.btv-drone-continue .btv-drone-window__header{min-height:70px;padding:9px 14px}.btv-drone-continue .btv-drone-window__header strong{font-size:1rem}.btv-drone-continue__pathways{grid-template-columns:1fr;padding:12px 13px 13px}.btv-drone-pathway{padding:12px}}
 .btv-single-drone-survey.btv-drone-prototype{max-width:1380px;box-sizing:border-box;margin-right:auto;margin-left:auto;}
 .btv-single-drone-survey.btv-drone-prototype .btv-single-drone-survey__content{max-width:none;}
 .btv-single-drone-survey.btv-drone-prototype .btv-drone-survey-links{margin-top:24px;}
