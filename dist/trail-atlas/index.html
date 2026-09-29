@@ -126,7 +126,7 @@ margin:24px 0;
 <link rel="stylesheet" id="dashicons-css" href="https://beesayatv.com/wp-includes/css/dashicons.min.css?ver=7.1.2" media="all">
 <link rel="stylesheet" id="beesayatv-cards-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/cards.css?ver=1784723148" media="all">
 <link rel="stylesheet" id="chld_thm_cfg_parent-css" href="https://beesayatv.com/wp-content/themes/bloggerly/style.css?ver=7.1.2" media="all">
-<link rel="stylesheet" id="beesayatv-child-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1790570987" media="all">
+<link rel="stylesheet" id="beesayatv-child-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1790675660" media="all">
 <link rel="stylesheet" id="beesayatv-audio-player-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/audio-player.css?ver=1784397693" media="all">
 <link rel="stylesheet" id="bloggerly-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1.0.5.1782171480" media="all">
 <link rel="stylesheet" id="leaflet_stylesheet-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/assets/vendor/leaflet/leaflet.css?ver=1789287969" media="all">
@@ -553,7 +553,7 @@ document.head.appendChild(locateStyle);
 		map.createPane('trailClickPane');
         map.getPane('trailClickPane').style.zIndex = 420;
         var connectivityConfig = {"manifestUrl":"\/wp-content\/uploads\/connectivity\/manifest.json","connectivityAppearance":{"serviceColor":"#2e9e09","noServiceColor":"#c62828","emergencyOnlyColor":"#f0a000","serviceContrastColor":"#ffffff","noServiceContrastColor":"#ffffff","emergencyOnlyContrastColor":"#14181c","satelliteServiceColor":"#ffffff","satelliteNoServiceColor":"#ffffff","satelliteEmergencyOnlyColor":"#ffd600","satelliteServiceContrastColor":"#2e9e09","satelliteNoServiceContrastColor":"#c62828","satelliteEmergencyOnlyContrastColor":"#000000"}};
-        var droneSurveys = [{"id":1693,"title":"Purok 1 near Pangilatan Peak | 2026 Drone Survey","url":"https:\/\/beesayatv.com\/drone-surveys\/purok-1-near-pangilatan-peak-2026-drone-survey\/","telemetry_url":"https:\/\/beesayatv.com\/wp-json\/beesayatv\/v1\/drone-surveys\/1693\/telemetry","recording_date":"2026-09-28","location":"Inayagan, Naga","lat":10.246404999999999,"lng":123.76070300000001},{"id":1677,"title":"Mananga River Near Buot-Taup | 2026 Drone Survey","url":"https:\/\/beesayatv.com\/drone-surveys\/mananga-river-near-buot-taup-2026-drone-survey\/","telemetry_url":"https:\/\/beesayatv.com\/wp-json\/beesayatv\/v1\/drone-surveys\/1677\/telemetry","recording_date":"2026-09-26","location":"Buot-Taup, Cebu City","lat":10.348699,"lng":123.80954199999999}];
+        var droneSurveys = [{"id":1721,"title":"Talisay | 2026 Drone Survey","url":"https:\/\/beesayatv.com\/drone-surveys\/talisay-2026-drone-survey\/","flights_url":"https:\/\/beesayatv.com\/wp-json\/beesayatv\/v1\/drone-surveys\/1721\/flights","recording_date":"September 29, 2026","location":"Talisay","lat":10.252243,"lng":123.83395400000001},{"id":1710,"title":"Mananga River Near Buot-Taup | 2026 Drone Survey","url":"https:\/\/beesayatv.com\/drone-surveys\/mananga-river-near-buot-taup-2026-drone-survey\/","flights_url":"https:\/\/beesayatv.com\/wp-json\/beesayatv\/v1\/drone-surveys\/1710\/flights","recording_date":"September 26, 2026","location":"Buot-Taup, Cebu City","lat":10.348699,"lng":123.80954199999999}];
         var droneFlightsLayer = typeof L.markerClusterGroup === 'function'
             ? L.markerClusterGroup({ showCoverageOnHover: false, spiderfyOnMaxZoom: true, zoomToBoundsOnClick: true, disableClusteringAtZoom: 17 })
             : L.layerGroup();
@@ -2105,19 +2105,25 @@ function updateActiveDroneFlightPathStyle() {
     activeDroneFlightLayers.eachLayer(function(layer) {
         if (!layer.setStyle) { return; }
         layer.setStyle(layer._atlasDroneFlightCasing
-            ? { weight: style.casingWeight }
+            ? { weight: style.casingWeight, opacity: atlasBasemapNeedsCasing() ? 0.9 : 0 }
             : { weight: style.weight, dashArray: style.dashArray });
     });
 }
 
 function showDroneFlightPath(survey, request) {
-    if (!survey.telemetry_url) { return; }
-    fetch(survey.telemetry_url, { credentials: 'same-origin', cache: 'no-store', headers: { Accept: 'application/json' } })
+    if (!survey.flights_url) { return; }
+    var manifestRequest = fetch(survey.flights_url, { credentials: 'same-origin', cache: 'no-store', headers: { Accept: 'application/json' } }).then(function(response) { if (!response.ok) { throw new Error('Drone flights are unavailable.'); } return response.json(); }).then(function(data) { return Array.isArray(data.flights) ? data.flights : []; });
+    manifestRequest.then(function(flights) {
+        return Promise.all(flights.map(function(item) {
+            return fetch(item.telemetryUrl || item.telemetry_url, { credentials: 'same-origin', cache: 'no-store', headers: { Accept: 'application/json' } })
         .then(function(response) {
             if (!response.ok) { throw new Error('Drone telemetry is unavailable.'); }
             return response.json();
-        })
-        .then(function(flight) {
+        }).then(function(flight) { return { flight: flight, id: String(item.id || item.recordId || '') }; });
+        }));
+    }).then(function(results) {
+        results.forEach(function(result) {
+            var flight = result.flight;
             if (request !== activeDroneFlightRequest || !activeDroneFlightLayers || !Array.isArray(flight.samples)) { return; }
             var windowStart = Number(flight.flightOffset);
             var windowEnd = Number(flight.playbackEnd);
@@ -2127,7 +2133,7 @@ function showDroneFlightPath(survey, request) {
                 if (!Array.isArray(sample) || !Number.isFinite(Number(sample[1])) || !Number.isFinite(Number(sample[2]))) { return; }
                 var sampleTime = Number(sample[0]);
                 if (!Number.isFinite(sampleTime) || sampleTime < windowStart || sampleTime > windowEnd) { return; }
-                var segmentId = String(sample[4] || 0);
+                var segmentId = result.id + ':' + String(sample[4] || 0);
                 if (!segments[segmentId]) { segments[segmentId] = []; }
                 segments[segmentId].push([Number(sample[1]), Number(sample[2])]);
             });
@@ -2136,19 +2142,20 @@ function showDroneFlightPath(survey, request) {
             Object.keys(segments).forEach(function(segmentId) {
                 if (segments[segmentId].length < 2) { return; }
                 var casing = L.polyline(segments[segmentId], {
-                    pane: 'droneSurveyPathPane', color: '#f5f2e8', opacity: 0.9,
-                    weight: style.casingWeight, interactive: false, lineCap: 'butt', lineJoin: 'round'
+                    pane: 'droneSurveyPathPane', color: '#f5f2e8', opacity: atlasBasemapNeedsCasing() ? 0.9 : 0,
+                    weight: style.casingWeight, interactive: false, lineCap: 'round', lineJoin: 'round', smoothFactor: 0
                 });
                 casing._atlasDroneFlightCasing = true;
                 layers.push(casing, L.polyline(segments[segmentId], {
                     pane: 'droneSurveyPathPane', color: '#6e7359', opacity: 0.95,
                     weight: style.weight, dashArray: style.dashArray,
-                    interactive: false, lineCap: 'butt', lineJoin: 'round'
+                    interactive: false, lineCap: 'round', lineJoin: 'round', smoothFactor: 0
                 }));
             });
             if (!layers.length || request !== activeDroneFlightRequest || !activeDroneFlightLayers) { return; }
             layers.forEach(function(layer) { activeDroneFlightLayers.addLayer(layer); });
-        })
+        });
+    })
         .catch(function() {});
 }
 
@@ -2168,8 +2175,7 @@ droneSurveys.forEach(function(survey) {
         var details = [];
         if (survey.location) { details.push(survey.location); }
         if (survey.recording_date) {
-            var date = new Date(survey.recording_date + 'T00:00:00');
-            details.push(Number.isNaN(date.getTime()) ? survey.recording_date : date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }));
+            details.push(survey.recording_date);
         }
         showAtlasInspector({
             title: survey.title,

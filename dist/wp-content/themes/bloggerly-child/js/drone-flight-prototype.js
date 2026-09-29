@@ -6,6 +6,19 @@
     var mediaHost = document.getElementById('btv-drone-prototype-video');
     var video = null;
     if (!config || !mapElement || !mediaHost || !window.L) { return; }
+    var mobileDisclosures = window.matchMedia('(max-width: 700px)');
+    var disclosurePanels = Array.prototype.slice.call(document.querySelectorAll('.btv-drone-disclosure'));
+    function setDisclosureMode() {
+        disclosurePanels.forEach(function (panel) { panel.open = !mobileDisclosures.matches; });
+    }
+    setDisclosureMode();
+    if (typeof mobileDisclosures.addEventListener === 'function') { mobileDisclosures.addEventListener('change', setDisclosureMode); }
+    disclosurePanels.forEach(function (panel) {
+        var summary = panel.querySelector('summary');
+        if (!summary) { return; }
+        summary.addEventListener('click', function (event) { if (!mobileDisclosures.matches) { event.preventDefault(); } });
+        summary.addEventListener('keydown', function (event) { if (!mobileDisclosures.matches && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); } });
+    });
 
     function loadYouTubeApi() {
         return new Promise(function (resolve, reject) {
@@ -38,6 +51,7 @@
                 var requestedPlay = false;
                 var lastTime = 0;
                 var player;
+                var pollingTimer = null;
                 function emit(name) {
                     (listeners[name] || []).forEach(function (listener) { listener(); });
                 }
@@ -49,6 +63,17 @@
                     play: function () {
                         player.playVideo();
                         return Promise.resolve();
+                    },
+                    pause: function () { if (player) { player.pauseVideo(); } },
+                    destroy: function () {
+                        ready = false;
+                        if (pollingTimer) { window.clearInterval(pollingTimer); pollingTimer = null; }
+                        if (playButton) {
+                            playButton.removeEventListener('click', requestPlay);
+                            playButton.removeEventListener('touchend', requestPlay);
+                        }
+                        if (player && typeof player.destroy === 'function') { player.destroy(); }
+                        listeners = {};
                     }
                 };
                 function requestPlay(event) {
@@ -85,7 +110,7 @@
                             if (requestedPlay) { player.playVideo(); }
                             resolve(media);
                             window.setTimeout(function () { emit('loadedmetadata'); }, 0);
-                            window.setInterval(function () {
+                            pollingTimer = window.setInterval(function () {
                                 if (!ready) { return; }
                                 var nextTime = media.currentTime;
                                 if (Math.abs(nextTime - lastTime) > 0.05) {
@@ -134,6 +159,234 @@
                 });
             });
         });
+    }
+
+    function initializeMultiFlightViewer(items) {
+        var map = L.map(mapElement, { zoomControl: true });
+        var street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap contributors', maxZoom: 19 }).addTo(map);
+        var satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: 'Tiles &copy; Esri', maxZoom: 19 });
+        L.control.layers({ Map: street, Satellite: satellite }, null, { position: 'topright', collapsed: false }).addTo(map);
+        L.control.scale({ imperial: false, maxWidth: 100, position: 'bottomright' }).addTo(map);
+
+        var layers = {};
+        var telemetry = {};
+        var activeIndex = 0;
+        var activeMedia = null;
+        var activeMarker = null;
+        var animationFrame = null;
+        var playAll = false;
+        var lastCameraFollow = 0;
+        var showingInitialOverview = true;
+        var playbackCameraFocused = false;
+        var mediaContainer = document.getElementById('btv-drone-media-container');
+        var flightTrigger = document.getElementById('btv-drone-flight-trigger');
+        var flightOptions = document.getElementById('btv-drone-flight-options');
+        var flightChoices = Array.prototype.slice.call(document.querySelectorAll('[data-drone-flight-index]'));
+        var playAllButton = document.getElementById('btv-drone-play-all');
+        var hudGps = document.querySelector('[data-drone-hud="gps"]');
+        var hudStart = document.querySelector('[data-drone-hud="start-gps"]');
+        var hudEnd = document.querySelector('[data-drone-hud="end-gps"]');
+        var hudSpeed = document.querySelector('[data-drone-hud="speed"]');
+        var hudHeading = document.querySelector('[data-drone-hud="heading"]');
+        var hudSatellites = document.querySelector('[data-drone-hud="satellites"]');
+        var hudDistance = document.querySelector('[data-drone-hud="distance"]');
+        var hudBattery = document.querySelector('[data-drone-hud="battery"]');
+        var hudGimbalPitch = document.querySelector('[data-drone-hud="gimbal-pitch"]');
+        var durationOutput = document.getElementById('btv-drone-video-duration');
+        var status = document.getElementById('btv-drone-prototype-status');
+        var droneIcon = L.divIcon({ className:'btv-drone-prototype-marker', html:'<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 12h10M9 9l-2 3 2 3m6-6 2 3-2 3M12 8v8"/><circle cx="6" cy="8" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="6" cy="16" r="2"/><circle cx="18" cy="16" r="2"/></svg></span>', iconSize:[34,34], iconAnchor:[17,17] });
+
+        function normalize(raw) {
+            raw.samples = raw.samples.map(function (s) { return Array.isArray(s) ? { t:Number(s[0]), lat:Number(s[1]), lng:Number(s[2]), alt:s[3], segment:Number(s[4] || 0), satellites:s[5], distance:s[6], battery:s[7], gimbalHeading:s[8], gimbalPitch:s[9] } : s; });
+            return raw;
+        }
+        function fetchFlight(index) {
+            if (telemetry[index]) { return Promise.resolve(telemetry[index]); }
+            return fetch(items[index].telemetryUrl, { credentials:'same-origin', headers:{ Accept:'application/json' } })
+                .then(function (r) { if (!r.ok) { throw new Error('Telemetry unavailable'); } return r.json(); })
+                .then(function (data) { telemetry[index] = normalize(data); drawFlight(index); return telemetry[index]; });
+        }
+        function drawFlight(index) {
+            if (layers[index] || !telemetry[index]) { return; }
+            var grouped = {};
+            telemetry[index].samples.forEach(function (s) {
+                if (!grouped[s.segment]) { grouped[s.segment] = []; }
+                grouped[s.segment].push([s.lat, s.lng]);
+            });
+            var group = L.featureGroup();
+            Object.keys(grouped).forEach(function (key) {
+                if (grouped[key].length > 1) {
+                    L.polyline(grouped[key], { color:'#6e7359', weight:4, opacity:0.24, lineCap:'round', lineJoin:'round', smoothFactor:0 }).addTo(group);
+                    var pulse = L.polyline(grouped[key], { color:'#d9cda9', weight:4, opacity:0.95, dashArray:'8 32', lineCap:'round', lineJoin:'round', smoothFactor:0, interactive:false, className:'btv-drone-route-pulse' + (index === activeIndex ? ' is-active-flight' : '') }).addTo(group);
+                    pulse._btvDronePulse = true;
+                }
+            });
+            group.addTo(map); layers[index] = group; styleLayers();
+            if (showingInitialOverview) {
+                var all = L.featureGroup(Object.keys(layers).map(function (key) { return layers[key]; }));
+                if (all.getBounds().isValid()) { map.fitBounds(all.getBounds(), { padding:[24,24], animate:false }); }
+            }
+        }
+        function styleLayers() {
+            Object.keys(layers).forEach(function (key) {
+                var isActive = Number(key) === activeIndex;
+                layers[key].eachLayer(function (line) {
+                    if (line._btvDronePulse) {
+                        var element = line.getElement();
+                        if (element) { element.classList.toggle('is-active-flight', isActive); }
+                        return;
+                    }
+                    line.setStyle(isActive ? { color:'#6e7359', weight:5, opacity:0.95 } : { color:'#8e9872', weight:3, opacity:0.22 });
+                });
+            });
+        }
+        function sampleAt(data, time) {
+            var samples = data.samples;
+            if (!samples.length || time < samples[0].t || time > samples[samples.length - 1].t) { return null; }
+            var low=0, high=samples.length-1;
+            while (low <= high) { var mid=Math.floor((low+high)/2); if (samples[mid].t < time) { low=mid+1; } else { high=mid-1; } }
+            if (low < samples.length && samples[low].t === time) { return samples[low]; }
+            var a=samples[low-1], b=samples[low];
+            if (!a || !b || a.segment !== b.segment || b.t-a.t > data.maxGapSeconds) { return null; }
+            var ratio=(time-a.t)/(b.t-a.t);
+            function blend(name) { return null == a[name] || null == b[name] ? null : Number(a[name])+(Number(b[name])-Number(a[name]))*ratio; }
+            return { lat:a.lat+(b.lat-a.lat)*ratio, lng:a.lng+(b.lng-a.lng)*ratio, t:time,
+                satellites:ratio < .5 ? a.satellites : b.satellites, distance:blend('distance'), battery:blend('battery'), gimbalPitch:blend('gimbalPitch') };
+        }
+        function distanceMetresBetween(a, b) {
+            var lat1=a.lat*Math.PI/180, lat2=b.lat*Math.PI/180;
+            var dlat=lat2-lat1, dlng=(b.lng-a.lng)*Math.PI/180;
+            var hav=Math.sin(dlat/2)*Math.sin(dlat/2)+Math.cos(lat1)*Math.cos(lat2)*Math.sin(dlng/2)*Math.sin(dlng/2);
+            return 6371000*2*Math.atan2(Math.sqrt(hav),Math.sqrt(Math.max(0,1-hav)));
+        }
+        function updateMarker() {
+            if (!activeMedia || !telemetry[activeIndex]) { return; }
+            var flightTime = Number(items[activeIndex].flightOffset || 0) + Number(activeMedia.currentTime || 0);
+            var point = sampleAt(telemetry[activeIndex], flightTime);
+            if (point) {
+                if (!activeMarker) { activeMarker = L.marker([point.lat,point.lng], { icon:droneIcon, zIndexOffset:1000 }).addTo(map); }
+                else { activeMarker.setLatLng([point.lat,point.lng]); }
+                if (!activeMedia.paused && window.performance.now() - lastCameraFollow >= 600) {
+                    var markerPoint = map.latLngToContainerPoint([point.lat, point.lng]);
+                    var mapSize = map.getSize();
+                    var outsideSafeZone = markerPoint.x < mapSize.x * 0.25 || markerPoint.x > mapSize.x * 0.75
+                        || markerPoint.y < mapSize.y * 0.25 || markerPoint.y > mapSize.y * 0.75;
+                    if (outsideSafeZone) {
+                        map.panTo([point.lat, point.lng], { animate:true, duration:0.55, easeLinearity:0.25, noMoveStart:true });
+                        lastCameraFollow = window.performance.now();
+                    }
+                }
+                if (hudGps) { hudGps.textContent = point.lat.toFixed(6) + '°, ' + point.lng.toFixed(6) + '°'; }
+                if (hudSatellites) { hudSatellites.textContent = null == point.satellites ? '—' : String(Math.round(point.satellites)); }
+                if (hudDistance) {
+                    var videoStart = sampleAt(telemetry[activeIndex], Number(items[activeIndex].flightOffset || 0)) || telemetry[activeIndex].samples[0];
+                    var distanceFeet = null;
+                    if (videoStart) {
+                        distanceFeet = null != point.distance && null != videoStart.distance
+                            ? Math.max(0, Number(point.distance) - Number(videoStart.distance))
+                            : distanceMetresBetween(videoStart, point) * 3.280839895;
+                    }
+                    hudDistance.textContent = null == distanceFeet || !Number.isFinite(distanceFeet) ? '—' : distanceFeet.toFixed(1) + ' ft';
+                }
+                if (hudBattery) { hudBattery.textContent = null == point.battery ? '—' : Math.round(point.battery) + '%'; }
+                if (hudGimbalPitch) { hudGimbalPitch.textContent = null == point.gimbalPitch ? '—' : Number(point.gimbalPitch).toFixed(1) + '°'; }
+                var before=sampleAt(telemetry[activeIndex],flightTime-.5), after=sampleAt(telemetry[activeIndex],flightTime+.5);
+                if (before && after) {
+                    var lat1=before.lat*Math.PI/180, lat2=after.lat*Math.PI/180, dlat=lat2-lat1, dlng=(after.lng-before.lng)*Math.PI/180;
+                    var hav=Math.sin(dlat/2)*Math.sin(dlat/2)+Math.cos(lat1)*Math.cos(lat2)*Math.sin(dlng/2)*Math.sin(dlng/2);
+                    var metres=6371000*2*Math.atan2(Math.sqrt(hav),Math.sqrt(1-hav));
+                    var y=Math.sin(dlng)*Math.cos(lat2), x=Math.cos(lat1)*Math.sin(lat2)-Math.sin(lat1)*Math.cos(lat2)*Math.cos(dlng);
+                    var heading=(Math.atan2(y,x)*180/Math.PI+360)%360;
+                    if(hudSpeed){hudSpeed.textContent=metres.toFixed(1)+' m/s';} if(hudHeading){hudHeading.textContent=String(Math.round(heading)).padStart(3,'0')+'°';}
+                }
+            } else if (activeMarker) { map.removeLayer(activeMarker); activeMarker = null; }
+            if (activeMedia && !activeMedia.paused && !activeMedia.ended) { animationFrame = window.requestAnimationFrame(updateMarker); }
+        }
+        function bindMedia(media) {
+            activeMedia = media;
+            media.addEventListener('loadedmetadata', function () {
+                if (durationOutput && Number.isFinite(media.duration)) { durationOutput.textContent = Math.round(media.duration) + ' sec'; }
+                updateMarker();
+            });
+            media.addEventListener('play', function () {
+                mapElement.classList.add('is-video-playing');
+                if (animationFrame) { cancelAnimationFrame(animationFrame); }
+                showingInitialOverview = false;
+                if (!playbackCameraFocused && telemetry[activeIndex]) {
+                    var startTime = Number(items[activeIndex].flightOffset || 0) + Number(media.currentTime || 0);
+                    var startPoint = sampleAt(telemetry[activeIndex], startTime);
+                    if (startPoint) {
+                        map.setView([startPoint.lat, startPoint.lng], Math.min(map.getZoom() + 2, 18), { animate:true, duration:0.55 });
+                        playbackCameraFocused = true;
+                        lastCameraFollow = window.performance.now();
+                    }
+                }
+                updateMarker();
+            });
+            media.addEventListener('pause', function () {
+                mapElement.classList.remove('is-video-playing');
+                updateMarker();
+            });
+            ['timeupdate','seeking','seeked'].forEach(function (name) { media.addEventListener(name, updateMarker); });
+            media.addEventListener('ended', function () {
+                mapElement.classList.remove('is-video-playing');
+                updateMarker();
+                if (playAll && activeIndex + 1 < items.length) { activate(activeIndex + 1, true); }
+                else if (playAll) { playAll = false; if (playAllButton) { playAllButton.innerHTML = '<span aria-hidden="true">▶</span> Play all flights (' + items.length + ')'; } }
+            });
+        }
+        function buildMedia(item) {
+            if (activeMedia && typeof activeMedia.pause === 'function') { activeMedia.pause(); }
+            if (activeMedia && typeof activeMedia.destroy === 'function') { activeMedia.destroy(); }
+            if (animationFrame) { cancelAnimationFrame(animationFrame); animationFrame = null; }
+            mediaContainer.innerHTML = '';
+            mediaContainer.classList.toggle('is-youtube', item.videoType === 'youtube');
+            if (item.videoType === 'youtube') {
+                var host=document.createElement('div'); host.id='btv-drone-prototype-video'; host.className='btv-drone-youtube-player'; host.setAttribute('data-youtube-id',item.youtubeId); mediaContainer.appendChild(host);
+                var button=document.createElement('button'); button.type='button'; button.className='btv-drone-youtube-play'; button.setAttribute('aria-label','Play video'); button.innerHTML='<span aria-hidden="true"></span>'; mediaContainer.appendChild(button);
+                return createYouTubeMedia(host).then(bindMedia);
+            }
+            var element=document.createElement('video'); element.id='btv-drone-prototype-video'; element.controls=true; element.playsInline=true; element.preload='metadata'; element.src=item.videoUrl; mediaContainer.appendChild(element); bindMedia(element); return Promise.resolve();
+        }
+        function updateFacts(data) {
+            var samples=data.samples, first=samples[0], last=samples[samples.length-1];
+            if (hudStart) { hudStart.textContent=first.lat.toFixed(6)+'°, '+first.lng.toFixed(6)+'°'; }
+            if (hudEnd) { hudEnd.textContent=last.lat.toFixed(6)+'°, '+last.lng.toFixed(6)+'°'; }
+            if (hudSpeed) { hudSpeed.textContent='—'; } if (hudHeading) { hudHeading.textContent='—'; }
+        }
+        function activate(index, autoplay) {
+            mapElement.classList.remove('is-video-playing');
+            lastCameraFollow = 0;
+            playbackCameraFocused = false;
+            activeIndex = index; styleLayers();
+            if (flightTrigger) { flightTrigger.querySelector('span').textContent = items[index].label; }
+            flightChoices.forEach(function (choice) { choice.setAttribute('aria-selected', Number(choice.getAttribute('data-drone-flight-index')) === index ? 'true' : 'false'); });
+            if (activeMarker) { map.removeLayer(activeMarker); activeMarker=null; }
+            Promise.all([fetchFlight(index), buildMedia(items[index])]).then(function (result) {
+                updateFacts(result[0]);
+                if (!showingInitialOverview && layers[index] && layers[index].getBounds().isValid()) {
+                    map.fitBounds(layers[index].getBounds(), { padding:[16,16], animate:false });
+                }
+                updateMarker(); if (autoplay && activeMedia) { activeMedia.play().catch(function () {}); }
+            }).catch(function () { if (status) { status.textContent='This flight could not be loaded.'; } });
+        }
+        function closeFlightMenu() { if (!flightOptions || !flightTrigger) { return; } flightOptions.hidden=true; flightTrigger.setAttribute('aria-expanded','false'); }
+        if (flightTrigger && flightOptions) {
+            flightTrigger.addEventListener('click', function () { var opening=flightOptions.hidden; flightOptions.hidden=!opening; flightTrigger.setAttribute('aria-expanded',opening?'true':'false'); if(opening){var selected=flightOptions.querySelector('[aria-selected="true"]'); if(selected){selected.focus();}} });
+            flightChoices.forEach(function (choice) { choice.addEventListener('click', function () { showingInitialOverview=false; playAll=false; closeFlightMenu(); if(playAllButton){playAllButton.innerHTML='<span aria-hidden="true">▶</span> Play all flights ('+items.length+')';} activate(Number(choice.getAttribute('data-drone-flight-index')),false); flightTrigger.focus(); }); });
+            document.addEventListener('click', function (event) { if (!event.target.closest('.btv-drone-flight-menu')) { closeFlightMenu(); } });
+            document.addEventListener('keydown', function (event) { if(event.key==='Escape'&&!flightOptions.hidden){closeFlightMenu();flightTrigger.focus();} });
+        }
+        if (playAllButton) { playAllButton.addEventListener('click', function () { showingInitialOverview=false; playAll=true; playAllButton.textContent='Playing all flights'; activate(activeIndex, true); }); }
+        var mapDisclosure = document.querySelector('.btv-drone-disclosure--map');
+        if (mapDisclosure) { mapDisclosure.addEventListener('toggle', function () { if (!mapDisclosure.open) { return; } window.setTimeout(function () { map.invalidateSize(); var all=L.featureGroup(Object.keys(layers).map(function(key){return layers[key];})); if(showingInitialOverview&&all.getBounds().isValid()){map.fitBounds(all.getBounds(),{padding:[24,24],animate:false});} }, 0); }); }
+        items.forEach(function (_,index) { fetchFlight(index).catch(function () {}); });
+        activate(0, false);
+    }
+
+    if (Array.isArray(config.flights) && config.flights.length) {
+        initializeMultiFlightViewer(config.flights);
+        return;
     }
 
     function normalizeFlight(rawFlight) {
@@ -331,6 +584,7 @@
     }
 
     function replaceRouteLayers(target, segments, options) {
+        options = Object.assign({ smoothFactor: 0 }, options);
         while (target.length > segments.length) {
             map.removeLayer(target.pop());
         }
@@ -359,7 +613,7 @@
             color: '#6e7359', weight: 4, opacity: 0.42, dashArray: '8 12', lineCap: 'round', lineJoin: 'round', className: 'btv-drone-route-upcoming'
         });
         pulsePathLayers = replaceRouteLayers(pulsePathLayers, upcoming, {
-            color: '#d9cda9', weight: 4, opacity: 0.95, dashArray: '8 32', lineCap: 'round', lineJoin: 'round', className: 'btv-drone-route-pulse'
+            color: '#d9cda9', weight: 4, opacity: 0.95, dashArray: '8 32', lineCap: 'round', lineJoin: 'round', className: 'btv-drone-route-pulse is-active-flight'
         });
         pathLayers = completedPathLayers.concat(upcomingPathLayers, pulsePathLayers);
     }
@@ -384,7 +638,7 @@
 
         if (config.editor) {
             pathLayers = route.segments.map(function (segment) {
-                return L.polyline(segment, { color: '#6e7359', weight: 4, opacity: 0.85, lineCap: 'round', lineJoin: 'round' }).addTo(map);
+                return L.polyline(segment, { color: '#6e7359', weight: 4, opacity: 0.85, lineCap: 'round', lineJoin: 'round', smoothFactor: 0 }).addTo(map);
             });
         } else {
             updatePublicRouteProgress(windowStart, true);
@@ -571,8 +825,8 @@
             var maximum = Number(offsetRange.max);
             if (Number.isFinite(minimum)) { next = Math.max(minimum, next); }
             if (Number.isFinite(maximum)) { next = Math.min(maximum, next); }
-            offsetRange.value = next.toFixed(1);
-            offsetNumber.value = next.toFixed(1);
+            offsetRange.value = next.toFixed(3);
+            offsetNumber.value = next.toFixed(3);
         }
         currentOffset = next;
         if (changedByEditor) { invalidateConfirmation(); }
@@ -589,8 +843,8 @@
             var minimum = Number(flightMoment.min);
             var maximum = Number(flightMoment.max);
             var next = Math.max(minimum, Math.min(Number(value) || 0, maximum));
-            flightMoment.value = next.toFixed(1);
-            flightMomentNumber.value = next.toFixed(1);
+            flightMoment.value = next.toFixed(3);
+            flightMomentNumber.value = next.toFixed(3);
             showPosition(next, 'Selected flight ' + next.toFixed(1) + ' s');
         }
         flightMoment.addEventListener('input', function () { setFlightMoment(flightMoment.value); });
@@ -606,11 +860,13 @@
         });
     }
     if (confirmSync) {
-        confirmSync.addEventListener('click', function () {
+        confirmSync.addEventListener('click', function (event) {
+            event.preventDefault();
             confirmedInput.value = '1';
-            confirmationStatus.textContent = 'Alignment confirmed — save or update the survey to publish it';
+            confirmationStatus.textContent = 'Saving alignment…';
             confirmationStatus.classList.add('is-confirmed');
             confirmationStatus.classList.remove('needs-review');
+            if (confirmSync.form) { confirmSync.form.requestSubmit(confirmSync); }
         });
     }
     function updateDuration() {
