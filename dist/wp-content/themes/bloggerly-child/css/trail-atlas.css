@@ -167,6 +167,7 @@ body.beesayatv-atlas-fullscreen-active .site-header,body.beesayatv-atlas-fullscr
 }
 
 .beesayatv-landscape-popup { width:min(320px,70vw); }
+.beesaya-landscape-count { display:flex!important; align-items:center; justify-content:center; background:transparent; border:0; color:#fff; font:700 12px/1 "Nunito Sans",sans-serif; pointer-events:none!important; }
 .beesaya-landscape-gallery { position:relative; width:180px; }
 .beesaya-landscape-gallery > .beesaya-landscape-gallery__nav { flex-wrap:nowrap; justify-content:space-between; gap:4px; font-size:12px; }
 .beesaya-landscape-gallery > .beesaya-landscape-gallery__nav[hidden] { display:none; }
@@ -177,13 +178,16 @@ body.beesayatv-atlas-fullscreen-active .site-header,body.beesayatv-atlas-fullscr
 .beesaya-landscape-gallery__nav { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:8px; font:400 14px/1.4 "Nunito Sans",sans-serif; }
 .beesaya-landscape-gallery__nav button { min-height:44px; padding:8px 12px; border:1px solid #dfe2d9; border-radius:6px; background:#fff; color:#263525; font:600 14px/1.3 "Nunito Sans",sans-serif; cursor:pointer; }
 .beesaya-landscape-gallery__nav button:disabled { opacity:.4; cursor:default; }
-.beesaya-landscape-full { box-sizing:border-box; width:100vw; height:100dvh; max-width:100vw; max-height:100dvh; margin:0; border:0; padding:16px; background:#131713; color:#fff; }
+.beesaya-landscape-full { box-sizing:border-box; width:100vw; height:100dvh; max-width:100vw; max-height:100dvh; margin:0; border:0; padding:8px; background:#131713; color:#fff; }
 .beesaya-landscape-full::backdrop { background:#131713; }
-.beesaya-landscape-full > img { display:block; width:100%; height:calc(100% - 100px); margin-top:44px; object-fit:contain; touch-action:pan-y; }
-.beesaya-landscape-full__close { position:absolute; top:8px; right:12px; min-height:44px; padding:8px 14px; border:1px solid #626862; border-radius:6px; background:#252b25; color:#fff; font:600 16px/1.3 "Nunito Sans",sans-serif; cursor:pointer; }
-.beesaya-landscape-full .beesaya-landscape-gallery__nav { justify-content:center; }
-.beesayatv-landscape-popup-shell .leaflet-popup-content { margin:32px 10px 10px; }
-.leaflet-container .beesayatv-landscape-popup-shell a.leaflet-popup-close-button { top:2px; right:2px; width:28px; height:28px; line-height:28px; color:#263525; border-radius:4px; }
+.beesaya-landscape-full > img { display:block; width:100%; height:calc(100% - 92px); margin-top:40px; object-fit:contain; touch-action:pan-y; }
+.beesaya-landscape-full__close { position:absolute; top:4px; right:8px; width:44px; height:44px; padding:0; border:0; background:transparent; color:#fff; font:400 28px/1 "Nunito Sans",sans-serif; cursor:pointer; }
+.beesaya-landscape-full .beesaya-landscape-gallery__nav { justify-content:center; gap:18px; margin-top:4px; }
+.beesaya-landscape-full .beesaya-landscape-gallery__nav[hidden] { display:none; }
+.beesaya-landscape-full .beesaya-landscape-gallery__nav button { width:44px; height:44px; padding:0; border:0; border-radius:50%; background:transparent; color:#fff; font-size:32px; font-weight:400; }
+.beesaya-landscape-full button:focus-visible { outline:2px solid #fff; outline-offset:-2px; }
+.beesayatv-landscape-popup-shell .leaflet-popup-content { margin:24px 6px 6px; }
+.leaflet-container .beesayatv-landscape-popup-shell a.leaflet-popup-close-button { top:0; right:0; width:24px; height:24px; line-height:24px; color:#263525; border-radius:4px; }
 .leaflet-container .beesayatv-landscape-popup-shell a.leaflet-popup-close-button:hover { background:#f4f4f4; }
 .leaflet-container .beesayatv-landscape-popup-shell a.leaflet-popup-close-button:focus-visible { outline:2px solid #697055; outline-offset:-2px; }
 .beesayatv-landscape-popup img { display:block; width:100%; height:auto; max-height:min(45vh,280px); object-fit:contain; border-radius:8px; }

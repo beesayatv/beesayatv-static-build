@@ -23,12 +23,13 @@
                 var fullNav = document.createElement('div'); fullNav.className = 'beesaya-landscape-gallery__nav';
                 var label = document.createElement('span');
                 function refresh() { full.src = photos[index]; label.textContent = (index+1)+' of '+photos.length; back.disabled = index===0; forward.disabled = index===photos.length-1; update(); }
-                var back = button('Previous',function(){index--;refresh();});
-                var forward = button('Next',function(){index++;refresh();});
-                var close = button('Close \u00d7',function(){dialog.close();});
+                var back = button('\u2039',function(){index--;refresh();}); back.setAttribute('aria-label','Previous photo');
+                var forward = button('\u203a',function(){index++;refresh();}); forward.setAttribute('aria-label','Next photo');
+                var close = button('\u00d7',function(){dialog.close();}); close.setAttribute('aria-label','Close photo viewer');
                 dialog.addEventListener('close',function(){dialog.remove();expand.focus();});
                 close.className='beesaya-landscape-full__close';
                 fullNav.append(back,label,forward); dialog.append(close,full,fullNav); document.body.appendChild(dialog); refresh(); dialog.showModal(); close.focus();
+                if(photos.length===1) fullNav.hidden=true;
                 var startX;
                 full.addEventListener('touchstart',function(e){startX=e.changedTouches[0].clientX;},{passive:true});
                 full.addEventListener('touchend',function(e){var delta=e.changedTouches[0].clientX-startX;if(Math.abs(delta)>50){index=Math.max(0,Math.min(photos.length-1,index+(delta<0?1:-1)));refresh();}},{passive:true});
