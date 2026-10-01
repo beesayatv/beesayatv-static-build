@@ -134,7 +134,7 @@ margin:24px 0;
 <link rel="stylesheet" id="dashicons-css" href="https://beesayatv.com/wp-includes/css/dashicons.min.css?ver=7.1.2" media="all">
 <link rel="stylesheet" id="beesayatv-cards-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/cards.css?ver=1784723148" media="all">
 <link rel="stylesheet" id="chld_thm_cfg_parent-css" href="https://beesayatv.com/wp-content/themes/bloggerly/style.css?ver=7.1.2" media="all">
-<link rel="stylesheet" id="beesayatv-child-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1790842658" media="all">
+<link rel="stylesheet" id="beesayatv-child-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1790845593" media="all">
 <link rel="stylesheet" id="beesayatv-audio-player-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/audio-player.css?ver=1784397693" media="all">
 <link rel="stylesheet" id="bloggerly-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/style.css?ver=1.0.5.1782171480" media="all">
 <link rel="stylesheet" id="beesayatv-page-style-css" href="https://beesayatv.com/wp-content/themes/bloggerly-child/css/page.css?ver=1784397693" media="all">
@@ -431,11 +431,15 @@ margin:24px 0;
             
             <div class="entry-content btv-page__content">
                 
-<figure class="wp-block-image size-large"><img fetchpriority="high" decoding="async" width="1024" height="576" src="https://beesayatv.com/wp-content/uploads/2026/07/beesaya-1024x576.jpg" alt="" class="wp-image-1067" srcset="https://beesayatv.com/wp-content/uploads/2026/07/beesaya-1024x576.jpg 1024w, https://beesayatv.com/wp-content/uploads/2026/07/beesaya-300x169.jpg 300w, https://beesayatv.com/wp-content/uploads/2026/07/beesaya-768x432.jpg 768w, https://beesayatv.com/wp-content/uploads/2026/07/beesaya.jpg 1280w" sizes="(max-width: 1024px) 100vw, 1024px"></figure>
+<figure class="wp-block-image size-large"><img fetchpriority="high" decoding="async" width="1024" height="576" src="https://beesayatv.com/wp-content/uploads/2026/10/finale-1024x576.jpg" alt="" class="wp-image-1864" srcset="https://beesayatv.com/wp-content/uploads/2026/10/finale-1024x576.jpg 1024w, https://beesayatv.com/wp-content/uploads/2026/10/finale-300x169.jpg 300w, https://beesayatv.com/wp-content/uploads/2026/10/finale-768x432.jpg 768w, https://beesayatv.com/wp-content/uploads/2026/10/finale.jpg 1280w" sizes="(max-width: 1024px) 100vw, 1024px"></figure>
 
 
 
-<p class="wp-block-paragraph">The <strong>beesayatv Field Logger</strong> is an Android application used to record route, connectivity, telemetry, surface, and photographic observations during field visits. It works offline and stores each recording on the device until the files are shared or saved elsewhere.</p>
+<p class="wp-block-paragraph">The <strong>beesayatv Field Logger</strong> is a customized Android application used to record route, connectivity, telemetry, surface, and photographic observations during field visits. </p>
+
+
+
+<p class="wp-block-paragraph">These records support the documentation and reviewed map layers presented in the <a href="https://beesayatv.com/trail-atlas/">Trail Atlas</a>. The app works offline and stores each recording on the device until its files are exported for review.</p>
 
 
 
@@ -456,11 +460,31 @@ margin:24px 0;
 
 
 
+<li><strong>Mark Observation</strong> &mdash; Allows manual photographic observations during an active field recording. A dedicated camera flow supports one photo or several views of the same subject, with immediate saving after each successful capture. Notes and categories are added later during editorial review.</li>
+
+
+
+<li><strong>Grouped observation photos</strong> &mdash; Groups several photographs of the same subject under one observation. Each new observation forms a separate group. Both portrait and landscape photographs are supported, and observation photos remain separate from automatic surface photographs and Repeat Visit evidence.</li>
+
+
+
+<li><strong>Observation location and saving</strong> &mdash; Each photo retains its capture time and available GPS coordinates, accuracy and fix age in the recording metadata. Photos without usable GPS are kept as incomplete observations. Each successful capture is saved immediately, and fully written photos can be recovered after an interruption. Finishing the observation is not required to retain photos already saved.</li>
+
+
+
+<li><strong>Field-friendly capture controls</strong> &mdash; Mark Observation and Take photo &amp; save use large, bright yellow buttons with bold labels for easier use outdoors.</li>
+
+
+
+<li><strong>GPS accuracy display</strong> &mdash; GPS Accuracy shows the phone&rsquo;s current estimated location accuracy in metres, such as &plusmn;8 m. Smaller values indicate a more precise estimate, not a guaranteed error bound. The display shows Waiting for GPS when no fix is available and Fix stale when the reading is no longer current. GPS FIX shows readiness, while Next Surface Photos shows progress toward the next automatic captures.</li>
+
+
+
 <li><strong>GPS uncertainty</strong> &mdash; Route decisions use location accuracy, distance from the previous GPX track, and consecutive GPS fixes. When accuracy is insufficient, the logger reports GPS uncertainty and avoids changing photography behavior based on an unreliable fix. Closely parallel trails may not always be distinguishable using consumer GPS.</li>
 
 
 
-<li><strong>Photograph locations</strong> &mdash; Successful photographs are linked to their accepted GPS coordinates and timestamp. GPS coordinates are also written into the JPEG metadata so that location information remains available when photographs are backed up separately.</li>
+<li><strong>Photograph locations</strong> &mdash; Ordinary automatic trail photographs and Repeat Visit evidence retain their location and timestamp records, with GPS coordinates also written into their JPEG metadata. Mark Observation photos keep location and capture metadata separately in the session records. Public copies created during WordPress import have technical image metadata removed.</li>
 
 
 
@@ -476,7 +500,15 @@ margin:24px 0;
 
 
 
-<li><strong>Session exports</strong> &mdash; Normal exports can include the GPX track, connectivity CSV, route-surface CSV, field-telemetry CSV, photographs, photographic metadata, repeat-observation data, and a session manifest. These records are intended for later review and interpretation.</li>
+<li><strong>Session exports</strong> &mdash; Normal exports can include the GPX track, connectivity CSV, route-surface CSV, field-telemetry CSV, photographs, photographic metadata, repeat-observation data, and a session manifest. Observation groups are included in <code>landscape/observations.json</code>, with their photos under <code>landscape/photos/</code>. The manifest includes observation and photo counts and file checksums. These records are intended for later review and interpretation.</li>
+
+
+
+<li><strong>Observation review and Photo Dots</strong> &mdash; WordPress Field Sessions imports each observation group from the session ZIP as an individual draft with its photo or gallery. Editorial review provides a short note and optional category before publication as one Photo Dot in the Trail Atlas. Reimporting the same observation preserves existing editorial changes. Observations without usable coordinates remain available for review but do not appear on the map.</li>
+
+
+
+<li><strong>Deleting recordings</strong> &mdash; Recording deletion removes the completed session folder from the phone, including observation photos and ZIPs stored in that folder. Copies already saved elsewhere or imported into WordPress remain independent of the phone recording.</li>
 </ul>
 
 
