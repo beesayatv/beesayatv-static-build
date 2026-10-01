@@ -1,0 +1,17 @@
+{
+    "schema_version": 4,
+    "dataset_version": "26f434aaf7ec5e7b",
+    "generated_at": "2026-09-19T13:57:16+00:00",
+    "bounds": [
+        [
+            10.236730100000001,
+            123.7449938
+        ],
+        [
+            10.3613131,
+            123.8622311
+        ]
+    ],
+    "display_point_count": 159,
+    "data_url": "data/connectivity/measurements.geojson"
+}
