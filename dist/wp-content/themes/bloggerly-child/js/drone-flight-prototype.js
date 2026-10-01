@@ -1,6 +1,17 @@
 (function () {
     'use strict';
 
+    // Rotate the cone separately from Leaflet's marker positioning transform.
+    function updateDirectionCone(marker, heading, speed) {
+        var element = marker.getElement();
+        if (!element) { return; }
+        var visible = Number.isFinite(heading) && speed >= 0.3;
+        element.classList.toggle('has-direction', visible);
+        if (visible) {
+            element.style.setProperty('--btv-drone-heading', heading + 'deg');
+        }
+    }
+
     var config = window.beesayatvDroneFlightPrototype;
     var mapElement = document.getElementById('btv-drone-prototype-map');
     var mediaHost = document.getElementById('btv-drone-prototype-video');
@@ -297,8 +308,9 @@
                     var metres=6371000*2*Math.atan2(Math.sqrt(hav),Math.sqrt(1-hav));
                     var y=Math.sin(dlng)*Math.cos(lat2), x=Math.cos(lat1)*Math.sin(lat2)-Math.sin(lat1)*Math.cos(lat2)*Math.cos(dlng);
                     var heading=(Math.atan2(y,x)*180/Math.PI+360)%360;
+                    updateDirectionCone(activeMarker, heading, metres);
                     if(hudSpeed){hudSpeed.textContent=metres.toFixed(1)+' m/s';} if(hudHeading){hudHeading.textContent=String(Math.round(heading)).padStart(3,'0')+'°';}
-                }
+                } else { updateDirectionCone(activeMarker, NaN, 0); }
             } else if (activeMarker) { map.removeLayer(activeMarker); activeMarker = null; }
             if (activeMedia && !activeMedia.paused && !activeMedia.ended) { animationFrame = window.requestAnimationFrame(updateMarker); }
         }
@@ -762,6 +774,8 @@
         lastMarkerFrame = now;
         var markerPosition = [smoothedMarkerPosition.lat, smoothedMarkerPosition.lng];
         positionMarker.setLatLng(markerPosition);
+        var markerMotion = motionAtTime(flightTime);
+        updateDirectionCone(positionMarker, markerMotion ? markerMotion.heading : NaN, markerMotion ? markerMotion.speed : 0);
         if (!config.editor && publicViewInitialized) {
             var mapSize = map.getSize();
             var markerPoint = map.latLngToContainerPoint(markerPosition);
