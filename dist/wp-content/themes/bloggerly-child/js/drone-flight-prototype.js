@@ -181,13 +181,69 @@
 
         var layers = {};
         var telemetry = {};
+        var showingInitialOverview = true;
+        var nearbyTrailLayer = L.featureGroup().addTo(map);
+        function renderNearbyTrailList(trails) {
+            var list = document.querySelector('[data-drone-nearby-trails-list]');
+            var nearbyBlock = document.querySelector('[data-drone-nearby-trails]');
+            if (!list || !nearbyBlock) { return; }
+            list.replaceChildren();
+            (Array.isArray(trails) ? trails : []).forEach(function (trail) {
+                if (!trail.title || !trail.url) { return; }
+                var item = document.createElement('li');
+                var link = document.createElement('a');
+                link.href = trail.url;
+                link.textContent = trail.title;
+                item.appendChild(link);
+                list.appendChild(item);
+            });
+            nearbyBlock.hidden = list.children.length === 0;
+        }
+        renderNearbyTrailList(config.nearbyTrails);
+        if (config.nearbyTrailsUrl) {
+            fetch(config.nearbyTrailsUrl, { credentials:'same-origin', headers:{ Accept:'application/json' } })
+                .then(function (response) { if (!response.ok) { throw new Error('Nearby trails unavailable'); } return response.json(); })
+                .then(function (data) {
+                    (Array.isArray(data.trails) ? data.trails : []).forEach(function (trail) {
+                        if (!trail.geojson) { return; }
+                        var trailColors = config.trailColors || { easy:'#3D8B3D', mild:'#3B7ED0', tough:'#D47A00', epic:'#B83C3C' };
+                        var difficultyKey = String(trail.difficulty || '').toLowerCase().trim();
+                        var defaultTrailColor = trail.color || trailColors[difficultyKey] || '#89867e';
+                        if (trail.wip) {
+                            L.geoJSON(trail.geojson, {
+                                style: { color:'#ff0000', weight:5, opacity:0.85, dashArray:'7 6', lineCap:'round', lineJoin:'round' },
+                                interactive:false
+                            }).addTo(nearbyTrailLayer);
+                            return;
+                        }
+                        if (Array.isArray(trail.segments) && trail.segments.length) {
+                            trail.segments.forEach(function (segment) {
+                                if (!Array.isArray(segment.coordinates) || segment.coordinates.length < 2) { return; }
+                                var color = segment.color || trailColors[String(segment.difficulty || '').toLowerCase().trim()] || defaultTrailColor;
+                                L.polyline(segment.coordinates.map(function (point) { return [point[1], point[0]]; }), {
+                                    color:color, weight:4, opacity:0.9, dashArray:'7 6', lineCap:'round', lineJoin:'round', interactive:false
+                                }).addTo(nearbyTrailLayer);
+                            });
+                            return;
+                        }
+                        L.geoJSON(trail.geojson, {
+                            style: { color:defaultTrailColor, weight:4, opacity:0.9, dashArray:'7 6', lineCap:'round', lineJoin:'round' },
+                            interactive:false
+                        }).addTo(nearbyTrailLayer);
+                    });
+                    if (showingInitialOverview) {
+                        var extent = L.featureGroup([nearbyTrailLayer].concat(Object.keys(layers).map(function (key) { return layers[key]; })));
+                        if (extent.getBounds().isValid()) { map.fitBounds(extent.getBounds(), { padding:[24,24], animate:false }); }
+                    }
+                })
+                .catch(function () {});
+        }
         var activeIndex = 0;
         var activeMedia = null;
         var activeMarker = null;
         var animationFrame = null;
         var playAll = false;
         var lastCameraFollow = 0;
-        var showingInitialOverview = true;
         var playbackCameraFocused = false;
         var mediaContainer = document.getElementById('btv-drone-media-container');
         var flightTrigger = document.getElementById('btv-drone-flight-trigger');
