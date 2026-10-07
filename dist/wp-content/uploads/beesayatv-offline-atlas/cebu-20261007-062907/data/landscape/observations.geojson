@@ -1,0 +1,25 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    123.786698,
+                    10.314421490000001
+                ]
+            },
+            "properties": {
+                "id": "2085cbfe-b3a5-4b4f-80c2-76d9e3d97f36",
+                "photo": "media/landscape/2085cbfe-b3a5-4b4f-80c2-76d9e3d97f36.jpg",
+                "photos": [
+                    "media/landscape/2085cbfe-b3a5-4b4f-80c2-76d9e3d97f36.jpg",
+                    "media/landscape/2085cbfe-b3a5-4b4f-80c2-76d9e3d97f36-1.jpg",
+                    "media/landscape/2085cbfe-b3a5-4b4f-80c2-76d9e3d97f36-2.jpg"
+                ],
+                "note": "Rugged, weathered rock formations rising up a steep hill, overgrown with climbing vines and wild foliage."
+            }
+        }
+    ]
+}
