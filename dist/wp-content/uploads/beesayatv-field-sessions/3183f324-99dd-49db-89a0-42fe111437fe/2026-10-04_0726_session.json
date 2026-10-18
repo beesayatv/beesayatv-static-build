@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "session_id": "3183f324-99dd-49db-89a0-42fe111437fe",
+  "started_at": "2026-10-04T07:26:52.282134+08:00",
+  "ended_at": "2026-10-04T07:46:19.97368+08:00",
+  "duration_ms": 1167692,
+  "completed_normally": true,
+  "app_version": "1.0",
+  "device": {
+    "manufacturer": "Xiaomi",
+    "model": "2109119DG",
+    "sdk_int": 34
+  },
+  "enabled_telemetry": [
+    "gpx",
+    "connectivity",
+    "photos"
+  ],
+  "counts": {
+    "route_points": 1166,
+    "telemetry_rows": 0,
+    "connectivity_observations": 4,
+    "surface_transitions": 1,
+    "visual_observations": 11,
+    "visual_photos": 11,
+    "landscape_observations": 0,
+    "landscape_photos": 0
+  },
+  "visual_evidence": {
+    "metadata_filename": "2026-10-04_0726_visual_observations.json",
+    "photo_count": 11,
+    "photo_bytes": 3907802
+  },
+  "files": {
+    "2026-10-04_0726_trail.gpx": {
+      "sha256": "029153fdad4e91f53464e55994c137f91ca5ec3e9e2d4e29e87e8631ae792141",
+      "bytes": 122659
+    },
+    "2026-10-04_0726_connectivity.csv": {
+      "sha256": "582487f5ab9eef4b2b4042162eb647d985318b4af558c8509a7bf5e93c588e5e",
+      "bytes": 692
+    },
+    "2026-10-04_0726_route_surface.csv": {
+      "sha256": "4048f4fdb6083595f4b8674e3d8aece6667ef7d411f0d2b62b6b89d8b81e5068",
+      "bytes": 59
+    },
+    "2026-10-04_0726_visual_observations.json": {
+      "sha256": "c472bd42257152c6fae2be3fdee78c4e6342e70fe4ff0da13f51e2789ccd4cc7",
+      "bytes": 1994
+    },
+    "photos\/VIS_0001.jpg": {
+      "sha256": "7d0ec5f2fcb7cf0d503389ed46526076faea2f0759205d2acfd7cfacf9c9cb12",
+      "bytes": 322285
+    },
+    "photos\/VIS_0002.jpg": {
+      "sha256": "81c1fa24a2d54791bcb0758b0b0889637fe8cb50c743d4d4d5b8a84063882a17",
+      "bytes": 398445
+    },
+    "photos\/VIS_0003.jpg": {
+      "sha256": "1d91bcc4fc1b34dc174f5e20b7b5542be64f7870ed9351fe37faf66c64b6a2ea",
+      "bytes": 282859
+    },
+    "photos\/VIS_0004.jpg": {
+      "sha256": "ab7342ffde92f39108b1cb68e035612131081d954d83a592fa304c2f6f80f5dd",
+      "bytes": 195246
+    },
+    "photos\/VIS_0005.jpg": {
+      "sha256": "23d7fd92d8ea1d14440da8398859aa0f28270f7ef69802654c71e740126d2013",
+      "bytes": 638858
+    },
+    "photos\/VIS_0006.jpg": {
+      "sha256": "c28bab50be4b5a42621d542fe7b980c82316090b287215a141ab16d74c89b2ab",
+      "bytes": 386171
+    },
+    "photos\/VIS_0007.jpg": {
+      "sha256": "24cefc136b6e1f3987c21092e769e2691664cecccea88fb4bc8236478ae46b72",
+      "bytes": 327858
+    },
+    "photos\/VIS_0008.jpg": {
+      "sha256": "3297f2c23d2735502a59475e675685cd1a3aa98007854e006ed581258f6bcd66",
+      "bytes": 575535
+    },
+    "photos\/VIS_0009.jpg": {
+      "sha256": "e289ba104ad6825515bad044fad23c486e36f28145b96981f1bb425a5726027b",
+      "bytes": 540251
+    },
+    "photos\/VIS_0010.jpg": {
+      "sha256": "629cf878ab48f1acccd19080dbf5f91d33c91305ff49cfc2b8c8663cce1f56c3",
+      "bytes": 143109
+    },
+    "photos\/VIS_0011.jpg": {
+      "sha256": "dac03240c1d3c0bd8d1ce8f8cae19dbae958f91987c967fdf99c749846d43970",
+      "bytes": 97185
+    }
+  },
+  "kind": "field_session"
+}

@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "session_id": "4616a89e-6aa7-461f-abf0-d8186b0aab26",
+  "started_at": "2026-09-12T06:45:04.005868+08:00",
+  "ended_at": "2026-09-12T10:21:39.341147+08:00",
+  "duration_ms": 12995336,
+  "completed_normally": true,
+  "app_version": "1.0",
+  "device": {"manufacturer": "Xiaomi", "model": "2109119DG", "sdk_int": 34},
+  "counts": {"route_points": 1647, "telemetry_rows": 728, "connectivity_observations": 1, "surface_transitions": 1, "visual_observations": 171, "visual_photos": 171},
+  "visual_evidence": {"metadata_filename": "2026-09-12_0645_visual_observations.json", "photo_count": 171, "photo_bytes": 22322086},
+  "files": {
+    "2026-09-12_0645_trail.gpx": {"sha256": "00bc238802728b95c6e6e7f02379e0c83c67a2bc665d699e5bdaf1df563751d7", "bytes": 173176},
+    "2026-09-12_0645_connectivity.csv": {"sha256": "2eda5a4207added8486c5b2fccc067b59e71884b8dbe0f3193dad930045c43c2", "bytes": 5426},
+    "2026-09-12_0645_route_surface.csv": {"sha256": "e9e4cb41a975373c515c5562fbe470f0eb04efccd03dfe7f8f9bf3ff5cb24dd7", "bytes": 23139},
+    "2026-09-12_0645_field_telemetry.csv": {"sha256": "2ce84686311906c7a5a1a707ee0b29d282a57437e84bb94fa367dd7e2bc57018", "bytes": 427618},
+    "2026-09-12_0645_visual_observations.json": {"sha256": "61dc0252afd0df914c422afdc599d43d79b866c40cf0d89ffb05879d44898670", "bytes": 29617}
+  }
+}
