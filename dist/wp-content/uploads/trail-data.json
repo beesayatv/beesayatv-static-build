@@ -78,6 +78,46 @@
         "wip": false
     },
     {
+        "title": "Buhisan-Puti-Nomolas Community Trail Loop",
+        "full_title": "Buhisan-Puti-Nomolas Community Trail Loop | Buhisan, Labangon, Cebu City | 2026 GPX",
+        "url": "http://beesayatv.test/trails/buhisan-puti-nomolas-community-trail-loop-buhisan-labangon-cebu-city-2026-gpx/",
+        "thumbnail": "http://beesayatv.test/wp-content/uploads/2026/10/VIS_0006-768x576.jpg",
+        "trail_location": [
+            "cebu"
+        ],
+        "trail_location_labels": [
+            "Cebu"
+        ],
+        "trail_difficulty": [
+            "easy"
+        ],
+        "trail_difficulty_labels": [
+            "Easy"
+        ],
+        "trail_feature": [
+            "forest",
+            "stairs",
+            "sunrise-view",
+            "valley",
+            "viewpoint"
+        ],
+        "trail_feature_labels": [
+            "Forest",
+            "Stairs",
+            "Sunrise View",
+            "Valley",
+            "Viewpoint"
+        ],
+        "trail_type": [
+            "loop"
+        ],
+        "trail_type_labels": [
+            "Loop"
+        ],
+        "documented": "October 2026",
+        "wip": false
+    },
+    {
         "title": "Buot Brgy Hall\u2013Sitio Tabla Community Trail",
         "full_title": "Buot Brgy Hall\u2013Sitio Tabla Community Trail | Buot-Taup / Sudlon 1, Cebu City | 2026 GPX",
         "url": "http://beesayatv.test/trails/buot-brgy-hall-sitio-tabla-community-trail-buot-taup-sudlon-1-cebu-city-2026-gpx/",

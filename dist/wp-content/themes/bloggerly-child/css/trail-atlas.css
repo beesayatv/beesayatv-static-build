@@ -169,7 +169,11 @@ body.beesayatv-atlas-fullscreen-active .site-header,body.beesayatv-atlas-fullscr
 }
 
 .beesayatv-landscape-popup { width:min(320px,70vw); }
-.beesaya-landscape-count { display:flex!important; align-items:center; justify-content:center; background:transparent; border:0; color:#fff; font:700 12px/1 "Nunito Sans",sans-serif; pointer-events:none!important; }
+.beesaya-landscape-marker,.beesaya-landscape-cluster { display:grid!important; place-items:center; border:0!important; background:transparent!important; }
+.beesaya-landscape-marker span,.beesaya-landscape-cluster span { display:grid; place-items:center; box-sizing:border-box; width:22px; height:22px; border:2px solid #fff; border-radius:50%; background:#1876c9; color:#fff; font:700 10px/1 "Nunito Sans",sans-serif; box-shadow:0 1px 4px rgba(18,40,59,.42); }
+.beesaya-landscape-marker span:empty { width:14px; height:14px; border-width:2px; }
+.beesaya-landscape-marker:hover span,.beesaya-landscape-marker:focus span { outline:3px solid rgba(24,118,201,.35); outline-offset:2px; }
+.beesaya-landscape-cluster span { width:22px; height:22px; border-width:2px; background:#155fa4; font-size:10px; }
 .beesaya-landscape-gallery { position:relative; width:180px; }
 .beesaya-landscape-gallery > .beesaya-landscape-gallery__nav { flex-wrap:nowrap; justify-content:space-between; gap:4px; font-size:12px; }
 .beesaya-landscape-gallery > .beesaya-landscape-gallery__nav[hidden] { display:none; }
