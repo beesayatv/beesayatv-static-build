@@ -7,7 +7,7 @@
             var image = document.createElement('img');
             image.alt = 'Landscape observation'; image.loading = 'lazy'; image.decoding = 'async';
             image.addEventListener('load',function(){
-                var scale=Math.min(220/image.naturalWidth,180/image.naturalHeight,1);
+                var scale=Math.min(220/image.naturalWidth,280/image.naturalHeight,1);
                 root.style.width=Math.max(120,Math.round(image.naturalWidth*scale))+'px';
             });
             var nav = document.createElement('div'); nav.className = 'beesaya-landscape-gallery__nav';

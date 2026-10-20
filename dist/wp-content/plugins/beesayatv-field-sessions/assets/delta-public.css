@@ -11,7 +11,7 @@
 .bfs-delta-public-location-heading h3{margin:0;font-size:1.1rem;font-weight:650}
 .bfs-delta-public-latest{display:flex;align-items:center;gap:.65rem;color:var(--delta-muted);font-size:.92rem}
 .bfs-delta-public-latest span{padding:.3rem .72rem;border-radius:999px;background:var(--delta-green);color:#fff;font-weight:600;white-space:nowrap}
-.bfs-delta-public-stage{position:relative;display:grid;place-items:center;width:100%;aspect-ratio:16/9;min-height:220px;max-height:68vh;overflow:hidden;border-radius:10px;background:#e8e8df;outline-offset:3px;touch-action:pan-y}
+.bfs-delta-public-stage{position:relative;display:grid;place-items:stretch;width:100%;aspect-ratio:16/9;min-height:220px;max-height:68vh;overflow:hidden;border-radius:10px;background:transparent;outline-offset:3px;touch-action:pan-y}
 .bfs-delta-public-stage:fullscreen{max-height:none;aspect-ratio:auto;border-radius:0;background:#101312}
 .bfs-delta-public-photo{grid-area:1/1;width:100%;height:100%;margin:0}
 .bfs-delta-public-photo img{display:block;width:100%;height:100%;object-fit:cover}
